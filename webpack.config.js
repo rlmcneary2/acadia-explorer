@@ -79,7 +79,7 @@ module.exports = {
                         options: babelOptions
                     }
                 ]
-            },
+            }
         ]
     },
     output: {

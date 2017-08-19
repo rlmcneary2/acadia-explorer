@@ -5,18 +5,18 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
-    "serve": "webpack-dev-server --colors --content-base dist/app/ --inline --progress"
+    "serve": "webpack-dev-server --colors --content-base dist/ --inline --progress"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rlmcneary2/react-demo.git"
+    "url": "git+https://github.com/rlmcneary2/acadia-explorer.git"
   },
   "author": "Richard L. McNeary II",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/rlmcneary2/react-demo/issues"
+    "url": "https://github.com/rlmcneary2/acadia-explorer/issues"
   },
-  "homepage": "https://github.com/rlmcneary2/react-demo#readme",
+  "homepage": "https://github.com/rlmcneary2/acadia-explorer#readme",
   "devDependencies": {
     "@types/node": "^7.0.12",
     "@types/react": "^15.0.23",
@@ -45,12 +45,15 @@
     "sass-loader": "^6.0.5",
     "source-map-loader": "^0.2.1",
     "tslint": "^5.1.0",
-    "typescript": "^2.2.2",
+    "tslint-eslint-rules": "^4.1.1",
+    "typescript": "^2.4.2",
     "webpack": "^2.4.1",
     "webpack-comment-remover-loader": "0.0.3",
-    "webpack-dev-server": "*"
+    "webpack-dev-server": "^2.6.1",
+    "worker-loader": "^0.8.1"
   },
   "dependencies": {
+    "asqueue": "file:///C:\\Users\\rich\\Documents\\GitHub\\asqueue",
     "babel-runtime": "^6.23.0",
     "redux-logger": "^3.0.6"
   }
