@@ -1,4 +1,7 @@
 {
+    "extends": [
+        "tslint-eslint-rules"
+    ],
     "rules": {
         "no-bom": true,
         "class-name": true,
