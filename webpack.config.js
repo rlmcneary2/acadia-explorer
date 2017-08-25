@@ -26,6 +26,7 @@ const babelOptions = {
 module.exports = {
     devServer: {
         contentBase: path.resolve(__dirname, _OUTPUT_DIR),
+        historyApiFallback: true,
         inline: true
     },
     devtool: "source-maps",
@@ -34,7 +35,7 @@ module.exports = {
         rules: [
             {
                 test: /\.scss$/,
-                use: ExtractTextPlugin .extract({
+                use: ExtractTextPlugin.extract({
                     use: [{
                         loader: "css-loader"
                     }, {
