@@ -39,6 +39,7 @@
     "react": "^15.5.4",
     "react-addons-transition-group": "^15.5.2",
     "react-dom": "^15.5.4",
+    "react-intl": "^2.3.0",
     "react-redux": "^4.4.8",
     "react-router-dom": "^4.2.2",
     "react-transition-group": "^1.1.3",
