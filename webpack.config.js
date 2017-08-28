@@ -30,7 +30,10 @@ module.exports = {
         inline: true
     },
     devtool: "source-maps",
-    entry: `./${_SOURCE_DIR}/index.ts`,
+    entry: {
+        "app": `./${_SOURCE_DIR}/index.ts`,
+        "serviceWorker": `./${_SOURCE_DIR}/app/serviceWorker/serviceWorker.ts`
+    },
     module: {
         rules: [
             {
@@ -84,7 +87,7 @@ module.exports = {
         ]
     },
     output: {
-        filename: "app.js",
+        filename: "[name].js",
         path: path.resolve(__dirname, _OUTPUT_DIR)
     },
     plugins: [

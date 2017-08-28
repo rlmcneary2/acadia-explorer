@@ -1,6 +1,6 @@
 
 
-import { http } from "./network/http";
+// import { http } from "./network/http";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as redux from "redux";
@@ -9,6 +9,8 @@ import Start from "./startView";
 
 
 export default async () => {
+    // Register our service worker.
+    await navigator.serviceWorker.register("serviceWorker.js", { scope: "/" });
 
     // Since the HTML is automatically generated add an element where the React
     // components will be attached.
@@ -24,7 +26,7 @@ export default async () => {
     ReactDOM.render(React.createElement(Start, { store }), reactRoot);
 
     // TEMP
-    const url = `https://islandexplorertracker.availtec.com/InfoPoint/rest/Routes/GetVisibleRoutes?_${Date.now()}`;
-    const response = await http.get(url);
-    console.log("response: %O", response);
+    // const url = `https://islandexplorertracker.availtec.com/InfoPoint/rest/Routes/GetVisibleRoutes?_${Date.now()}`;
+    // const response = await http.get(url);
+    // console.log("response: %O", response);
 };
