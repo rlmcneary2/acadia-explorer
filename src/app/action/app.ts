@@ -1,6 +1,6 @@
 
 
-import { HttpRequestData } from "./interfaces";
+import { HttpRequestStartData } from "./interfaces";
 import { actionHttp } from "./http";
 
 
@@ -13,7 +13,7 @@ namespace actionApp {
     export function initialize(): (any) => void {
         return dispatch => {
             const uid = Date.now();
-            const request: HttpRequestData = {
+            const request: HttpRequestStartData = {
                 uid,
                 url: new URL(`https://islandexplorertracker.availtec.com/InfoPoint/rest/Routes/GetVisibleRoutes?_${uid}`)
             };

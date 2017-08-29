@@ -1,6 +1,6 @@
 
 
-import { BaseAction, HttpRequestAction, HttpResponseAction, HttpResponseData } from "../action/interfaces";
+import { BaseAction, HttpRequestStartAction, HttpRequestEndAction, HttpRequestEndData } from "../action/interfaces";
 import { actionHttp } from "../action/http";
 
 
@@ -9,7 +9,7 @@ export default (state: State = { requests: [] }, action: BaseAction): State => {
 
     switch (action.type) {
         case actionHttp.types.requestEnd: {
-            const a = action as HttpResponseAction;
+            const a = action as HttpRequestEndAction;
             const index = state.requests.findIndex(item => item.uid === a.data.request.uid);
 
             if (0 <= index) {
@@ -27,7 +27,7 @@ export default (state: State = { requests: [] }, action: BaseAction): State => {
         }
 
         case actionHttp.types.requestStart: {
-            const a = action as HttpRequestAction;
+            const a = action as HttpRequestStartAction;
             const index = state.requests.findIndex(item => item.uid === a.data.uid);
 
             if (index < 0) {
@@ -46,7 +46,7 @@ export default (state: State = { requests: [] }, action: BaseAction): State => {
 
 interface State {
     requests: {
-        response?: HttpResponseData;
+        response?: HttpRequestEndData;
         uid: number;
         url: URL;
     }[];

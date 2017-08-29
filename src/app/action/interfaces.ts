@@ -4,27 +4,27 @@ interface BaseAction {
     type: string;
 }
 
-interface HttpResponseAction extends BaseAction {
-    data: HttpResponseData;
+interface HttpRequestEndAction extends BaseAction {
+    data: HttpRequestEndData;
 }
 
-interface HttpRequestAction extends BaseAction {
-    data: HttpRequestData;
+interface HttpRequestStartAction extends BaseAction {
+    data: HttpRequestStartData;
 }
 
-interface HttpResponseData {
+interface HttpRequestEndData {
     headers?: Headers;
     ok: boolean;
     response?: any;
-    request: HttpRequestData;
+    request: HttpRequestStartData;
     status?: number;
     statusText?: string;
 }
 
-interface HttpRequestData {
+interface HttpRequestStartData {
     uid: number;
     url: URL;
 }
 
 
-export { BaseAction, HttpResponseAction, HttpResponseData, HttpRequestAction, HttpRequestData };
+export { BaseAction, HttpRequestEndAction, HttpRequestEndData, HttpRequestStartAction, HttpRequestStartData };
