@@ -1,8 +1,9 @@
 
 
-// import { http } from "./network/http";
+import { actionApp } from "./action/app";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import reducers from "./reducer/reducers";
 import * as redux from "redux";
 import reduxThunk from "redux-thunk";
 import Start from "./startView";
@@ -10,7 +11,9 @@ import Start from "./startView";
 
 export default async () => {
     // Register our service worker.
-    await navigator.serviceWorker.register("serviceWorker.js", { scope: "/" });
+    if (navigator.serviceWorker) {
+        await navigator.serviceWorker.register("serviceWorker.js", { scope: "/" });
+    }
 
     // Since the HTML is automatically generated add an element where the React
     // components will be attached.
@@ -21,12 +24,9 @@ export default async () => {
     // Setup React, Redux, React-Router
     const middlewareArgs = [reduxThunk];
     const reduxMiddleware = redux.applyMiddleware(...middlewareArgs);
-    const tempReducer = (state) => state;
-    const store = redux.createStore(tempReducer, {}, reduxMiddleware);
-    ReactDOM.render(React.createElement(Start, { store }), reactRoot);
+    const store = redux.createStore(reducers, {}, reduxMiddleware);
 
-    // TEMP
-    // const url = `https://islandexplorertracker.availtec.com/InfoPoint/rest/Routes/GetVisibleRoutes?_${Date.now()}`;
-    // const response = await http.get(url);
-    // console.log("response: %O", response);
+    store.dispatch(actionApp.initialize());
+
+    ReactDOM.render(React.createElement(Start, { store }), reactRoot);
 };
