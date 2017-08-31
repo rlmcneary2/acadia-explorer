@@ -1,6 +1,12 @@
 
 
-import { BaseAction, HttpRequestStartAction, HttpRequestEndAction, HttpRequestEndData } from "../action/interfaces";
+import {
+    BaseAction,
+    DataAction,
+    HttpRequestDefinedUids,
+    HttpRequestStartData,
+    HttpRequestEndData
+} from "../action/interfaces";
 import { actionHttp } from "../action/http";
 
 
@@ -8,8 +14,23 @@ export default (state: State = { requests: [] }, action: BaseAction): State => {
     let nextState: State;
 
     switch (action.type) {
+        case actionHttp.types.removeRequest: {
+            const a = action as DataAction<number | HttpRequestDefinedUids>;
+            const index = state.requests.findIndex(item => item.uid === a.data);
+
+            if (0 <= index) {
+                const r = state.requests.slice();
+                r.splice(index, 1);
+
+                nextState = Object.assign({}, state);
+                nextState.requests = r;
+            }
+
+            break;
+        }
+
         case actionHttp.types.requestEnd: {
-            const a = action as HttpRequestEndAction;
+            const a = action as DataAction<HttpRequestEndData>;
             const index = state.requests.findIndex(item => item.uid === a.data.request.uid);
 
             if (0 <= index) {
@@ -27,7 +48,7 @@ export default (state: State = { requests: [] }, action: BaseAction): State => {
         }
 
         case actionHttp.types.requestStart: {
-            const a = action as HttpRequestStartAction;
+            const a = action as DataAction<HttpRequestStartData>;
             const index = state.requests.findIndex(item => item.uid === a.data.uid);
 
             if (index < 0) {
@@ -44,6 +65,7 @@ export default (state: State = { requests: [] }, action: BaseAction): State => {
     return nextState || state;
 };
 
+
 interface State {
     requests: {
         response?: HttpRequestEndData;
@@ -51,5 +73,6 @@ interface State {
         url: URL;
     }[];
 }
+
 
 export { State };

@@ -4,27 +4,32 @@ interface BaseAction {
     type: string;
 }
 
-interface HttpRequestEndAction extends BaseAction {
-    data: HttpRequestEndData;
-}
-
-interface HttpRequestStartAction extends BaseAction {
-    data: HttpRequestStartData;
+interface DataAction<T> extends BaseAction {
+    data: T;
 }
 
 interface HttpRequestEndData {
     headers?: Headers;
     ok: boolean;
-    response?: any;
     request: HttpRequestStartData;
+    response?: any;
     status?: number;
     statusText?: string;
 }
 
 interface HttpRequestStartData {
-    uid: number;
+    uid: number | HttpRequestDefinedUids;
     url: URL;
 }
 
+enum HttpRequestDefinedUids {
+    GetRoutes = 1000000
+}
 
-export { BaseAction, HttpRequestEndAction, HttpRequestEndData, HttpRequestStartAction, HttpRequestStartData };
+export {
+    BaseAction,
+    DataAction,
+    HttpRequestDefinedUids,
+    HttpRequestEndData,
+    HttpRequestStartData
+};

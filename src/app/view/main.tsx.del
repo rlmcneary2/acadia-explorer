@@ -1,0 +1,14 @@
+
+
+import { connect } from "react-redux";
+import * as React from "react";
+
+
+export default connect()(state => {
+    return (<Main />);
+});
+
+
+const Main = state => {
+    return (<h1>Hello, I'm routed main.</h1>);
+};
