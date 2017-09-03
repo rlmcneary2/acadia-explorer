@@ -1,7 +1,7 @@
 
 
-import { BaseAction, DataAction, } from "../action/interfaces";
 import { actionApi } from "../action/api";
+import { BaseAction, DataAction, } from "../action/interfaces";
 
 
 export default (state: State = {}, action: BaseAction): State => {

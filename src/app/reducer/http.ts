@@ -1,5 +1,6 @@
 
 
+import { actionHttp } from "../action/http";
 import {
     BaseAction,
     DataAction,
@@ -7,7 +8,6 @@ import {
     HttpRequestStartData,
     HttpRequestEndData
 } from "../action/interfaces";
-import { actionHttp } from "../action/http";
 
 
 export default (state: State = { requests: [] }, action: BaseAction): State => {

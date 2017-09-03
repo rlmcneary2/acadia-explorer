@@ -23,7 +23,7 @@ function httpHandler(dispatch: redux.Dispatch<{}>, state: State) {
         // Have to let this stack unwind otherwise recurse forever!
         setTimeout(() => {
             dispatch(actionHttp.removeRequest(routeRequest.uid));
-            dispatch(actionApi.updateRoutes(routeRequest.response.response));
+            dispatch(actionApi.updateRoutes(routeRequest.response.response)); // Doesn't handle errors! Pass HttpRequestEndData instead.
         });
     }
 }
