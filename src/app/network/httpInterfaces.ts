@@ -1,11 +1,16 @@
 
 
 interface RequestSignature {
-    (url: string, headers?: Headers): Promise<WorkerResponse>;
+    (url: string, headers?: Headers, responseType?: string): Promise<WorkerResponse>;
+}
+
+interface WorkerHeader {
+    name: string;
+    value: string;
 }
 
 interface WorkerRequest {
-    headers?: Headers;
+    headers?: WorkerHeader[];
     method?: string; // Defaults to GET
     responseFunction?: string; // Defaults to json
     uid: number;
@@ -22,4 +27,4 @@ interface WorkerResponse {
 }
 
 
-export { RequestSignature, WorkerRequest, WorkerResponse };
+export { RequestSignature, WorkerHeader, WorkerRequest, WorkerResponse };

@@ -28,7 +28,8 @@ namespace actionHttp {
         return async dispatch => {
             dispatch(requestStart(data));
 
-            const res = await http.get(data.url.toString());
+            const { headers, url, responseType } = data;
+            const res = await http.get(url.toString(), headers, responseType);
 
             const { ok, response, status, statusText } = res;
             const endData: HttpRequestEndData = {

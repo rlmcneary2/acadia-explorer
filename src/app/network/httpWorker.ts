@@ -53,6 +53,23 @@ async function messageHandler(evt: MessageEvent) {
 }
 
 async function fetchResponse(request: WorkerRequest): Promise<Response> {
-    const req = new Request(request.url, request);
+    const { method, url } = request;
+    let options;
+    if (method) {
+        options = options || {};
+        options.method = method;
+    }
+
+    if (request.headers && 0 < request.headers.length) {
+        options = options || {};
+        options.headers = new Headers();
+        request.headers.forEach(item => {
+            options.headers.append(item.name, item.value);
+        });
+    }
+
+    const req = new Request(url, options);
+
+
     return await fetch(req);
 }

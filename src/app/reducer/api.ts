@@ -9,6 +9,15 @@ export default (state: State = {}, action: BaseAction): State => {
 
     switch (action.type) {
 
+        case actionApi.types.updateKmlFiles: {
+            const a = action as DataAction<any>;
+            nextState = Object.assign({}, state);
+            const kf = state.kmlFiles ? [...state.kmlFiles] : [];
+            kf.push(a.data);
+            nextState.kmlFiles = kf;
+            break;
+        }
+
         case actionApi.types.updateRoutes: {
             const a = action as DataAction<any>;
             nextState = Object.assign({}, state);
@@ -23,6 +32,7 @@ export default (state: State = {}, action: BaseAction): State => {
 
 
 interface State {
+    kmlFiles?: { id: string, xml: string }[];
     routes?: any[];
 }
 

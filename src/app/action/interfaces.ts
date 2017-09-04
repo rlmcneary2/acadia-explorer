@@ -18,12 +18,15 @@ interface HttpRequestEndData {
 }
 
 interface HttpRequestStartData {
+    headers?: Headers;
+    responseType?: string;
     uid: number | HttpRequestDefinedUids;
     url: URL;
 }
 
 enum HttpRequestDefinedUids {
-    GetRoutes = 1000000
+    GetRoutes = 1000000,
+    GetKmlFiles = 1000001
 }
 
 export {

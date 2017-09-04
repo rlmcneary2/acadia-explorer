@@ -1,6 +1,6 @@
 
 
-import { WorkerRequest, WorkerResponse } from "./httpInterfaces";
+import { WorkerHeader, WorkerRequest, WorkerResponse } from "./httpInterfaces";
 const HttpWorker = require("worker-loader!./httpWorker");
 
 
@@ -11,14 +11,29 @@ let id = Date.now();
 
 const http = {
 
-    async get(url: string, headers?: Headers): Promise<WorkerResponse> {
+    async get(url: string, headers?: Headers, responseType?: string): Promise<WorkerResponse> {
         return new Promise<WorkerResponse>(resolve => {
             id++;
+
+            const h: WorkerHeader[] = [];
+            if (headers) {
+                headers.forEach((value, name) => {
+                    h.push({ name, value });
+                });
+            }
+
             const request: WorkerRequest = {
-                headers,
                 uid: id,
                 url
             };
+
+            if (h) {
+                request.headers = h;
+            }
+
+            if (responseType) {
+                request.responseFunction = responseType;
+            }
 
             requests.set(request.uid, resolve);
 
