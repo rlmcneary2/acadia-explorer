@@ -1,6 +1,6 @@
 
 
-import { actionApi } from "../action/api";
+import { actionUi } from "../action/ui";
 import { BaseAction, DataAction, } from "../action/interfaces";
 
 
@@ -9,10 +9,10 @@ export default (state: State = {}, action: BaseAction): State => {
 
     switch (action.type) {
 
-        case actionApi.types.updateRoutes: {
+        case actionUi.types.setViewData: {
             const a = action as DataAction<any>;
             nextState = Object.assign({}, state);
-            nextState.routes = a.data;
+            nextState.viewData = a.data;
             break;
         }
 
@@ -23,7 +23,7 @@ export default (state: State = {}, action: BaseAction): State => {
 
 
 interface State {
-    routes?: any[];
+    viewData?: any;
 }
 
 

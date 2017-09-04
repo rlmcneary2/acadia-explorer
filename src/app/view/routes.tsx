@@ -52,9 +52,7 @@ const Routes = (props: Props): JSX.Element => {
 
 function createRouteItem(item: any): JSX.Element {
     const url: URL = new URL(window.location.href);
-    const parts = url.pathname.split("/");
-    parts.push(item.LongName);
-    url.pathname = parts.join("/");
+    url.pathname = `routes/${item.RouteId}`;
 
     const props: ButtonProps = {
         content: {

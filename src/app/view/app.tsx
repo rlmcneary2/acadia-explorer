@@ -1,15 +1,16 @@
 
 
-import Routes from "./routes";
+import routerData from "./router/routerData";
 import * as React from "react";
-import { Link, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import { connect } from "react-redux";
 
-export default connect()(state => {
+export default connect()(props => {
+    const routeProps = routerData.findData(props.location);
+
     return (
         <div>
-            <h1><Link to="/routes">Routes</Link></h1>
-            <Route path="/routes" component={Routes} />
+            <Route {...routeProps} />
         </div>
     );
 });
