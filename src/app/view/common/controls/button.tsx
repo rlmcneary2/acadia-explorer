@@ -1,18 +1,14 @@
 
 
+import { ControlTextContent } from "./interfaces";
 import * as React from "react";
-const { FormattedMessage } = require("react-intl");
+import { FormattedMessage } from "react-intl";
 
 
 interface Props {
     click?: (props: Props) => void;
-    content: PropStringContent;
+    content: ControlTextContent;
     isPrimary?: boolean;
-}
-
-interface PropStringContent {
-    id: string;
-    values?: {};
 }
 
 
