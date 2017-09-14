@@ -32,7 +32,7 @@ module.exports = {
     },
     devtool: "source-maps",
     entry: {
-        "app": `./${_SOURCE_DIR}/index.ts`
+        app: `./${_SOURCE_DIR}/index.ts`
     },
     module: {
         rules: [
