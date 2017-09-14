@@ -1,7 +1,7 @@
 
 
 import { WorkerHeader, WorkerRequest, WorkerResponse } from "./httpInterfaces";
-const HttpWorker = require("worker-loader!./httpWorker");
+const HttpWorker = require("worker-loader?name=serviceWorker.js!./httpWorker");
 
 
 const worker = new HttpWorker() as Worker; // Singleton

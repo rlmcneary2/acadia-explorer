@@ -6,8 +6,9 @@ const path = require("path");
 const webpack = require("webpack");
 
 
-const _SOURCE_DIR = "src";
 const _OUTPUT_DIR = "dist";
+const _SOURCE_DIR = "src";
+const _STYLE_DIR = "style";
 
 
 const babelOptions = {
@@ -31,8 +32,7 @@ module.exports = {
     },
     devtool: "source-maps",
     entry: {
-        "app": `./${_SOURCE_DIR}/index.ts`,
-        "serviceWorker": `./${_SOURCE_DIR}/app/serviceWorker/serviceWorker.ts`
+        "app": `./${_SOURCE_DIR}/index.ts`
     },
     module: {
         rules: [
@@ -94,10 +94,10 @@ module.exports = {
         new webpack.DefinePlugin({ "process.env": { NODE_ENV: process.env.NODE_ENV } }),
         new webpack.LoaderOptionsPlugin({ debug: true }),
         new ExtractTextPlugin("app.css"),
-        new HtmlWebpackPlugin({ inject: "head", title: "Rich McNeary" }),
+        new HtmlWebpackPlugin({ inject: "head", title: "Acadia Island Explorer" }),
     ],
     resolve: {
-        extensions: [".js", ".jsx", ".ts", ".tsx", ".scss"]
+        extensions: [".js", ".jsx", "scss", ".ts", ".tsx"]
     },
     target: "web"
 };
