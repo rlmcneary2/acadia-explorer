@@ -1,0 +1,21 @@
+
+
+$control-height: 52px;
+
+
+@mixin control {
+    a {
+        color: $control-text-color;
+        text-decoration: none;
+    }
+    height: $control-height;
+    span {
+        font: {
+            size: $text-control;
+        }
+    }
+}
+
+.control {
+    @include control;
+}

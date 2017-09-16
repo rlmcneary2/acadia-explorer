@@ -1,0 +1,28 @@
+
+
+.menu-item {
+    @include control;
+}
+
+.menu-container {
+    background: $app-background-color;
+    position: relative;
+}
+
+.routes-menu-enter {
+    transform: translateX(-100%);
+}
+
+.routes-menu-enter.routes-menu-enter-active {
+    transform: translateX(0%);
+    transition: transform 250ms ease-out;
+}
+
+.routes-menu-leave {
+    transform: translateX(0%);
+}
+
+.routes-menu-leave.routes-menu-leave-active {
+    transform: translateX(-100%);
+    transition: transform 150ms ease-in;
+}

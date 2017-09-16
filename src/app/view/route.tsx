@@ -58,7 +58,7 @@ const Route = (props: InternalProps): JSX.Element => {
     }
 
     return (
-        <div>
+        <div className="content">
             {content}
         </div>
     );

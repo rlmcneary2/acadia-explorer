@@ -5,6 +5,7 @@ import Menu, { Props as MenuProps } from "./common/controls/menu";
 import * as React from "react";
 import { Route } from "react-router-dom";
 import { connect } from "react-redux";
+import { CSSTransitionGroup } from "react-transition-group";
 import { State } from "../reducer/interfaces";
 import IslandExplorerRoute from "./route";
 import Welcome from "./welcome";
@@ -14,33 +15,67 @@ interface Props {
     routes?: any[];
 }
 
+interface ComponentState {
+    showRoutesMenu: boolean;
+}
+
+class App extends React.Component<Props> {
+
+    constructor(
+        public state: ComponentState,
+        private _toggleNavigationMenuDisplay: () => void
+    ) {
+        super();
+        this.state = { showRoutesMenu: false };
+        this._toggleNavigationMenuDisplay = toggleNavigationMenuDisplay.bind(this);
+    }
+
+    render() {
+        const routesMenu = createRoutesMenu.call(this);
+
+        // const anyProps = this.props as any;
+        // if (anyProps.location.pathname && (anyProps.location.pathname as string).indexOf("welcome") < 1) {
+        //     setTimeout(() => {
+        //         anyProps.history.push("/welcome");
+        //     });
+        // }
+
+        return (
+            <div className="application">
+                <menu className="header">
+                    <li>
+                        <button className="control" onClick={this._toggleNavigationMenuDisplay}>
+                            <span>Routes</span>
+                        </button>
+                    </li>
+                </menu>
+                <CSSTransitionGroup component="div" id="routes-menu-transition" transitionEnterTimeout={300} transitionLeaveTimeout={300} transitionName="routes-menu">
+                    {routesMenu}
+                </CSSTransitionGroup>
+                <Route component={Welcome} path="/welcome" />
+                <Route component={IslandExplorerRoute} path="/route/:id" />
+            </div>
+        );
+    }
+
+}
+
 
 export default connect(mapStateToProps)(props => {
-    const menu = createRoutesMenu(props);
-
-    // const anyProps = props as any;
-    // if (anyProps.location.pathname && (anyProps.location.pathname as string).indexOf("welcome") < 1) {
-    //     setTimeout(() => {
-    //         anyProps.history.push("/welcome");
-    //     });
-    // }
-
-    return (
-        <div className="application">
-            {menu}
-            <Route component={Welcome} path="/welcome" />
-            <Route component={IslandExplorerRoute} path="/route/:id" />
-        </div>
-    );
+    return (<App {...props} />);
 });
 
 
-function createRoutesMenu(props: Props): JSX.Element {
-    if (!props.routes) {
+function createRoutesMenu(): JSX.Element {
+    if (!this.state.showRoutesMenu) {
+        return null;
+    }
+
+    if (!this.props.routes) {
         return (<div>WORKING</div>);
     }
 
-    const items: ControlLinkContent[] = props.routes.map(item => {
+    const items: ControlLinkContent[] = this.props.routes.map(item => {
         return {
             id: item.LongName,
             to: `/route/${item.RouteId}`
@@ -51,6 +86,8 @@ function createRoutesMenu(props: Props): JSX.Element {
         items
     };
 
+    (menuProps as any).select = this._onNavigationMenuButtonClick;
+
     return (
         <Menu {...menuProps} />
     );
@@ -58,4 +95,8 @@ function createRoutesMenu(props: Props): JSX.Element {
 
 function mapStateToProps(state: State): Props {
     return state.api;
+}
+
+function toggleNavigationMenuDisplay() {
+    this.setState({ showRoutesMenu: !this.state.showRoutesMenu });
 }

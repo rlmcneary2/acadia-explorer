@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 
 interface Props {
     items: ControlTextContent[] | ControlLinkContent[];
+    select?: (control: ControlTextContent | ControlLinkContent) => string;
 }
 
 
@@ -19,11 +20,11 @@ class Menu extends React.Component<Props, JSX.Element> {
     }
 
     private createList(items: JSX.Element[]): JSX.Element {
-        const list = (<ul role="group">{items}</ul>);
+        const list = (<ul className="menu" role="group">{items}</ul>);
         if (isNavigationItemArray(this.props.items)) {
-            return (<nav role="menu">{list}</nav>);
+            return (<nav className="menu-container" role="menu">{list}</nav>);
         } else {
-            return (<div role="menu">{list}</div>);
+            return (<div className="menu-container" role="menu">{list}</div>);
         }
     }
 
@@ -39,7 +40,14 @@ class Menu extends React.Component<Props, JSX.Element> {
                 content = (<Link to={item.to}>{content}</Link>);
             }
 
-            return (<li key={item.id} role="menuitem">{content}</li>);
+            let clickHandler;
+            if (this.props.select) {
+                clickHandler = () => {
+                    this.props.select(item);
+                };
+            }
+
+            return (<li className="menu-item" key={item.id} onClick={clickHandler} role="menuitem">{content}</li>);
         });
     }
 
@@ -55,5 +63,9 @@ function isNavigationItem(item: any): item is ControlLinkContent {
 }
 
 function isNavigationItemArray(items: any[]): items is ControlLinkContent[] {
+    if (!items || items.length < 1) {
+        return false;
+    }
+
     return isNavigationItem(items[0]);
 }
