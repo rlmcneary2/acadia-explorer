@@ -30,8 +30,8 @@ class App extends React.Component<Props> {
         this._toggleNavigationMenuDisplay = toggleNavigationMenuDisplay.bind(this);
     }
 
-    render() {
-        const routesMenu = createRoutesMenu.call(this);
+    public render() {
+        const routesMenu = this.createRoutesMenu();
 
         // const anyProps = this.props as any;
         // if (anyProps.location.pathname && (anyProps.location.pathname as string).indexOf("welcome") < 1) {
@@ -58,6 +58,37 @@ class App extends React.Component<Props> {
         );
     }
 
+
+    private _onNavigationMenuButtonClick = () => {
+        this.setState({ showRoutesMenu: false });
+    };
+
+    private createRoutesMenu: () => JSX.Element = () => {
+        if (!this.state.showRoutesMenu) {
+            return null;
+        }
+
+        if (!this.props.routes) {
+            return (<div>WORKING</div>);
+        }
+
+        const items: ControlLinkContent[] = this.props.routes.map(item => {
+            return {
+                id: item.LongName,
+                to: `/route/${item.RouteId}`
+            };
+        });
+
+        const menuProps: MenuProps = {
+            items
+        };
+
+        (menuProps as any).select = this._onNavigationMenuButtonClick;
+
+        return (
+            <Menu {...menuProps} />
+        );
+    };
 }
 
 
@@ -65,33 +96,6 @@ export default connect(mapStateToProps)(props => {
     return (<App {...props} />);
 });
 
-
-function createRoutesMenu(): JSX.Element {
-    if (!this.state.showRoutesMenu) {
-        return null;
-    }
-
-    if (!this.props.routes) {
-        return (<div>WORKING</div>);
-    }
-
-    const items: ControlLinkContent[] = this.props.routes.map(item => {
-        return {
-            id: item.LongName,
-            to: `/route/${item.RouteId}`
-        };
-    });
-
-    const menuProps: MenuProps = {
-        items
-    };
-
-    (menuProps as any).select = this._onNavigationMenuButtonClick;
-
-    return (
-        <Menu {...menuProps} />
-    );
-}
 
 function mapStateToProps(state: State): Props {
     return state.api;

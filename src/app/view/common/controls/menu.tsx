@@ -19,6 +19,7 @@ class Menu extends React.Component<Props, JSX.Element> {
         return this.createList(items);
     }
 
+
     private createList(items: JSX.Element[]): JSX.Element {
         const list = (<ul className="menu" role="group">{items}</ul>);
         if (isNavigationItemArray(this.props.items)) {
