@@ -88,13 +88,14 @@ module.exports = {
     },
     output: {
         filename: "[name].js",
-        path: path.resolve(__dirname, _OUTPUT_DIR)
+        path: path.resolve(__dirname, _OUTPUT_DIR),
+        publicPath: "/"
     },
     plugins: [
         new webpack.DefinePlugin({ "process.env": { NODE_ENV: process.env.NODE_ENV } }),
         new webpack.LoaderOptionsPlugin({ debug: true }),
         new ExtractTextPlugin("app.css"),
-        new HtmlWebpackPlugin({ inject: "head", title: "Acadia Island Explorer" }),
+        new HtmlWebpackPlugin({ inject: "head", template: "./src/index.template.html", title: "Acadia Island Explorer" }),
     ],
     resolve: {
         extensions: [".js", ".jsx", "scss", ".ts", ".tsx"]
