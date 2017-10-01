@@ -99,9 +99,10 @@ module.exports = {
     ],
     resolve: {
         alias: {
-            "@controls": path.resolve(__dirname, "src/app/view/common/controls/")
+            "@controls": path.resolve(__dirname, "src/app/view/common/controls/"),
+            "@data": path.resolve(__dirname, "src/app/data/")
         },
-        extensions: [".js", ".jsx", "scss", ".ts", ".tsx"]
+        extensions: [".js", "json", ".jsx", "scss", ".ts", ".tsx"]
     },
     target: "web"
 };
