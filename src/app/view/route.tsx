@@ -1,10 +1,9 @@
 
 
-// import Button, { Props as ButtonProps } from "./common/routeButton";
 import { State } from "../reducer/interfaces";
 import * as React from "react";
 import { connect } from "react-redux";
-import Map, { Props as MapProps } from "@controls/map";
+import Map, { Props as MapProps, MapGLLayer } from "@controls/map";
 
 
 /**
@@ -56,8 +55,9 @@ const Route = (props: InternalProps): JSX.Element => {
         // content = (<pre>{JSON.stringify(props.route, null, 2)}</pre>);
         const mapProps: MapProps = {
             latitude: 44.3420759,
+            layers: [createMapGLLayer(props.route)],
             longitude: -68.2981852,
-            zoom: 9
+            zoom: 11
         };
         content = (<Map {...mapProps} />);
     } else {
@@ -73,3 +73,29 @@ const Route = (props: InternalProps): JSX.Element => {
 
 
 export { Props };
+
+
+function createMapGLLayer(route) {
+    const layer: MapGLLayer = {
+        id: `${route.ShortName.toLowerCase()}-${route.RouteId}`,
+        type: "line",
+        source: {
+            data: mapRouteIdToLayerData(route),
+            type: "geojson"
+        }
+    };
+
+    return layer;
+}
+
+function mapRouteIdToLayerData(route: any) {
+    let data;
+    switch (route.RouteId) {
+        case 1: {
+            data = require("../data/oceanarium.geo.json");
+            break;
+        }
+    }
+
+    return data;
+}
