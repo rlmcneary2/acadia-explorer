@@ -1,7 +1,7 @@
 
 
-import { ControlLinkContent } from "./common/controls/interfaces";
-import Menu, { Props as MenuProps } from "./common/controls/menu";
+import { ControlLinkContent } from "@controls/interfaces";
+import Menu, { Props as MenuProps } from "@controls/menu";
 import * as React from "react";
 import { Route } from "react-router-dom";
 import { connect } from "react-redux";
@@ -49,11 +49,11 @@ class App extends React.Component<Props> {
                         </button>
                     </li>
                 </menu>
+                <Route component={Welcome} path="/welcome" />
+                <Route component={IslandExplorerRoute} path="/route/:id" />
                 <CSSTransitionGroup component="div" id="routes-menu-transition" transitionEnterTimeout={300} transitionLeaveTimeout={300} transitionName="routes-menu">
                     {routesMenu}
                 </CSSTransitionGroup>
-                <Route component={Welcome} path="/welcome" />
-                <Route component={IslandExplorerRoute} path="/route/:id" />
             </div>
         );
     }
