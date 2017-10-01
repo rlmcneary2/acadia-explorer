@@ -4,6 +4,7 @@
 import { State } from "../reducer/interfaces";
 import * as React from "react";
 import { connect } from "react-redux";
+import Map, { Props as MapProps } from "@controls/map";
 
 
 /**
@@ -52,7 +53,13 @@ function mapStateToProps(state: State, ownProps: Props): InternalProps {
 const Route = (props: InternalProps): JSX.Element => {
     let content = null;
     if (props.route) {
-        content = (<pre>{JSON.stringify(props.route, null, 2)}</pre>);
+        // content = (<pre>{JSON.stringify(props.route, null, 2)}</pre>);
+        const mapProps: MapProps = {
+            latitude: 44.3420759,
+            longitude: -68.2981852,
+            zoom: 9
+        };
+        content = (<Map {...mapProps} />);
     } else {
         content = "WORKING";
     }
