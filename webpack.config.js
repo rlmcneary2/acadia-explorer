@@ -98,6 +98,9 @@ module.exports = {
         new HtmlWebpackPlugin({ inject: "head", template: "./src/index.template.html", title: "Acadia Island Explorer" }),
     ],
     resolve: {
+        alias: {
+            "@controls": path.resolve(__dirname, "src/app/view/common/controls/")
+        },
         extensions: [".js", ".jsx", "scss", ".ts", ".tsx"]
     },
     target: "web"
