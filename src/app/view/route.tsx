@@ -1,6 +1,7 @@
 
 
-import { State } from "../reducer/interfaces";
+import { RouteGeo } from "@reducer/api";
+import { State } from "@reducer/interfaces";
 import * as React from "react";
 import { connect } from "react-redux";
 import Map, { Props as MapProps, MapGLLayer } from "@controls/map";
@@ -16,6 +17,7 @@ interface Props {
 
 interface InternalProps extends Props {
     route?: any;
+    routeGeos?: RouteGeo[];
 }
 
 
@@ -40,6 +42,10 @@ function mapStateToProps(state: State, ownProps: Props): InternalProps {
         props.route = route;
     }
 
+    if (state.api.routeGeos && 0 < state.api.routeGeos.length) {
+        props.routeGeos = state.api.routeGeos;
+    }
+
     return props;
 }
 
@@ -52,10 +58,10 @@ function mapStateToProps(state: State, ownProps: Props): InternalProps {
 const Route = (props: InternalProps): JSX.Element => {
     let content = null;
     if (props.route) {
-        // content = (<pre>{JSON.stringify(props.route, null, 2)}</pre>);
         const mapProps: MapProps = {
             latitude: 44.3420759,
-            layers: [createMapGLLayer(props.route)],
+            layerId: props.route.RouteTraceFilename,
+            layers: createMapGLLayers(props),
             longitude: -68.2981852,
             zoom: 11
         };
@@ -75,27 +81,27 @@ const Route = (props: InternalProps): JSX.Element => {
 export { Props };
 
 
-function createMapGLLayer(route) {
+function createMapGLLayers(props: InternalProps): MapGLLayer[] {
+    if (!props.routeGeos || props.routeGeos.length < 1) {
+        return [];
+    }
+
+    return props.routeGeos.map(item => createMapGLLayer(props.route.RouteTraceFilename, item));
+}
+
+function createMapGLLayer(activeRouteId: string, routeGeo: RouteGeo) {
+    const { id, geoJson: data } = routeGeo;
     const layer: MapGLLayer = {
-        id: `${route.ShortName.toLowerCase()}-${route.RouteId}`,
+        id,
+        layout: {
+            visibility: activeRouteId === id ? "visible" : "none"
+        },
         type: "line",
         source: {
-            data: mapRouteIdToLayerData(route),
+            data,
             type: "geojson"
         }
     };
 
     return layer;
-}
-
-function mapRouteIdToLayerData(route: any) {
-    let data;
-    switch (route.RouteId) {
-        case 1: {
-            data = require("../data/oceanarium.geo.json");
-            break;
-        }
-    }
-
-    return data;
 }
