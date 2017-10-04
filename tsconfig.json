@@ -23,6 +23,9 @@
         "paths": {
             "@controls/*": [
                 "src/app/view/common/controls/*"
+            ],
+            "@reducer/*": [
+                "src/app/reducer/*"
             ]
         },
         "preserveConstEnums": true,

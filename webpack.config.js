@@ -100,7 +100,8 @@ module.exports = {
     resolve: {
         alias: {
             "@controls": path.resolve(__dirname, "src/app/view/common/controls/"),
-            "@data": path.resolve(__dirname, "src/app/data/")
+            "@data": path.resolve(__dirname, "src/app/data/"),
+            "@reducer": path.resolve(__dirname, "src/app/reducer/")
         },
         extensions: [".js", "json", ".jsx", "scss", ".ts", ".tsx"]
     },
