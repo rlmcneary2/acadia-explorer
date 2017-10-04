@@ -1,6 +1,7 @@
 
 
 import { DataAction } from "./interfaces";
+import { RouteGeo } from "@reducer/api";
 
 
 namespace actionApi {
@@ -10,7 +11,7 @@ namespace actionApi {
         updateKmlFiles: "updateKmlFiles"
     });
 
-    export function updateKmlFiles(data: { id: string, xml: string }): DataAction<{ id: string, xml: string }> {
+    export function updateKmlFiles(data: RouteGeo): DataAction<RouteGeo> {
         return {
             data,
             type: actionApi.types.updateKmlFiles

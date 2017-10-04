@@ -5,6 +5,7 @@ import { actionHttp } from "../action/http";
 import { HttpRequestDefinedUids } from "../action/interfaces";
 import { State } from "../reducer/interfaces";
 import * as redux from "redux";
+import * as toGeoJSON from "@mapbox/togeojson";
 
 
 export default (store: redux.Store<{}>) => {
@@ -55,7 +56,12 @@ function httpHandler(dispatch: redux.Dispatch<{}>, state: State) {
         setTimeout(() => {
             kmlRequests.forEach(item => {
                 const parts = item.response.request.url.pathname.split("/");
-                dispatch(actionApi.updateKmlFiles({ id: parts[parts.length - 1], xml: item.response.response }));
+
+                // Convert from KML to geojson.
+                const xml = new DOMParser().parseFromString(item.response.response, "text/xml");
+                const geoJson = toGeoJSON.kml(xml);
+
+                dispatch(actionApi.updateKmlFiles({ id: parts[parts.length - 1], geoJson }));
             });
         });
     }
