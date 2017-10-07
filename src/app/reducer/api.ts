@@ -40,7 +40,9 @@ export default (state: State = { routeGeos: [] }, action: BaseAction): State => 
 
 interface RouteGeo {
     id: string;
-    geoJson: {};
+    geoJson: {
+        features: any[];
+    };
 }
 
 interface State {

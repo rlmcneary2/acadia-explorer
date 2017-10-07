@@ -1,10 +1,10 @@
 
 
+import mbx from "./MapBox/map";
 import { RouteGeo } from "@reducer/api";
 import { State } from "@reducer/interfaces";
 import * as React from "react";
 import { connect } from "react-redux";
-import Map, { Props as MapProps, MapGLLayer } from "@controls/map";
 
 
 /**
@@ -58,14 +58,14 @@ function mapStateToProps(state: State, ownProps: Props): InternalProps {
 const Route = (props: InternalProps): JSX.Element => {
     let content = null;
     if (props.route) {
-        const mapProps: MapProps = {
+        const mapProps: mbx.Props = {
             latitude: 44.3420759,
             layerId: props.route.RouteTraceFilename,
             layers: createMapGLLayers(props),
             longitude: -68.2981852,
             zoom: 11
         };
-        content = (<Map {...mapProps} />);
+        content = (<mbx.Map {...mapProps} />);
     } else {
         content = "WORKING";
     }
@@ -81,7 +81,7 @@ const Route = (props: InternalProps): JSX.Element => {
 export { Props };
 
 
-function createMapGLLayers(props: InternalProps): MapGLLayer[] {
+function createMapGLLayers(props: InternalProps): mbx.MapGLLayer[] {
     if (!props.routeGeos || props.routeGeos.length < 1) {
         return [];
     }
@@ -90,18 +90,6 @@ function createMapGLLayers(props: InternalProps): MapGLLayer[] {
 }
 
 function createMapGLLayer(activeRouteId: string, routeGeo: RouteGeo) {
-    const { id, geoJson: data } = routeGeo;
-    const layer: MapGLLayer = {
-        id,
-        layout: {
-            visibility: activeRouteId === id ? "visible" : "none"
-        },
-        type: "line",
-        source: {
-            data,
-            type: "geojson"
-        }
-    };
-
-    return layer;
+    const { id, geoJson } = routeGeo;
+    return mbx.createMapGLLayer(id, activeRouteId === id ? "visible" : "none", geoJson);
 }
