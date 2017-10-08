@@ -2,15 +2,26 @@
 
 import * as React from "react";
 import InteractiveMap from "react-map-gl";
+import * as mapboxgl from "mapbox-gl";
+
+
+const PROPERTY_AFFECTS_ZOOM_TO_FIT = "acx:affectsZoomToFit";
 
 
 namespace MapBoxReact {
 
+    export interface GeoJSON {
+        features: any[];
+    }
+
     export interface MapGLLayer {
         id: string;
         layout: {
+            "line-cap"?: "round";
+            "line-join"?: "round";
             visibility?: VisibilityType;
         };
+        metadata?: {};
         paint: {
             "line-color": string;
             "line-opacity": number;
@@ -19,7 +30,7 @@ namespace MapBoxReact {
         type: "fill" | "line" | "symbol" | "circle" | "fill-extrusion" | "raster" | "background";
         source: {
             type: "geojson";
-            data: any; // geojson data here
+            data: GeoJSON;
         };
     }
 
@@ -28,11 +39,18 @@ namespace MapBoxReact {
      * @interface Props
      */
     export interface Props {
+        background?: {
+            color: string;
+            opacity?: number;
+            width: number;
+        };
         latitude: number;
         layerId: string;
         layers?: MapGLLayer[];
         longitude: number;
         zoom: number;
+        zoomToFit?: boolean;
+        zoomToFitPadding?: number;
     }
 
     interface State {
@@ -130,11 +148,62 @@ namespace MapBoxReact {
 
         private _updateMapTimeout;
 
+        private addLayer(layer: MapGLLayer): boolean {
+            const mapLayer = this._map.getLayer(layer.id);
+
+            let added: boolean;
+            if (!mapLayer) {
+                this._map.addLayer(layer);
+                added = true;
+            }
+
+            return added;
+        }
+
+        private getXYValues(coordinate: number[]): number[] {
+            if (coordinate.length < 3) {
+                return [...coordinate];
+            }
+
+            return coordinate.slice(0, 2);
+        }
+
+        private getLayerBounds(layer: MapGLLayer): mapboxgl.LngLatBounds {
+            const { data: geoJson } = layer.source;
+            if (!geoJson.features || geoJson.features.length < 1) {
+                return [];
+            }
+
+            let coordinates: number[][];
+            const bounds = geoJson.features
+                .map(feature => {
+                    ({ coordinates } = feature.geometry);
+                    return this.reduceToBounds(coordinates);
+                });
+
+            const arrBounds: number[][] = [];
+            bounds.forEach(b => b.toArray().forEach(c => arrBounds.push(c)));
+            return this.reduceToBounds(arrBounds);
+        }
+
         private mapRef(mapComponent) {
             // We need to get the map component because it has functions that are
             // needed to add layers and such.
             this._map = mapComponent.getMap();
             this.updateMap(this.props);
+        }
+
+        private reduceToBounds(coordinates: number[][]): mapboxgl.LngLatBounds {
+            if (coordinates.length < 1) {
+                return;
+            }
+
+            const initialCoordinate = this.getXYValues(coordinates[0]);
+            const initialBounds = new mapboxgl.LngLatBounds(initialCoordinate, initialCoordinate);
+
+            return coordinates.reduce((bounds, coordinate) => {
+                return bounds.extend(this.getXYValues(coordinate));
+            }, initialBounds);
         }
 
         private updateMap(props: Props) {
@@ -159,24 +228,52 @@ namespace MapBoxReact {
 
             // Add any layers that are in layers but not in the map. If the layer is
             // the active layer make it visible.
+            let bounds: mapboxgl.LngLatBounds;
             if (props.layers && 0 < props.layers.length) {
-                let layerUpdateCount = 0;
                 let layer: MapGLLayer;
-                let mapLayer: MapGLLayer;
                 for (let i = 0; i < props.layers.length; i++) {
                     layer = props.layers[i];
-                    mapLayer = this._map.getLayer(layer.id);
-                    if (!mapLayer) {
-                        console.log(`Map.updateMap - ${layer.id} visibility: ${layer.layout.visibility}`);
-                        this._map.addLayer(layer);
-                        layerUpdateCount++;
+
+                    // Will be used to move and zoom the map to fit in the
+                    // viewport.
+                    if (layer.id === props.layerId || layer.metadata[PROPERTY_AFFECTS_ZOOM_TO_FIT]) {
+                        bounds = this.getLayerBounds(layer);
                     }
-                    else {
-                        console.log(`Map.updateMap - ${layer.id} visibility: ${layer.layout.visibility}`);
+
+                    if (this.addLayer(layer)) {
+                        // The line layer was added. Now add a background layer
+                        // to highlight the line.
+                        if (props.background) {
+                            const backgroundLayer = Object.assign({}, layer);
+                            backgroundLayer.id = `background-${layer.id}`;
+                            backgroundLayer.paint = Object.assign({}, layer.paint);
+                            backgroundLayer.paint["line-color"] = props.background.color;
+                            backgroundLayer.paint["line-opacity"] = props.background.hasOwnProperty("opacity") ? props.background.opacity : 1;
+                            backgroundLayer.paint["line-width"] = props.background.width;
+                            this._map.addLayer(backgroundLayer);
+                            this._map.moveLayer(backgroundLayer.id, layer.id);
+                        }
+                    } else {
+                        // The line already exists. Update the line and
+                        // background visibility.
                         this._map.setLayoutProperty(layer.id, "visibility", layer.layout.visibility);
-                        layerUpdateCount++;
+                        this._map.setLayoutProperty(`background-${layer.id}`, "visibility", layer.layout.visibility);
                     }
                 }
+
+                // Update the map location and zoom to fit the selected route.
+                if (props.zoomToFit) {
+                    if (bounds) {
+                        let args = [bounds];
+                        if (props.zoomToFitPadding) {
+                            args = [...args, { padding: props.zoomToFitPadding }];
+                        }
+
+                        this._map.fitBounds(...args);
+                    }
+                }
+            } else {
+                this._map.flyTo({ center: [props.latitude, props.longitude], zoom: props.zoom });
             }
         }
 
@@ -194,10 +291,10 @@ namespace MapBoxReact {
     }
 
 
-    export function createMapGLLayer(id: string, visibility: VisibilityType, geojson: {}) {
+    export function createMapGLLayer(id: string, geojson: GeoJSON, visibility: VisibilityType = "visible", affectsZoomToFit = true): MapGLLayer {
         // Get the color from the first feature and add that to the MapGLLayer.
         let paint: any;
-        const features: any[] = geojson && (geojson as any).features ? (geojson as any).features : [];
+        const features: any[] = geojson && geojson.features ? geojson.features : [];
         if (0 < features.length) {
             const feature = features[0];
             if (feature.properties) {
@@ -211,7 +308,12 @@ namespace MapBoxReact {
         const layer: MapGLLayer = {
             id,
             layout: {
+                "line-cap": "round",
+                "line-join": "round",
                 visibility
+            },
+            metadata: {
+                [PROPERTY_AFFECTS_ZOOM_TO_FIT]: affectsZoomToFit
             },
             paint,
             type: "line",

@@ -7,6 +7,12 @@ import * as React from "react";
 import { connect } from "react-redux";
 
 
+const ROUTE_LINE_WIDTH = 8;
+const START_LATITUDE = 44.3420759;
+const START_LONGITUDE = -68.2654881;
+const START_ZOOM = 10;
+
+
 /**
  * The props for the presentational Route component.
  * @interface Props
@@ -57,14 +63,24 @@ function mapStateToProps(state: State, ownProps: Props): InternalProps {
  */
 const Route = (props: InternalProps): JSX.Element => {
     let content = null;
-    if (props.route) {
+    if (props.hasOwnProperty("route")) {
         const mapProps: mbx.Props = {
-            latitude: 44.3420759,
+            background: {
+                color: "#FFF",
+                width: ROUTE_LINE_WIDTH + 6
+            },
+            latitude: START_LATITUDE,
             layerId: props.route.RouteTraceFilename,
-            layers: createMapGLLayers(props),
-            longitude: -68.2981852,
-            zoom: 11
+            longitude: START_LONGITUDE,
+            zoom: START_ZOOM,
+            zoomToFit: true,
+            zoomToFitPadding: 40
         };
+
+        if (props.route) {
+            mapProps.layers = createMapGLLayers(props);
+        }
+
         content = (<mbx.Map {...mapProps} />);
     } else {
         content = "WORKING";
@@ -86,10 +102,16 @@ function createMapGLLayers(props: InternalProps): mbx.MapGLLayer[] {
         return [];
     }
 
+    if (!props.route) {
+        return [];
+    }
+
     return props.routeGeos.map(item => createMapGLLayer(props.route.RouteTraceFilename, item));
 }
 
 function createMapGLLayer(activeRouteId: string, routeGeo: RouteGeo) {
     const { id, geoJson } = routeGeo;
-    return mbx.createMapGLLayer(id, activeRouteId === id ? "visible" : "none", geoJson);
+    const layer = mbx.createMapGLLayer(id, geoJson, activeRouteId === id ? "visible" : "none", activeRouteId === id);
+    layer.paint["line-width"] = ROUTE_LINE_WIDTH;
+    return layer;
 }

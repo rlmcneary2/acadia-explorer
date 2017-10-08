@@ -72,12 +72,17 @@ class App extends React.Component<Props> {
             return (<div>WORKING</div>);
         }
 
-        const items: ControlLinkContent[] = this.props.routes.map(item => {
+        let items: ControlLinkContent[] = this.props.routes.map(item => {
             return {
                 id: item.LongName,
                 to: `/route/${item.RouteId}`
             };
         });
+
+        items = [{
+            id: "NONE",
+            to: "/"
+        }, ...items];
 
         const menuProps: MenuProps = {
             items
