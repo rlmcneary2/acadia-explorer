@@ -5,6 +5,8 @@ import { RouteGeo } from "@reducer/api";
 import { State } from "@reducer/interfaces";
 import * as React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+
 
 
 const ROUTE_LINE_WIDTH = 8;
@@ -18,7 +20,15 @@ const START_ZOOM = 10;
  * @interface Props
  */
 interface Props {
-    match: any; // Provided by redux-router
+    location: {
+        pathname: string;
+    };
+    match: {
+        params: {
+            id: string;
+        };
+        url: string;
+    }; // Provided by redux-router
 }
 
 interface InternalProps extends Props {
@@ -29,11 +39,11 @@ interface InternalProps extends Props {
 
 // This is the container.
 export default connect(mapStateToProps)((props: InternalProps): JSX.Element => {
-    return (<Route {...props } />);
+    return (<IslandExplorerRoute {...props } />);
 });
 
 function mapStateToProps(state: State, ownProps: Props): InternalProps {
-    const { match } = ownProps;
+    const { location, match } = ownProps;
     let route;
     if (state.api.routes && 0 < state.api.routes.length && match.params.id) {
         const routeId = parseInt(match.params.id);
@@ -41,6 +51,7 @@ function mapStateToProps(state: State, ownProps: Props): InternalProps {
     }
 
     const props: InternalProps = {
+        location,
         match
     };
 
@@ -61,7 +72,7 @@ function mapStateToProps(state: State, ownProps: Props): InternalProps {
  * @param {InternalProps} props 
  * @returns {JSX.Element} 
  */
-const Route = (props: InternalProps): JSX.Element => {
+const IslandExplorerRoute = (props: InternalProps): JSX.Element => {
     let content = null;
     if (props.hasOwnProperty("route")) {
         const mapProps: mbx.Props = {
@@ -81,13 +92,28 @@ const Route = (props: InternalProps): JSX.Element => {
             mapProps.layers = createMapGLLayers(props);
         }
 
-        content = (<mbx.Map {...mapProps} />);
+        // It would be nice to use a react router Switch or Redirect here but we
+        // need to keep the map component around and not replace it every time
+        // the path changes to a new route. For that reason the URL will be
+        // parsed here: if it ends with "info" the info page will be displayed
+        // otherwise the map will be displayed.
+        if (props.location.pathname.endsWith("info")) {
+            content = (<h1>Info please!</h1>);
+        } else {
+            content = (<mbx.Map {...mapProps} />);
+        }
+        // content = (<Redirect to={`/route/${props.match.params.id}/map`} />); // For historical purposes.
     } else {
         content = "WORKING";
     }
 
     return (
         <div className="content">
+            <div style={{ display: "flex", flex: "0 0 30px", width: "100px" }}>
+                <Link to={props.location.pathname.endsWith("info") ? `/route/${props.match.params.id}/map` : `/route/${props.match.params.id}/info`}>
+                    {props.location.pathname.endsWith("info") ? "Map" : "Info"}
+                </Link>
+            </div>
             {content}
         </div>
     );
@@ -96,6 +122,10 @@ const Route = (props: InternalProps): JSX.Element => {
 
 export { Props };
 
+
+// function createMapComponent(props) {
+//     return (<mbx.Map {...props} />);
+// }
 
 function createMapGLLayers(props: InternalProps): mbx.MapGLLayer[] {
     if (!props.routeGeos || props.routeGeos.length < 1) {

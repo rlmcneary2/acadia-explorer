@@ -189,7 +189,10 @@ namespace MapBoxReact {
         private mapRef(mapComponent) {
             // We need to get the map component because it has functions that are
             // needed to add layers and such.
-            this._map = mapComponent.getMap();
+            if (mapComponent) {
+                this._map = mapComponent.getMap();
+            }
+
             this.updateMap(this.props);
         }
 
@@ -283,9 +286,13 @@ namespace MapBoxReact {
             // Get the actual width and height in pixels of the div that contains
             // the map and use them to set the map's dimensions.
             const nextProps = Object.assign({}, this.state);
-            nextProps.viewport = Object.assign({}, this.state.viewport);
-            nextProps.viewport.height = div.clientHeight;
-            nextProps.viewport.width = div.clientWidth;
+
+            if (div) {
+                nextProps.viewport = Object.assign({}, this.state.viewport);
+                nextProps.viewport.height = div.clientHeight;
+                nextProps.viewport.width = div.clientWidth;
+            }
+
             this.setState(nextProps);
         }
     }
