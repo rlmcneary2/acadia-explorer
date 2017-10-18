@@ -42,13 +42,15 @@ class App extends React.Component<Props> {
 
         return (
             <div className="application">
-                <menu className="header">
-                    <li>
-                        <button className="control" onClick={this._toggleNavigationMenuDisplay}>
-                            <span>Routes</span>
-                        </button>
-                    </li>
-                </menu>
+                <nav className="header">
+                    <menu className="header">
+                        <li>
+                            <button className="control" onClick={this._toggleNavigationMenuDisplay}>
+                                <span>Routes</span>
+                            </button>
+                        </li>
+                    </menu>
+                </nav>
                 <Route component={Welcome} path="/welcome" />
                 <Route component={IslandExplorerRoute} path="/route/:id" />
                 <CSSTransitionGroup component="div" id="routes-menu-transition" transitionEnterTimeout={300} transitionLeaveTimeout={300} transitionName="routes-menu">

@@ -44,6 +44,7 @@ namespace MapBoxReact {
             opacity?: number;
             width: number;
         };
+        isVisible?: boolean;
         latitude: number;
         layerId: string;
         layers?: MapGLLayer[];
@@ -126,8 +127,17 @@ namespace MapBoxReact {
         }
 
         public render() {
+            const props: any = {
+                className: "aex-map-wrapper",
+                ref: this._mapWrapperRef
+            };
+
+            if (!this.props.isVisible) {
+                props.style = { visibility: "hidden" };
+            }
+
             return (
-                <div className="aex-map-wrapper" ref={this._mapWrapperRef}>
+                <div {...props}>
                     <InteractiveMap {...this.state.viewport} {...this.state.settings} ref={this._mapRef} />
                 </div>
             );

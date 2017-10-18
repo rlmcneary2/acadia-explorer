@@ -55,6 +55,7 @@ $application-max-width: 1000px;
 */
 @import "control";
 @import "menu";
+@import "route";
 @import "map";
 
 
@@ -89,9 +90,12 @@ $application-max-width: 1000px;
 
 .application > .header {
     display: flex;
-    flex: 0 1 auto;
+    flex: 0 0 auto;
+    height: $control-height;
 }
 
 .application > .content {
+    display: flex;
     flex: 1;
+    flex-direction: column;
 }

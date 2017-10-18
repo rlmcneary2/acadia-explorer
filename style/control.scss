@@ -6,9 +6,12 @@ $control-height: 52px;
 @mixin control {
     a {
         color: $control-text-color;
+        display: block;
+        height: 100%;
         text-decoration: none;
     }
     height: $control-height;
+    position: relative;
     span {
         font: {
             size: $text-control;

@@ -1,5 +1,8 @@
 
 
 .aex-map-wrapper {
+    .mapboxgl-map {
+        visibility: inherit !important; /* Don't like it but visibility is being set directly on this element. */
+    }
     height: 100%;
 }

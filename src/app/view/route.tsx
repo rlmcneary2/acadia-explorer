@@ -1,11 +1,11 @@
 
 
 import mbx from "./MapBox/map";
+import LinkButton, { Props as LinkButtonProps } from "@controls/linkButton";
 import { RouteGeo } from "@reducer/api";
 import { State } from "@reducer/interfaces";
 import * as React from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 
 
 
@@ -73,6 +73,7 @@ function mapStateToProps(state: State, ownProps: Props): InternalProps {
  * @returns {JSX.Element} 
  */
 const IslandExplorerRoute = (props: InternalProps): JSX.Element => {
+    const isShowMap = !props.location.pathname.endsWith("info");
     let content = null;
     if (props.hasOwnProperty("route")) {
         const mapProps: mbx.Props = {
@@ -80,6 +81,7 @@ const IslandExplorerRoute = (props: InternalProps): JSX.Element => {
                 color: "#FFF",
                 width: ROUTE_LINE_WIDTH + 6
             },
+            isVisible: isShowMap,
             latitude: START_LATITUDE,
             layerId: props.route.RouteTraceFilename,
             longitude: START_LONGITUDE,
@@ -97,23 +99,29 @@ const IslandExplorerRoute = (props: InternalProps): JSX.Element => {
         // the path changes to a new route. For that reason the URL will be
         // parsed here: if it ends with "info" the info page will be displayed
         // otherwise the map will be displayed.
-        if (props.location.pathname.endsWith("info")) {
-            content = (<h1>Info please!</h1>);
-        } else {
-            content = (<mbx.Map {...mapProps} />);
-        }
+        content = (
+            <div className="route-content">
+                <mbx.Map {...mapProps} />
+                <h1 style={{ display: !isShowMap ? "initial" : "none" }}>Info please!</h1>
+            </div>
+        );
         // content = (<Redirect to={`/route/${props.match.params.id}/map`} />); // For historical purposes.
     } else {
         content = "WORKING";
     }
 
+    const linkButtonProps: LinkButtonProps = {
+        content: {
+            id: !isShowMap ? "Map" : "Info"
+        },
+        to: !isShowMap ? `/route/${props.match.params.id}/map` : `/route/${props.match.params.id}/info`
+    };
+
     return (
         <div className="content">
-            <div style={{ display: "flex", flex: "0 0 30px", width: "100px" }}>
-                <Link to={props.location.pathname.endsWith("info") ? `/route/${props.match.params.id}/map` : `/route/${props.match.params.id}/info`}>
-                    {props.location.pathname.endsWith("info") ? "Map" : "Info"}
-                </Link>
-            </div>
+            <nav className="route-tabs">
+                <LinkButton {...linkButtonProps} />
+            </nav>
             {content}
         </div>
     );
