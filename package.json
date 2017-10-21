@@ -59,6 +59,7 @@
     "@mapbox/togeojson": "^0.16.0",
     "asqueue": "^0.0.9",
     "babel-runtime": "^6.23.0",
+    "geojson": "^0.5.0",
     "react-map-gl": "^3.0.4",
     "redux-logger": "^3.0.6"
   }
