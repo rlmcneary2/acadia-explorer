@@ -8,6 +8,10 @@ interface DataAction<T> extends BaseAction {
     data: T;
 }
 
+interface DataActionId<U, T> extends DataAction<T> {
+    id: U;
+}
+
 interface HttpRequestEndData {
     headers?: Headers;
     ok: boolean;
@@ -25,13 +29,13 @@ interface HttpRequestStartData {
 }
 
 enum HttpRequestDefinedUids {
-    GetRoutes = 1000000,
-    GetKmlFiles = 1000001
+    GetRoutes = 1000000
 }
 
 export {
     BaseAction,
     DataAction,
+    DataActionId,
     HttpRequestDefinedUids,
     HttpRequestEndData,
     HttpRequestStartData

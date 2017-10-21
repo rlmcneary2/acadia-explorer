@@ -1,10 +1,10 @@
 
 
 import { actionApi } from "../action/api";
-import { BaseAction, DataAction, } from "../action/interfaces";
+import { BaseAction, DataAction, DataActionId } from "../action/interfaces";
 
 
-export default (state: State = { routeGeos: [] }, action: BaseAction): State => {
+export default (state: State = { routeGeos: [], routeStops: [] }, action: BaseAction): State => {
     let nextState: State;
 
     switch (action.type) {
@@ -32,6 +32,22 @@ export default (state: State = { routeGeos: [] }, action: BaseAction): State => 
             break;
         }
 
+        case actionApi.types.updateStops: {
+            const a = action as DataActionId<number, any>;
+
+            // Only add the stop information if this route doesn't already
+            // exist.
+            const index = state.routeStops.findIndex(item => item.id === a.id);
+            if (index < 0) {
+                nextState = Object.assign({}, state);
+                const rs = state.routeStops ? [...state.routeStops] : [];
+                rs.push({ id: a.id, stops: a.data });
+                nextState.routeStops = rs;
+            }
+
+            break;
+        }
+
     }
 
     return nextState || state;
@@ -45,10 +61,16 @@ interface RouteGeo {
     };
 }
 
+interface RouteStops {
+    id: number;
+    stops: any[];
+}
+
 interface State {
     routeGeos: RouteGeo[];
     routes?: any[];
+    routeStops: RouteStops[];
 }
 
 
-export { RouteGeo, State };
+export { RouteGeo, RouteStops, State };
