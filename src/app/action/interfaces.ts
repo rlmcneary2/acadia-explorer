@@ -4,12 +4,25 @@ interface BaseAction {
     type: string;
 }
 
+/**
+ * An action response that has data.
+ * @interface DataAction
+ * @extends {BaseAction}
+ * @template T The type of the data.
+ */
 interface DataAction<T> extends BaseAction {
     data: T;
 }
 
-interface DataActionId<U, T> extends DataAction<T> {
-    id: U;
+/**
+ * An action response that has data associated with an ID.
+ * @interface DataActionId
+ * @extends {DataAction<T>}
+ * @template S The type of the id.
+ * @template T The type of the data.
+ */
+interface DataActionId<S, T> extends DataAction<T> {
+    id: S;
 }
 
 interface HttpRequestEndData {
