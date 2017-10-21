@@ -10,7 +10,7 @@ namespace actionApp {
         return dispatch => {
             const request: HttpRequestStartData = {
                 uid: HttpRequestDefinedUids.GetRoutes,
-                url: new URL(`https://islandexplorertracker.availtec.com/InfoPoint/rest/Routes/GetVisibleRoutes?_${Date.now()}`)
+                url: new URL("https://islandexplorertracker.availtec.com/InfoPoint/rest/Routes/GetVisibleRoutes")
             };
 
             dispatch(actionHttp.request(request));
