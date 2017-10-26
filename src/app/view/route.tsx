@@ -2,11 +2,11 @@
 
 import mbx from "./MapBox/map";
 import LinkButton, { Props as LinkButtonProps } from "@controls/linkButton";
-import { RouteGeo } from "@reducer/api";
+import { RouteGeo, RouteStops } from "@reducer/api";
 import { State } from "@reducer/interfaces";
 import * as React from "react";
 import { connect } from "react-redux";
-
+import * as GeoJSON from "geojson";
 
 
 const ROUTE_LINE_WIDTH = 8;
@@ -34,6 +34,7 @@ interface Props {
 interface InternalProps extends Props {
     route?: any;
     routeGeos?: RouteGeo[];
+    routeStops?: RouteStops[];
 }
 
 
@@ -61,6 +62,10 @@ function mapStateToProps(state: State, ownProps: Props): InternalProps {
 
     if (state.api.routeGeos && 0 < state.api.routeGeos.length) {
         props.routeGeos = state.api.routeGeos;
+    }
+
+    if (state.api.routeStops && 0 < state.api.routeStops.length) {
+        props.routeStops = state.api.routeStops;
     }
 
     return props;
@@ -131,10 +136,6 @@ const IslandExplorerRoute = (props: InternalProps): JSX.Element => {
 export { Props };
 
 
-// function createMapComponent(props) {
-//     return (<mbx.Map {...props} />);
-// }
-
 function createMapGLLayers(props: InternalProps): mbx.MapGLLayer[] {
     if (!props.routeGeos || props.routeGeos.length < 1) {
         return [];
@@ -144,12 +145,30 @@ function createMapGLLayers(props: InternalProps): mbx.MapGLLayer[] {
         return [];
     }
 
-    return props.routeGeos.map(item => createMapGLLayer(props.route.RouteTraceFilename, item));
+    let layers = props.routeGeos.map(item => createMapGLRouteLayer(props.route.RouteTraceFilename, item));
+    if (props.routeStops && 0 < props.routeStops.length) {
+        layers = [...layers, ...props.routeStops.map(item => createMapGLStopsLayer(props.route.RouteTraceFilename, props.route.RouteId, item))];
+    }
+    return layers;
 }
 
-function createMapGLLayer(activeRouteId: string, routeGeo: RouteGeo) {
+function createMapGLRouteLayer(activeRouteId: string, routeGeo: RouteGeo) {
     const { id, geoJson } = routeGeo;
     const layer = mbx.createMapGLLayer(id, geoJson, activeRouteId === id ? "visible" : "none", activeRouteId === id);
     layer.paint["line-width"] = ROUTE_LINE_WIDTH;
     return layer;
+}
+
+function createMapGLStopsLayer(activeRouteId: string, activeRouteNumber: number, routeStops: RouteStops) {
+    // Convert route stops to geojson points.
+    const data = routeStops.stops.map(item => {
+        const { Latitude: lat, Longitude: lng, Name: name } = item;
+        return {
+            lat,
+            lng,
+            name
+        };
+    });
+    const geoJson = GeoJSON.parse(data, { extra: { icon: "circle" }, Point: ["lat", "lng"] });
+    return mbx.createMapGLLayer(`${routeStops.id}_STOPS`, geoJson, activeRouteNumber === routeStops.id ? "visible" : "none", false);
 }

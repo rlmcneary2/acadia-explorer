@@ -188,6 +188,7 @@ namespace MapBoxReact {
             const bounds = geoJson.features
                 .map(feature => {
                     ({ coordinates } = feature.geometry);
+                    coordinates = Array.isArray(coordinates[0]) ? coordinates : [(coordinates as any)];
                     return this.reduceToBounds(coordinates);
                 });
 
@@ -254,23 +255,27 @@ namespace MapBoxReact {
                     }
 
                     if (this.addLayer(layer)) {
-                        // The line layer was added. Now add a background layer
-                        // to highlight the line.
-                        if (props.background) {
-                            const backgroundLayer = Object.assign({}, layer);
-                            backgroundLayer.id = `background-${layer.id}`;
-                            backgroundLayer.paint = Object.assign({}, layer.paint);
-                            backgroundLayer.paint["line-color"] = props.background.color;
-                            backgroundLayer.paint["line-opacity"] = props.background.hasOwnProperty("opacity") ? props.background.opacity : 1;
-                            backgroundLayer.paint["line-width"] = props.background.width;
-                            this._map.addLayer(backgroundLayer);
-                            this._map.moveLayer(backgroundLayer.id, layer.id);
+                        if (layer.type === "line") {
+                            // The line layer was added. Now add a background layer
+                            // to highlight the line.
+                            if (props.background) {
+                                const backgroundLayer = Object.assign({}, layer);
+                                backgroundLayer.id = `background-${layer.id}`;
+                                backgroundLayer.paint = Object.assign({}, layer.paint);
+                                backgroundLayer.paint["line-color"] = props.background.color;
+                                backgroundLayer.paint["line-opacity"] = props.background.hasOwnProperty("opacity") ? props.background.opacity : 1;
+                                backgroundLayer.paint["line-width"] = props.background.width;
+                                this._map.addLayer(backgroundLayer);
+                                this._map.moveLayer(backgroundLayer.id, layer.id);
+                            }
                         }
                     } else {
-                        // The line already exists. Update the line and
+                        // The layer already exists. Update the layer and
                         // background visibility.
                         this._map.setLayoutProperty(layer.id, "visibility", layer.layout.visibility);
-                        this._map.setLayoutProperty(`background-${layer.id}`, "visibility", layer.layout.visibility);
+                        if (layer.type === "line") {
+                            this._map.setLayoutProperty(`background-${layer.id}`, "visibility", layer.layout.visibility);
+                        }
                     }
                 }
 
@@ -310,30 +315,49 @@ namespace MapBoxReact {
 
     export function createMapGLLayer(id: string, geojson: GeoJSON, visibility: VisibilityType = "visible", affectsZoomToFit = true): MapGLLayer {
         // Get the color from the first feature and add that to the MapGLLayer.
-        let paint: any;
+        let layout;
+        let paint;
+        let type;
         const features: any[] = geojson && geojson.features ? geojson.features : [];
         if (0 < features.length) {
             const feature = features[0];
             if (feature.properties) {
                 paint = {};
-                paint["line-color"] = feature.properties.stroke || "#000";
-                paint["line-opacity"] = feature.properties["stroke-opcaity"] || 1;
-                paint["line-width"] = feature.properties["stroke-width"] || "20";
+
+                if (feature.geometry.type === "Point") {
+                    // Setup based on category?
+                    layout = {
+                        "icon-allow-overlap": true,
+                        "icon-image": "{icon}-11",
+                        "icon-size": 1,
+                        "text-anchor": "left",
+                        "text-field": "{name}",
+                        "text-offset": [0.7, 0],
+                        visibility
+                    };
+                    type = "symbol";
+                } else if (feature.geometry.type === "LineString") {
+                    layout = {
+                        "line-cap": "round",
+                        "line-join": "round",
+                        visibility
+                    };
+                    type = "line";
+                    paint["line-color"] = feature.properties.stroke || "#000";
+                    paint["line-opacity"] = feature.properties["stroke-opcaity"] || 1;
+                    paint["line-width"] = feature.properties["stroke-width"] || "20";
+                }
             }
         }
 
         const layer: MapGLLayer = {
             id,
-            layout: {
-                "line-cap": "round",
-                "line-join": "round",
-                visibility
-            },
+            layout,
             metadata: {
                 [PROPERTY_AFFECTS_ZOOM_TO_FIT]: affectsZoomToFit
             },
             paint,
-            type: "line",
+            type,
             source: {
                 data: geojson,
                 type: "geojson"
