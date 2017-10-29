@@ -5,9 +5,6 @@ import InteractiveMap from "react-map-gl";
 import * as mapboxgl from "mapbox-gl";
 
 
-const PROPERTY_AFFECTS_ZOOM_TO_FIT = "acx:affectsZoomToFit";
-
-
 namespace MapBoxReact {
 
     export interface GeoJSON {
@@ -16,23 +13,41 @@ namespace MapBoxReact {
 
     export interface MapGLLayer {
         id: string;
-        layout: {
-            "line-cap"?: "round";
-            "line-join"?: "round";
-            visibility?: VisibilityType;
-        };
+        layout: MapGLLayerLineStringLayout | MapGLLayerSymbolLayout;
         metadata?: {};
-        paint: {
-            "line-color": string;
-            "line-opacity": number;
-            "line-width": number;
-        };
+        paint?: MapGLLayerLineStringPaint;
         type: "fill" | "line" | "symbol" | "circle" | "fill-extrusion" | "raster" | "background";
         source: {
             type: "geojson";
             data: GeoJSON;
         };
     }
+
+    export interface MapGLLayerLayout {
+        visibility?: VisibilityType;
+    }
+
+    export interface MapGLLayerLineStringLayout extends MapGLLayerLayout {
+        "line-cap"?: "round";
+        "line-join"?: "round";
+    }
+
+    export interface MapGLLayerSymbolLayout extends MapGLLayerLayout {
+        "icon-allow-overlap"?: boolean;
+        "icon-image"?: string;
+        "icon-size"?: number;
+        "text-anchor"?: "left";
+        "text-field"?: string;
+        "text-offset"?: [number, number];
+    }
+
+    export interface MapGLLayerLineStringPaint {
+        "line-color"?: string;
+        "line-opacity"?: number;
+        "line-width"?: number;
+    }
+
+    export const PROPERTY_AFFECTS_ZOOM_TO_FIT = "acx:affectsZoomToFit";
 
     /**
      * The props for the presentational Route component.
@@ -310,61 +325,6 @@ namespace MapBoxReact {
 
             this.setState(nextProps);
         }
-    }
-
-
-    export function createMapGLLayer(id: string, geojson: GeoJSON, visibility: VisibilityType = "visible", affectsZoomToFit = true): MapGLLayer {
-        // Get the color from the first feature and add that to the MapGLLayer.
-        let layout;
-        let paint;
-        let type;
-        const features: any[] = geojson && geojson.features ? geojson.features : [];
-        if (0 < features.length) {
-            const feature = features[0];
-            if (feature.properties) {
-                paint = {};
-
-                if (feature.geometry.type === "Point") {
-                    // Setup based on category?
-                    layout = {
-                        "icon-allow-overlap": true,
-                        "icon-image": "{icon}-11",
-                        "icon-size": 1,
-                        "text-anchor": "left",
-                        "text-field": "{name}",
-                        "text-offset": [0.7, 0],
-                        visibility
-                    };
-                    type = "symbol";
-                } else if (feature.geometry.type === "LineString") {
-                    layout = {
-                        "line-cap": "round",
-                        "line-join": "round",
-                        visibility
-                    };
-                    type = "line";
-                    paint["line-color"] = feature.properties.stroke || "#000";
-                    paint["line-opacity"] = feature.properties["stroke-opcaity"] || 1;
-                    paint["line-width"] = feature.properties["stroke-width"] || "20";
-                }
-            }
-        }
-
-        const layer: MapGLLayer = {
-            id,
-            layout,
-            metadata: {
-                [PROPERTY_AFFECTS_ZOOM_TO_FIT]: affectsZoomToFit
-            },
-            paint,
-            type,
-            source: {
-                data: geojson,
-                type: "geojson"
-            }
-        };
-
-        return layer;
     }
 
 }

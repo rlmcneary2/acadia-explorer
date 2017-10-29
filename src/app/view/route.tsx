@@ -154,8 +154,29 @@ function createMapGLLayers(props: InternalProps): mbx.MapGLLayer[] {
 
 function createMapGLRouteLayer(activeRouteId: string, routeGeo: RouteGeo) {
     const { id, geoJson } = routeGeo;
-    const layer = mbx.createMapGLLayer(id, geoJson, activeRouteId === id ? "visible" : "none", activeRouteId === id);
-    layer.paint["line-width"] = ROUTE_LINE_WIDTH;
+    const feature = geoJson && geoJson.features && 0 < geoJson.features.length ? geoJson.features[0] : null;
+    const layer: mbx.MapGLLayer = {
+        id,
+        layout: {
+            "line-cap": "round",
+            "line-join": "round",
+            visibility: activeRouteId === id ? "visible" : "none"
+        },
+        metadata: {
+            [mbx.PROPERTY_AFFECTS_ZOOM_TO_FIT]: activeRouteId === id
+        },
+        paint: {
+            "line-color": feature.properties.stroke || "#000",
+            "line-opacity": feature.properties["stroke-opcaity"] || 1,
+            "line-width": ROUTE_LINE_WIDTH
+        },
+        type: "line",
+        source: {
+            data: geoJson,
+            type: "geojson"
+        }
+    };
+
     return layer;
 }
 
@@ -170,5 +191,85 @@ function createMapGLStopsLayer(activeRouteId: string, activeRouteNumber: number,
         };
     });
     const geoJson = GeoJSON.parse(data, { extra: { icon: "circle" }, Point: ["lat", "lng"] });
-    return mbx.createMapGLLayer(`${routeStops.id}_STOPS`, geoJson, activeRouteNumber === routeStops.id ? "visible" : "none", false);
+
+    const layer: mbx.MapGLLayer = {
+        id: `${routeStops.id}_STOPS`,
+        layout: {
+            "icon-allow-overlap": true,
+            "icon-image": "{icon}-11",
+            "icon-size": 1,
+            "text-anchor": "left",
+            "text-field": "{name}",
+            "text-offset": [0.7, 0],
+            visibility: activeRouteNumber === routeStops.id ? "visible" : "none"
+        },
+        metadata: {
+            [mbx.PROPERTY_AFFECTS_ZOOM_TO_FIT]: false
+        },
+        type: "symbol",
+        source: {
+            data: geoJson,
+            type: "geojson"
+        }
+    };
+
+    return layer;
 }
+
+// export function createMapGLLayer(id: string, geojson: GeoJSON, visibility: VisibilityType = "visible", affectsZoomToFit = true): MapGLLayer {
+//     // Get the color from the first feature and add that to the MapGLLayer.
+//     let layout: MapGLLayerLineStringLayout | MapGLLayerSymbolLayout;
+//     let paint: MapGLLayerLineStringPaint;
+//     let type;
+//     const features: any[] = geojson && geojson.features ? geojson.features : [];
+//     if (0 < features.length) {
+//         const feature = features[0];
+//         if (feature.properties) {
+
+//             if (feature.geometry.type === "Point") {
+//                 // Setup based on category?
+//                 layout = {
+//                     "icon-allow-overlap": true,
+//                     "icon-image": "{icon}-15",
+//                     "text-anchor": "left",
+//                     "text-field": "{name}",
+//                     "text-offset": [0.7, 0],
+//                     visibility
+//                 };
+//                 type = "symbol";
+//             } else if (feature.geometry.type === "LineString") {
+//                 layout = {
+//                     "line-cap": "round",
+//                     "line-join": "round",
+//                     visibility
+//                 };
+//                 type = "line";
+//                 paint = {};
+//                 paint["line-color"] = feature.properties.stroke || "#000";
+//                 paint["line-opacity"] = feature.properties["stroke-opcaity"] || 1;
+//                 paint["line-width"] = feature.properties["stroke-width"] || "20";
+//             }
+
+//         }
+//     }
+
+//     const layer: MapGLLayer = {
+//         id,
+//         layout,
+//         metadata: {
+//             [PROPERTY_AFFECTS_ZOOM_TO_FIT]: affectsZoomToFit
+//         },
+//         type,
+//         source: {
+//             data: geojson,
+//             type: "geojson"
+//         }
+//     };
+
+//     if (paint) {
+//         layer.paint = paint;
+//     }
+
+//     return layer;
+// }
+
