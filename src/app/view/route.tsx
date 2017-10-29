@@ -74,63 +74,65 @@ function mapStateToProps(state: State, ownProps: Props): InternalProps {
 
 /**
  * This is the presentational component to display a route.
- * @param {InternalProps} props 
- * @returns {JSX.Element} 
  */
-const IslandExplorerRoute = (props: InternalProps): JSX.Element => {
-    const isShowMap = !props.location.pathname.endsWith("info");
-    let content = null;
-    if (props.hasOwnProperty("route")) {
-        const mapProps: mbx.Props = {
-            background: {
-                color: "#FFF",
-                width: ROUTE_LINE_WIDTH + 6
-            },
-            isVisible: isShowMap,
-            latitude: START_LATITUDE,
-            layerId: props.route.RouteTraceFilename,
-            longitude: START_LONGITUDE,
-            zoom: START_ZOOM,
-            zoomToFit: true,
-            zoomToFitPadding: 40
-        };
+class IslandExplorerRoute extends React.Component<InternalProps, JSX.Element> {
 
-        if (props.route) {
-            mapProps.layers = createMapGLLayers(props);
+    render(): JSX.Element {
+        const isShowMap = !this.props.location.pathname.endsWith("info");
+        let content = null;
+        if (this.props.hasOwnProperty("route")) {
+            const mapProps: mbx.Props = {
+                background: {
+                    color: "#FFF",
+                    width: ROUTE_LINE_WIDTH + 6
+                },
+                isVisible: isShowMap,
+                latitude: START_LATITUDE,
+                layerId: this.props.route.RouteTraceFilename,
+                longitude: START_LONGITUDE,
+                zoom: START_ZOOM,
+                zoomToFit: true,
+                zoomToFitPadding: 40
+            };
+
+            if (this.props.route) {
+                mapProps.layers = createMapGLLayers(this.props);
+            }
+
+            // It would be nice to use a react router Switch or Redirect here but we
+            // need to keep the map component around and not replace it every time
+            // the path changes to a new route. For that reason the URL will be
+            // parsed here: if it ends with "info" the info page will be displayed
+            // otherwise the map will be displayed.
+            content = (
+                <div className="route-content">
+                    <mbx.Map {...mapProps} />
+                    <h1 style={{ display: !isShowMap ? "initial" : "none" }}>Info please!</h1>
+                </div>
+            );
+            // content = (<Redirect to={`/route/${props.match.params.id}/map`} />); // For historical purposes.
+        } else {
+            content = "WORKING";
         }
 
-        // It would be nice to use a react router Switch or Redirect here but we
-        // need to keep the map component around and not replace it every time
-        // the path changes to a new route. For that reason the URL will be
-        // parsed here: if it ends with "info" the info page will be displayed
-        // otherwise the map will be displayed.
-        content = (
-            <div className="route-content">
-                <mbx.Map {...mapProps} />
-                <h1 style={{ display: !isShowMap ? "initial" : "none" }}>Info please!</h1>
+        const linkButtonProps: LinkButtonProps = {
+            content: {
+                id: !isShowMap ? "Map" : "Info"
+            },
+            to: !isShowMap ? `/route/${this.props.match.params.id}/map` : `/route/${this.props.match.params.id}/info`
+        };
+
+        return (
+            <div className="content">
+                <nav className="route-tabs">
+                    <LinkButton {...linkButtonProps} />
+                </nav>
+                {content}
             </div>
         );
-        // content = (<Redirect to={`/route/${props.match.params.id}/map`} />); // For historical purposes.
-    } else {
-        content = "WORKING";
     }
 
-    const linkButtonProps: LinkButtonProps = {
-        content: {
-            id: !isShowMap ? "Map" : "Info"
-        },
-        to: !isShowMap ? `/route/${props.match.params.id}/map` : `/route/${props.match.params.id}/info`
-    };
-
-    return (
-        <div className="content">
-            <nav className="route-tabs">
-                <LinkButton {...linkButtonProps} />
-            </nav>
-            {content}
-        </div>
-    );
-};
+}
 
 
 export { Props };
