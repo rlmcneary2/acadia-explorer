@@ -55,7 +55,7 @@ export default (state: State = { routeGeos: [], routeStops: [] }, action: BaseAc
 
 
 interface RouteGeo {
-    id: string;
+    id: number;
     geoJson: {
         features: any[];
     };

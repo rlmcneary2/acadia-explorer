@@ -50,7 +50,7 @@ namespace MapBoxReact {
     export const PROPERTY_AFFECTS_ZOOM_TO_FIT = "acx:affectsZoomToFit";
 
     /**
-     * The props for the presentational Route component.
+     * The props for the map.
      * @interface Props
      */
     export interface Props {
@@ -59,14 +59,16 @@ namespace MapBoxReact {
             opacity?: number;
             width: number;
         };
+        mapIsInitialized: () => void;
         isVisible?: boolean;
         latitude: number;
-        layerId: string;
         layers?: MapGLLayer[];
         longitude: number;
+        visibleLayersIds?: string[];
         zoom: number;
         zoomToFit?: boolean;
         zoomToFitPadding?: number;
+        zoomToLayerId?: string;
     }
 
     interface State {
@@ -115,7 +117,7 @@ namespace MapBoxReact {
 
         public componentWillMount() {
             this._mapRef = this.mapRef.bind(this);
-            this._mapWrapperRef = this.mapWrapperRef.bind(this);
+            this._mapWrapperRefBound = this._mapWrapperRef.bind(this);
             this._viewportChanged = this.viewportChanged.bind(this);
 
             const nextState: State = Object.assign({}, this.state);
@@ -125,31 +127,28 @@ namespace MapBoxReact {
 
         public componentWillReceiveProps(nextProps: Props) {
             // As the KML / geojson information arrives update the map with the
-            // available bus routes. Only the selected route will be visible.
-            if (
-                nextProps.layerId !== this.props.layerId ||
-                nextProps.layers.length !== this.props.layers.length ||
-                !this.props.layers.every(item => 0 <= nextProps.layers.findIndex(nItem => nItem.id === item.id))
-            ) {
-                this.updateMap(nextProps);
-            }
+            // available bus route and stop information. Layer visibility is set
+            // during render.
+            this._updateMapLayers(nextProps);
         }
 
         public componentWillUnmount() {
             this._mapRef = null;
-            this._mapWrapperRef = null;
+            this._mapWrapperRefBound = null;
             this._viewportChanged = null;
         }
 
         public render() {
             const props: any = {
                 className: "aex-map-wrapper",
-                ref: this._mapWrapperRef
+                ref: this._mapWrapperRefBound
             };
 
             if (!this.props.isVisible) {
                 props.style = { visibility: "hidden" };
             }
+
+            this._updateLayerVisibility(this.props);
 
             return (
                 <div {...props}>
@@ -161,11 +160,9 @@ namespace MapBoxReact {
         public state: State;
 
 
-        private _viewportChanged: ViewportChanged;
+        private _initialized = false;
 
-        private viewportChanged(viewport) {
-            this.setState({ viewport });
-        }
+        private _layerIds: string[] = [];
 
         private _map;
 
@@ -173,12 +170,19 @@ namespace MapBoxReact {
 
         private _updateMapTimeout;
 
+        private _viewportChanged: ViewportChanged;
+
+        private viewportChanged(viewport) {
+            this.setState({ viewport });
+        }
+
         private addLayer(layer: MapGLLayer): boolean {
             const mapLayer = this._map.getLayer(layer.id);
 
             let added: boolean;
             if (!mapLayer) {
                 this._map.addLayer(layer);
+                this._layerIds.push(layer.id);
                 added = true;
             }
 
@@ -193,8 +197,8 @@ namespace MapBoxReact {
             return coordinate.slice(0, 2);
         }
 
-        private getLayerBounds(layer: MapGLLayer): mapboxgl.LngLatBounds {
-            const { data: geoJson } = layer.source;
+        private getLayerBounds(source: any): mapboxgl.LngLatBounds {
+            const { data: geoJson } = source;
             if (!geoJson.features || geoJson.features.length < 1) {
                 return [];
             }
@@ -219,7 +223,7 @@ namespace MapBoxReact {
                 this._map = mapComponent.getMap();
             }
 
-            this.updateMap(this.props);
+            // this.updateMap(this.props);
         }
 
         private reduceToBounds(coordinates: number[][]): mapboxgl.LngLatBounds {
@@ -235,7 +239,7 @@ namespace MapBoxReact {
             }, initialBounds);
         }
 
-        private updateMap(props: Props) {
+        private _updateMapLayers(props: Props) {
             if (!this._map) {
                 return;
             }
@@ -248,71 +252,73 @@ namespace MapBoxReact {
                 }
 
                 this._updateMapTimeout = setTimeout(() => {
-                    this.updateMap(props);
+                    this._updateMapLayers(props);
                 }, 100);
                 return;
             }
 
             // Map style is fully loaded, go ahead and apply layers now.
+            if (!this._initialized) {
+                this._initialized = true;
+                const callback = this.props.mapIsInitialized;
+                setTimeout(() => {
+                    callback();
+                });
+            }
 
             // Add any layers that are in layers but not in the map. If the layer is
             // the active layer make it visible.
-            let bounds: mapboxgl.LngLatBounds;
             if (props.layers && 0 < props.layers.length) {
-                let layer: MapGLLayer;
                 for (let i = 0; i < props.layers.length; i++) {
-                    layer = props.layers[i];
-
-                    // Will be used to move and zoom the map to fit in the
-                    // viewport.
-                    if (layer.id === props.layerId || layer.metadata[PROPERTY_AFFECTS_ZOOM_TO_FIT]) {
-                        bounds = this.getLayerBounds(layer);
-                    }
-
-                    if (this.addLayer(layer)) {
-                        if (layer.type === "line") {
-                            // The line layer was added. Now add a background layer
-                            // to highlight the line.
-                            if (props.background) {
-                                const backgroundLayer = Object.assign({}, layer);
-                                backgroundLayer.id = `background-${layer.id}`;
-                                backgroundLayer.paint = Object.assign({}, layer.paint);
-                                backgroundLayer.paint["line-color"] = props.background.color;
-                                backgroundLayer.paint["line-opacity"] = props.background.hasOwnProperty("opacity") ? props.background.opacity : 1;
-                                backgroundLayer.paint["line-width"] = props.background.width;
-                                this._map.addLayer(backgroundLayer);
-                                this._map.moveLayer(backgroundLayer.id, layer.id);
-                            }
-                        }
-                    } else {
-                        // The layer already exists. Update the layer and
-                        // background visibility.
-                        this._map.setLayoutProperty(layer.id, "visibility", layer.layout.visibility);
-                        if (layer.type === "line") {
-                            this._map.setLayoutProperty(`background-${layer.id}`, "visibility", layer.layout.visibility);
-                        }
-                    }
-                }
-
-                // Update the map location and zoom to fit the selected route.
-                if (props.zoomToFit) {
-                    if (bounds) {
-                        let args = [bounds];
-                        if (props.zoomToFitPadding) {
-                            args = [...args, { padding: props.zoomToFitPadding }];
-                        }
-
-                        this._map.fitBounds(...args);
-                    }
+                    this.addLayer(props.layers[i]);
                 }
             } else {
                 this._map.flyTo({ center: [props.latitude, props.longitude], zoom: props.zoom });
             }
         }
 
-        private _mapWrapperRef;
+        private _updateLayerVisibility(props: Props) {
+            if (!this._initialized) {
+                return;
+            }
 
-        private mapWrapperRef(div: HTMLDivElement) {
+            // Loop over all the layers and set their visibility.
+            let id: string;
+            let layer;
+            let source;
+            let isVisible: boolean;
+            let bounds;
+            for (let i = 0; i < this._layerIds.length; i++) {
+                id = this._layerIds[i];
+                isVisible = props.visibleLayersIds.includes(id);
+
+                layer = this._map.getLayer(id);
+                if (layer) {
+                    this._map.setLayoutProperty(id, "visibility", isVisible ? "visible" : "none");
+                }
+
+                if (isVisible) {
+                    source = this._map.getSource(id);
+                    if (source) {
+                        bounds = this.getLayerBounds(source.serialize());
+                    }
+                }
+            }
+
+            // Update the map location and zoom to fit the selected route.
+            if (props.zoomToFit && bounds) {
+                let args = [bounds];
+                if (props.zoomToFitPadding) {
+                    args = [...args, { padding: props.zoomToFitPadding }];
+                }
+
+                this._map.fitBounds(...args);
+            }
+        }
+
+        private _mapWrapperRefBound;
+
+        private _mapWrapperRef(div: HTMLDivElement) {
             // Get the actual width and height in pixels of the div that contains
             // the map and use them to set the map's dimensions.
             const nextProps = Object.assign({}, this.state);
@@ -326,7 +332,6 @@ namespace MapBoxReact {
             this.setState(nextProps);
         }
     }
-
 }
 
 

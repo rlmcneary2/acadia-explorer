@@ -36,18 +36,20 @@ function httpHandler(dispatch: redux.Dispatch<{}>, state: State) {
             let uid = Date.now();
             response.forEach(item => {
                 _kmlRequests.push(uid);
-                dispatch(actionHttp.request({
+                dispatch(actionHttp.request(({
                     responseType: "text",
+                    routeId: item.RouteId,
                     uid: uid,
                     url: new URL(`https://islandexplorertracker.availtec.com/InfoPoint/Resources/Traces/${item.RouteTraceFilename}`)
-                }));
+                } as any)));
 
                 uid++;
                 _stopRequests.push(uid);
-                dispatch(actionHttp.request({
+                dispatch(actionHttp.request(({
+                    routeId: item.RouteId,
                     uid: uid,
                     url: new URL(`https://islandexplorertracker.availtec.com/InfoPoint/rest/Stops/GetAllStopsForRoutes?routeIDs=${item.RouteId}`)
-                }));
+                } as any)));
 
                 uid++;
             });
@@ -67,13 +69,11 @@ function httpHandler(dispatch: redux.Dispatch<{}>, state: State) {
 
         setTimeout(() => {
             kmlRequests.forEach(item => {
-                const parts = item.response.request.url.pathname.split("/");
-
                 // Convert from KML to geojson.
                 const xml = new DOMParser().parseFromString(item.response.response, "text/xml");
                 const geoJson = toGeoJSON.kml(xml);
 
-                dispatch(actionApi.updateKmlFiles({ id: parts[parts.length - 1], geoJson }));
+                dispatch(actionApi.updateKmlFiles({ id: (item as any).routeId, geoJson }));
             });
         });
     }

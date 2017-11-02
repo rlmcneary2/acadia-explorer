@@ -3,7 +3,7 @@
 import mbx from "./MapBox/map";
 import LinkButton, { Props as LinkButtonProps } from "@controls/linkButton";
 import { RouteGeo, RouteStops } from "@reducer/api";
-import { State } from "@reducer/interfaces";
+import { State as ReduxState } from "@reducer/interfaces";
 import * as React from "react";
 import { connect } from "react-redux";
 import * as GeoJSON from "geojson";
@@ -14,6 +14,17 @@ const START_LATITUDE = 44.3420759;
 const START_LONGITUDE = -68.2654881;
 const START_ZOOM = 10;
 
+
+interface InternalProps extends Props {
+    route?: any;
+    routeGeos?: RouteGeo[];
+    routeStops?: RouteStops[];
+}
+
+interface LayerProps {
+    color?: string;
+    id: number;
+}
 
 /**
  * The props for the presentational Route component.
@@ -31,10 +42,13 @@ interface Props {
     }; // Provided by redux-router
 }
 
-interface InternalProps extends Props {
-    route?: any;
-    routeGeos?: RouteGeo[];
-    routeStops?: RouteStops[];
+interface State {
+    activeRoute: {
+        color: any;
+        id: number;
+        shortName: string;
+    };
+    layers: Map<string, LayerProps>;
 }
 
 
@@ -43,7 +57,7 @@ export default connect(mapStateToProps)((props: InternalProps): JSX.Element => {
     return (<IslandExplorerRoute {...props } />);
 });
 
-function mapStateToProps(state: State, ownProps: Props): InternalProps {
+function mapStateToProps(state: ReduxState, ownProps: Props): InternalProps {
     const { location, match } = ownProps;
     let route;
     if (state.api.routes && 0 < state.api.routes.length && match.params.id) {
@@ -75,9 +89,32 @@ function mapStateToProps(state: State, ownProps: Props): InternalProps {
 /**
  * This is the presentational component to display a route.
  */
-class IslandExplorerRoute extends React.Component<InternalProps, JSX.Element> {
+class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
-    render(): JSX.Element {
+    constructor() {
+        super();
+        this.state = { activeRoute: { color: "", id: -1, shortName: "" }, layers: new Map<string, LayerProps>() };
+    }
+
+    public componentWillMount() {
+        this._mapIsInitializedHandlerBound = this._mapIsInitializedHandler.bind(this);
+    }
+
+    public componentWillReceiveProps(nextProps: InternalProps) {
+        if (
+            nextProps.hasOwnProperty("route") &&
+            nextProps.route.RouteId !== this.state.activeRoute.id
+        ) {
+            const { Color: color, RouteId: id, ShortName: shortName } = nextProps.route;
+            this.setState({ activeRoute: { color, id, shortName } });
+        }
+    }
+
+    public componentWillUnmount() {
+        this._mapIsInitializedHandlerBound = null;
+    }
+
+    public render(): JSX.Element {
         const isShowMap = !this.props.location.pathname.endsWith("info");
         let content = null;
         if (this.props.hasOwnProperty("route")) {
@@ -86,17 +123,36 @@ class IslandExplorerRoute extends React.Component<InternalProps, JSX.Element> {
                     color: "#FFF",
                     width: ROUTE_LINE_WIDTH + 6
                 },
+                mapIsInitialized: this._mapIsInitializedHandlerBound,
                 isVisible: isShowMap,
                 latitude: START_LATITUDE,
-                layerId: this.props.route.RouteTraceFilename,
                 longitude: START_LONGITUDE,
                 zoom: START_ZOOM,
                 zoomToFit: true,
                 zoomToFitPadding: 40
             };
 
-            if (this.props.route) {
-                mapProps.layers = createMapGLLayers(this.props);
+            // Layers only passed to the Map component once so eventually the
+            // mapProps.layers will be an empty array.
+            mapProps.layers = this._createMapGLLayers();
+
+            // Use the information about layers in state to determine which
+            // layer is visible on the map.
+            if (this.state.activeRoute && this.state.activeRoute.id) {
+                const visibleLayersIds: string[] = [];
+                this.state.layers
+                    .forEach(item => {
+                        if (item.id === this.state.activeRoute.id) {
+                            visibleLayersIds.push(this._routeLayerId(item.id));
+                            visibleLayersIds.push(this._stopsLayerId(item.id));
+                        }
+                    });
+
+                if (0 < visibleLayersIds.length) {
+                    mapProps.visibleLayersIds = visibleLayersIds;
+                }
+
+                mapProps.zoomToLayerId = this._routeLayerId(this.state.activeRoute.id);
             }
 
             // It would be nice to use a react router Switch or Redirect here but we
@@ -132,88 +188,124 @@ class IslandExplorerRoute extends React.Component<InternalProps, JSX.Element> {
         );
     }
 
+    public state: State;
+
+
+    private _createMapGLLayers(): mbx.MapGLLayer[] {
+        if (!this._mapInitialized) {
+            return [];
+        }
+
+        const layers: mbx.MapGLLayer[] = [];
+        if (this.props.routeGeos && 0 < this.props.routeGeos.length) {
+            let rg: RouteGeo;
+            let layer: mbx.MapGLLayer;
+            for (let i = 0; i < this.props.routeGeos.length; i++) {
+                rg = this.props.routeGeos[i];
+
+                if (!this.state.layers.has(this._routeLayerId(rg.id))) {
+                    layer = this._createMapGLRouteLayer(rg);
+                    layers.push(layer);
+                    this.state.layers.set(this._routeLayerId(rg.id), { color: layer.paint["line-color"], id: rg.id });
+                }
+            }
+        }
+
+        if (this.props.routeStops && this.props.routeStops.length) {
+            let color: string;
+            for (let i = 0; i < this.props.routeStops.length; i++) {
+                const rs = this.props.routeStops[i];
+                if (!this.state.layers.has(this._routeLayerId(rs.id))) {
+                    continue;
+                }
+
+                if (this.state.layers.has(this._stopsLayerId(rs.id))) {
+                    continue;
+                }
+
+                color = this.state.layers.get(this._routeLayerId(rs.id)).color;
+                layers.push(this._createMapGLStopsLayer(rs, color));
+                this.state.layers.set(this._stopsLayerId(rs.id), { id: rs.id });
+            }
+        }
+
+        return layers;
+    }
+
+    private _createMapGLRouteLayer(routeGeo: RouteGeo) {
+        const { geoJson } = routeGeo;
+        const feature = geoJson && geoJson.features && 0 < geoJson.features.length ? geoJson.features[0] : null;
+        const layer: mbx.MapGLLayer = {
+            id: this._routeLayerId(routeGeo.id),
+            layout: {
+                "line-cap": "round",
+                "line-join": "round"
+            },
+            paint: {
+                "line-color": feature.properties.stroke || "#000",
+                "line-opacity": feature.properties["stroke-opcaity"] || 1,
+                "line-width": ROUTE_LINE_WIDTH
+            },
+            type: "line",
+            source: {
+                data: geoJson,
+                type: "geojson"
+            }
+        };
+
+        return layer;
+    }
+
+    private _createMapGLStopsLayer(routeStops: RouteStops, color: string) {
+        // Convert route stops to geojson points.
+        const data = routeStops.stops.map(item => {
+            const { Latitude: lat, Longitude: lng, Name: name } = item;
+            return {
+                lat,
+                lng,
+                name
+            };
+        });
+        const geoJson = GeoJSON.parse(data, { extra: { icon: "circle" }, Point: ["lat", "lng"] });
+
+        const layer: mbx.MapGLLayer = {
+            id: this._stopsLayerId(routeStops.id),
+            layout: {
+                "icon-allow-overlap": true,
+                "icon-image": "{icon}-11",
+                "icon-size": 1,
+                "text-anchor": "left",
+                "text-field": "{name}",
+                "text-offset": [0.7, 0]
+            },
+            type: "symbol",
+            source: {
+                data: geoJson,
+                type: "geojson"
+            }
+        };
+
+        return layer;
+    }
+
+    private _mapInitialized = false;
+
+    private _mapIsInitializedHandler() {
+        this._mapInitialized = true;
+        this.forceUpdate();
+    }
+
+    private _mapIsInitializedHandlerBound: () => void;
+
+    private _routeLayerId(id: number): string {
+        return `${id}`;
+    }
+
+    private _stopsLayerId(id: number): string {
+        return `${id}_STOPS`;
+    }
+
 }
 
 
 export { Props };
-
-
-function createMapGLLayers(props: InternalProps): mbx.MapGLLayer[] {
-    if (!props.routeGeos || props.routeGeos.length < 1) {
-        return [];
-    }
-
-    if (!props.route) {
-        return [];
-    }
-
-    let layers = props.routeGeos.map(item => createMapGLRouteLayer(props.route.RouteTraceFilename, item));
-    if (props.routeStops && 0 < props.routeStops.length) {
-        layers = [...layers, ...props.routeStops.map(item => createMapGLStopsLayer(props.route.RouteTraceFilename, props.route.RouteId, item))];
-    }
-    return layers;
-}
-
-function createMapGLRouteLayer(activeRouteId: string, routeGeo: RouteGeo) {
-    const { id, geoJson } = routeGeo;
-    const feature = geoJson && geoJson.features && 0 < geoJson.features.length ? geoJson.features[0] : null;
-    const layer: mbx.MapGLLayer = {
-        id,
-        layout: {
-            "line-cap": "round",
-            "line-join": "round",
-            visibility: activeRouteId === id ? "visible" : "none"
-        },
-        metadata: {
-            [mbx.PROPERTY_AFFECTS_ZOOM_TO_FIT]: activeRouteId === id
-        },
-        paint: {
-            "line-color": feature.properties.stroke || "#000",
-            "line-opacity": feature.properties["stroke-opcaity"] || 1,
-            "line-width": ROUTE_LINE_WIDTH
-        },
-        type: "line",
-        source: {
-            data: geoJson,
-            type: "geojson"
-        }
-    };
-
-    return layer;
-}
-
-function createMapGLStopsLayer(activeRouteId: string, activeRouteNumber: number, routeStops: RouteStops) {
-    // Convert route stops to geojson points.
-    const data = routeStops.stops.map(item => {
-        const { Latitude: lat, Longitude: lng, Name: name } = item;
-        return {
-            lat,
-            lng,
-            name
-        };
-    });
-    const geoJson = GeoJSON.parse(data, { extra: { icon: "circle" }, Point: ["lat", "lng"] });
-
-    const layer: mbx.MapGLLayer = {
-        id: `${routeStops.id}_STOPS`,
-        layout: {
-            "icon-allow-overlap": true,
-            "icon-image": "{icon}-11",
-            "icon-size": 1,
-            "text-anchor": "left",
-            "text-field": "{name}",
-            "text-offset": [0.7, 0],
-            visibility: activeRouteNumber === routeStops.id ? "visible" : "none"
-        },
-        metadata: {
-            [mbx.PROPERTY_AFFECTS_ZOOM_TO_FIT]: false
-        },
-        type: "symbol",
-        source: {
-            data: geoJson,
-            type: "geojson"
-        }
-    };
-
-    return layer;
-}
