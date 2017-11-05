@@ -13,6 +13,7 @@ const ROUTE_LINE_WIDTH = 8;
 const START_LATITUDE = 44.3420759;
 const START_LONGITUDE = -68.2654881;
 const START_ZOOM = 10;
+const ZOOM_TO_FIT_PADDING = 100;
 
 
 interface InternalProps extends Props {
@@ -129,7 +130,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 longitude: START_LONGITUDE,
                 zoom: START_ZOOM,
                 zoomToFit: true,
-                zoomToFitPadding: 40
+                zoomToFitPadding: ZOOM_TO_FIT_PADDING
             };
 
             // Layers only passed to the Map component once so eventually the
@@ -145,6 +146,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                         if (item.id === this.state.activeRoute.id) {
                             visibleLayersIds.push(this._routeLayerId(item.id));
                             visibleLayersIds.push(this._stopsLayerId(item.id));
+                            visibleLayersIds.push(this._stopsLayerId(item.id, true));
                         }
                     });
 
@@ -226,6 +228,9 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 color = this.state.layers.get(this._routeLayerId(rs.id)).color;
                 layers.push(this._createMapGLStopsLayer(rs, color));
                 this.state.layers.set(this._stopsLayerId(rs.id), { id: rs.id });
+
+                layers.push(this._createMapGLStopsTextLayer(rs, color));
+                this.state.layers.set(this._stopsLayerId(rs.id, true), { id: rs.id });
             }
         }
 
@@ -268,16 +273,67 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         });
         const geoJson = GeoJSON.parse(data, { extra: { icon: "circle" }, Point: ["lat", "lng"] });
 
+        const paint: mbx.MapGLLayerCirclePaint = {
+            "circle-color": color,
+            "circle-radius": {
+                base: 1.25,
+                stops: [[10, 11], [14, 12]]
+            },
+            "circle-stroke-color": "#FFF",
+            "circle-stroke-opacity": 0.8,
+            "circle-stroke-width": {
+                base: 1.25,
+                stops: [[10, 7], [14, 8]]
+            }
+        };
+
         const layer: mbx.MapGLLayer = {
             id: this._stopsLayerId(routeStops.id),
+            layout: {},
+            paint,
+            type: "circle",
+            source: {
+                data: geoJson,
+                type: "geojson"
+            }
+        };
+
+        return layer;
+    }
+
+    private _createMapGLStopsTextLayer(routeStops: RouteStops, color: string) {
+        // Convert route stops to geojson points.
+        const data = routeStops.stops.map(item => {
+            const { Latitude: lat, Longitude: lng, Name: name } = item;
+            return {
+                lat,
+                lng,
+                name
+            };
+        });
+        const geoJson = GeoJSON.parse(data, { Point: ["lat", "lng"] });
+
+        const paint: mbx.MapGLLayerSymbolPaint = {
+            "text-halo-blur": 1,
+            "text-halo-color": "#FFF",
+            "text-halo-width": 6
+        };
+
+        const layer: mbx.MapGLLayer = {
+            id: this._stopsLayerId(routeStops.id, true),
             layout: {
                 "icon-allow-overlap": true,
-                "icon-image": "{icon}-11",
-                "icon-size": 1,
-                "text-anchor": "left",
+                "icon-optional": true,
+                // "text-allow-overlap": true,
+                "text-anchor": "top",
                 "text-field": "{name}",
-                "text-offset": [0.7, 0]
+                "text-offset": [0, 1],
+                "text-size": {
+                    base: 1.25,
+                    stops: [[10, 25], [14, 40]]
+                }
             },
+            paint,
             type: "symbol",
             source: {
                 data: geoJson,
@@ -301,8 +357,8 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         return `${id}`;
     }
 
-    private _stopsLayerId(id: number): string {
-        return `${id}_STOPS`;
+    private _stopsLayerId(id: number, isTextLayer = false): string {
+        return `${id}_STOPS${isTextLayer ? "_TEXT" : ""}`;
     }
 
 }
