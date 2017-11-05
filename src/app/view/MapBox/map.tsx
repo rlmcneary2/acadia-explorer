@@ -13,14 +13,29 @@ namespace MapBoxReact {
 
     export interface MapGLLayer {
         id: string;
-        layout: MapGLLayerLineStringLayout | MapGLLayerSymbolLayout;
+        layout: MapGLLayerLineStringLayout | MapGLLayerSymbolLayout | {};
         metadata?: {};
-        paint?: MapGLLayerLineStringPaint;
+        paint?: MapGLLayerLineStringPaint | MapGLLayerCirclePaint | MapGLLayerSymbolPaint;
         type: "fill" | "line" | "symbol" | "circle" | "fill-extrusion" | "raster" | "background";
         source: {
             type: "geojson";
             data: GeoJSON;
         };
+    }
+
+    export interface MapGLLayerCirclePaint {
+        "circle-color": string;
+        "circle-radius": number | MapGLCurveTypeStep;
+        "circle-stroke-color"?: string;
+        "circle-stroke-opacity"?: number;
+        "circle-stroke-width"?: number | MapGLCurveTypeStep;
+    }
+
+    export interface MapGLLayerSymbolPaint {
+        "text-color"?: string;
+        "text-halo-blur"?: number | MapGLCurveTypeStep;
+        "text-halo-color"?: string;
+        "text-halo-width"?: number | MapGLCurveTypeStep;
     }
 
     export interface MapGLLayerLayout {
@@ -32,19 +47,27 @@ namespace MapBoxReact {
         "line-join"?: "round";
     }
 
-    export interface MapGLLayerSymbolLayout extends MapGLLayerLayout {
-        "icon-allow-overlap"?: boolean;
-        "icon-image"?: string;
-        "icon-size"?: number;
-        "text-anchor"?: "left";
-        "text-field"?: string;
-        "text-offset"?: [number, number];
-    }
-
     export interface MapGLLayerLineStringPaint {
         "line-color"?: string;
         "line-opacity"?: number;
         "line-width"?: number;
+    }
+
+    export interface MapGLCurveTypeStep {
+        base: number;
+        stops: number[][];
+    }
+
+    export interface MapGLLayerSymbolLayout extends MapGLLayerLayout {
+        "icon-allow-overlap"?: boolean;
+        "icon-image"?: string;
+        "icon-optional"?: boolean;
+        "icon-size"?: number;
+        "text-allow-overlap": boolean;
+        "text-anchor"?: string | MapGLCurveTypeStep;
+        "text-field"?: string;
+        "text-offset"?: number | MapGLCurveTypeStep;
+        "text-size"?: number | MapGLCurveTypeStep;
     }
 
     export const PROPERTY_AFFECTS_ZOOM_TO_FIT = "acx:affectsZoomToFit";
@@ -222,8 +245,6 @@ namespace MapBoxReact {
             if (mapComponent) {
                 this._map = mapComponent.getMap();
             }
-
-            // this.updateMap(this.props);
         }
 
         private reduceToBounds(coordinates: number[][]): mapboxgl.LngLatBounds {
@@ -272,8 +293,6 @@ namespace MapBoxReact {
                 for (let i = 0; i < props.layers.length; i++) {
                     this.addLayer(props.layers[i]);
                 }
-            } else {
-                this._map.flyTo({ center: [props.latitude, props.longitude], zoom: props.zoom });
             }
         }
 
