@@ -1,7 +1,7 @@
 {
   "name": "acadia-explorer",
   "version": "0.0.1",
-  "description": "",
+  "description": "Island Explorer routes and current locations of buses.",
   "main": "index.js",
   "scripts": {
     "build": "webpack",
@@ -36,7 +36,7 @@
     "html-webpack-plugin": "^2.28.0",
     "http-server": "^0.9.0",
     "node-sass": "^4.5.3",
-    "prop-types": "^15.5.7",
+    "prop-types": "15.5.4",
     "react": "^15.5.4",
     "react-addons-transition-group": "^15.5.2",
     "react-dom": "^15.5.4",
