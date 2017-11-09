@@ -1,0 +1,15 @@
+environment:
+  access_token:
+    secure: H9sFhjbuf7fSmveMmHPdTG/IeGFYL+vOBrAeN2CTvoV1QrlOrCvjCI+VuMiGUYfu
+
+on_success:
+  - git config --global credential.helper store
+  - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com\n"
+  - git config --global user.email "rlmcneary2@gmail.com"
+  - git config --global user.name "Rich McNeary"
+  - xcopy dist ..\temp\ /E
+  - git checkout -b gh-pages
+  - git rm -rf
+  - xcopy ..\temp\ . /E
+  - git commit -m "AppVeyor build: develop" -a
+  - git push origin gh-pages
