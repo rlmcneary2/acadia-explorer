@@ -271,6 +271,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 name
             };
         });
+
         const geoJson = GeoJSON.parse(data, { extra: { icon: "circle" }, Point: ["lat", "lng"] });
 
         const paint: mbx.MapGLLayerCirclePaint = {
@@ -311,6 +312,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 name
             };
         });
+
         const geoJson = GeoJSON.parse(data, { Point: ["lat", "lng"] });
 
         const paint: mbx.MapGLLayerSymbolPaint = {
@@ -357,8 +359,8 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         return `${id}`;
     }
 
-    private _stopsLayerId(id: number, isTextLayer = false): string {
-        return `${id}_STOPS${isTextLayer ? "_TEXT" : ""}`;
+    private _stopsLayerId(id: number, isLabelLayer = false): string {
+        return `${id}_STOPS${isLabelLayer ? "_LABELS" : ""}`;
     }
 
 }
