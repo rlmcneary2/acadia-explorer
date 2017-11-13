@@ -25,7 +25,7 @@ on_success:
   - xcopy dist ..\temp\ /E
   - git checkout -b gh-pages
   - ps: Remove-Item * -Recurse -Force
-  - xcopy ..\temp\ . /E
+  - xcopy ..\temp .\ /E /Y
   - dir
 #  - git commit -m "AppVeyor build: $env.source_branch" -a
 #  - git push origin gh-pages
