@@ -3,7 +3,7 @@ artifacts:
 
 branches:
   only:
-    - develop
+    - $env.source_branch
 
 build_script:
   - ps: "Install-Product node 8 x64"
@@ -13,6 +13,7 @@ build_script:
 environment:
   access_token:
     secure: H9sFhjbuf7fSmveMmHPdTG/IeGFYL+vOBrAeN2CTvoV1QrlOrCvjCI+VuMiGUYfu
+  source_branch: develop
 
 image: Visual Studio 2017
 
@@ -23,9 +24,10 @@ on_success:
   - git config --global user.name "Rich McNeary"
   - xcopy dist ..\temp\ /E
   - git checkout -b gh-pages
-  - ps: Remove-Item * -Recurse -Force -whatif
-#  - xcopy ..\temp\ . /E
-#  - git commit -m "AppVeyor build: develop" -a
+  - ps: Remove-Item * -Recurse -Force
+  - xcopy ..\temp\ . /E
+  - dir
+#  - git commit -m "AppVeyor build: $env.source_branch" -a
 #  - git push origin gh-pages
 
 test: off
