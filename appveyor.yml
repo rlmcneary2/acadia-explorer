@@ -18,6 +18,7 @@ environment:
 image: Visual Studio 2017
 
 on_success:
+# Setup git configuration then push the built files to the gh-pages branch.
   - git config --global credential.helper store
   - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com\n"
   - git config --global user.email "rlmcneary2@gmail.com"
@@ -26,9 +27,9 @@ on_success:
   - git checkout -b gh-pages
   - ps: Remove-Item * -Recurse -Force
   - xcopy ..\temp .\ /E /Y
-  - dir
-#  - git commit -m "AppVeyor build: $env.source_branch" -a
-#  - git push origin gh-pages
+  - git add .
+  - git commit -m "AppVeyor build - $env.source_branch" -a
+  - git push origin gh-pages
 
 test: off
 
