@@ -23,7 +23,7 @@ on_success:
   - git config --global user.name "Rich McNeary"
   - xcopy dist ..\temp\ /E
   - git checkout -b gh-pages
-  - ps: Remove-Item -Recurse -Force -whatif
+  - ps: Remove-Item * -Recurse -Force -whatif
 #  - xcopy ..\temp\ . /E
 #  - git commit -m "AppVeyor build: develop" -a
 #  - git push origin gh-pages
