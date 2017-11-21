@@ -23,14 +23,16 @@ on_success:
   - xcopy dist ..\temp\ /E
   - ps: Remove-Item * -Recurse -Force
   - xcopy ..\temp .\ /E /H /Y
-  - dir .\ /a
   - git config --global credential.helper store
   - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
+  - type "$env:USERPROFILE\.git-credentials"
   - git config --global user.email "rlmcneary2@gmail.com"
   - git config --global user.name "Rich McNeary"
+  - dir .\ /a
   - git checkout -b gh-pages
   - git add .
-  - git commit -m "AppVeyor build - $env.source_branch" -a
+  - git remote -v
+  - git commit -m "AppVeyor build - $env:source_branch" -a
   - git push origin gh-pages
 
 test: off
