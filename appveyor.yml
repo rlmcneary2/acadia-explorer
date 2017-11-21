@@ -33,6 +33,8 @@ on_success:
   - git add .
   - git remote -v
   - git commit -m "AppVeyor build - $env:source_branch" -a
+  - git remote set-url --push https://github.com/rlmcneary2/acadia-explorer.git https://$(env:access_token):x-oauth-basic@github.com/rlmcneary2/acadia-explorer.git
+  - git remote -v
   - git push origin gh-pages
 
 test: off
