@@ -25,10 +25,10 @@ on_success:
   - git config --global user.name "Rich McNeary"
   - xcopy ".git" "..\temp\.git\" /E
   - xcopy dist ..\temp\ /E
-  - dir ..\temp
+  - cd ..\temp
   - git checkout -b gh-pages
-  - ps: Remove-Item * -Recurse -Force
-  - xcopy ..\temp .\ /E /H /Y
+#  - ps: Remove-Item * -Recurse -Force
+#  - xcopy ..\temp .\ /E /H /Y
   - dir .\ /a
   - git add .
   - git commit -m "AppVeyor build - $env.source_branch" -a
