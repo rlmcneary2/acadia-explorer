@@ -25,7 +25,7 @@ on_success:
   - xcopy ..\temp .\ /E /H /Y
   - git config --global credential.helper store
   - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
-  - type "$env:USERPROFILE\.git-credentials"
+  - ps: Get-Content "$env:USERPROFILE\.git-credentials" | foreach {$_}
   - git config --global user.email "rlmcneary2@gmail.com"
   - git config --global user.name "Rich McNeary"
   - dir .\ /a
