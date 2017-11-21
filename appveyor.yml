@@ -29,10 +29,10 @@ on_success:
   - git checkout -b gh-pages
   - ps: Remove-Item * -Recurse -Force
   - xcopy ..\temp .\ /E /H /Y
-  - dir .\
-#  - git add .
-#  - git commit -m "AppVeyor build - $env.source_branch" -a
-#  - git push origin gh-pages
+  - dir .\ /a
+  - git add .
+  - git commit -m "AppVeyor build - $env.source_branch" -a
+  - git push origin gh-pages
 
 test: off
 
