@@ -11,23 +11,23 @@ build_script:
   - npm run build
 
 environment:
-  access_token:
-    secure: H9sFhjbuf7fSmveMmHPdTG/IeGFYL+vOBrAeN2CTvoV1QrlOrCvjCI+VuMiGUYfu
+#  access_token:
+#    secure: H9sFhjbuf7fSmveMmHPdTG/IeGFYL+vOBrAeN2CTvoV1QrlOrCvjCI+VuMiGUYfu
   source_branch: develop
 
 image: Visual Studio 2017
 
 on_success:
 # Setup git configuration then push the built files to the gh-pages branch.
-  - git config --global credential.helper store
-  - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com\n"
-  - git config --global user.email "rlmcneary2@gmail.com"
-  - git config --global user.name "Rich McNeary"
   - xcopy ".git" "..\temp\.git\" /E
   - xcopy dist ..\temp\ /E
   - ps: Remove-Item * -Recurse -Force
   - xcopy ..\temp .\ /E /H /Y
   - dir .\ /a
+  - git config --global credential.helper store
+  - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
+  - git config --global user.email "rlmcneary2@gmail.com"
+  - git config --global user.name "Rich McNeary"
   - git checkout -b gh-pages
   - git add .
   - git commit -m "AppVeyor build - $env.source_branch" -a
