@@ -11,15 +11,13 @@ build_script:
   - npm run build
 
 environment:
-#  access_token:
-#    secure: H9sFhjbuf7fSmveMmHPdTG/IeGFYL+vOBrAeN2CTvoV1QrlOrCvjCI+VuMiGUYfu
   source_branch: develop
 
 image: Visual Studio 2017
 
 on_success:
 # Setup git configuration then push the built files to the gh-pages branch.
-  - set
+#  - set
   - xcopy ".git" "..\temp\.git\" /E
   - xcopy dist ..\temp\ /E
   - ps: Remove-Item * -Recurse -Force
@@ -33,9 +31,9 @@ on_success:
   - git add .
   - set message="AppVeyor build - %APPVEYOR_REPO_BRANCH%"
   - git commit -m %message% -a
-  - git remote -v
+#  - git remote -v
   - ps: Get-Content "$env:USERPROFILE\.git-credentials" | foreach {$_}
-  - git push origin gh-pages
+  - git push -f origin gh-pages
 
 test: off
 
