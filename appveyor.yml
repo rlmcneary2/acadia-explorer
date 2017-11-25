@@ -1,5 +1,5 @@
-artifacts:
-  - path: dist
+#artifacts:
+#  - path: dist
 
 branches:
   only:
@@ -19,6 +19,7 @@ image: Visual Studio 2017
 
 on_success:
 # Setup git configuration then push the built files to the gh-pages branch.
+  - set
   - xcopy ".git" "..\temp\.git\" /E
   - xcopy dist ..\temp\ /E
   - ps: Remove-Item * -Recurse -Force
@@ -31,11 +32,7 @@ on_success:
   - dir .\ /a
   - git checkout -b gh-pages
   - git add .
-#  - git remote -v
-  - setlocal enabledelayedexpansion
-  - echo %APPVEYOR_REPO_BRANCH%
-  - git commit -m "AppVeyor build - !APPVEYOR_REPO_BRANCH!" -a
-#  - git remote set-url --push origin https://%access_token%:x-oauth-basic@github.com/rlmcneary2/acadia-explorer.git
+  - git commit -m "AppVeyor build - %APPVEYOR_REPO_BRANCH%" -a
   - git remote -v
   - git push origin gh-pages
 
