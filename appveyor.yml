@@ -32,7 +32,9 @@ on_success:
   - git checkout -b gh-pages
   - git add .
 #  - git remote -v
-  - git commit -m "AppVeyor build - %SOURCE_BRANCH%" -a
+  - setlocal enabledelayedexpansion
+  - echo %APPVEYOR_REPO_BRANCH%
+  - git commit -m "AppVeyor build - !APPVEYOR_REPO_BRANCH!" -a
 #  - git remote set-url --push origin https://%access_token%:x-oauth-basic@github.com/rlmcneary2/acadia-explorer.git
   - git remote -v
   - git push origin gh-pages
