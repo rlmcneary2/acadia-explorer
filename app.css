@@ -1,0 +1,132 @@
+/*
+    Basic CSS defaults that might be used in resets.
+*/
+/*
+    Resets
+*/
+html {
+  font-size: 10px; }
+
+body {
+  margin: 0; }
+
+button {
+  background: white;
+  border: 0;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0; }
+  button > span:focus {
+    outline: none; }
+
+menu, ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0; }
+
+li {
+  display: block; }
+
+/*
+    Application constants (SASS variables).
+*/
+/*
+    Import app specific files...
+*/
+.control {
+  height: 52px;
+  position: relative; }
+  .control a {
+    color: black;
+    display: block;
+    height: 100%;
+    text-decoration: none; }
+  .control span {
+    font-size: 4.5em; }
+
+.menu-item {
+  height: 52px;
+  position: relative; }
+  .menu-item a {
+    color: black;
+    display: block;
+    height: 100%;
+    text-decoration: none; }
+  .menu-item span {
+    font-size: 4.5em; }
+
+.menu-container {
+  background: white;
+  position: relative; }
+
+.routes-menu-enter {
+  transform: translateX(-100%); }
+
+.routes-menu-enter.routes-menu-enter-active {
+  transform: translateX(0%);
+  transition: transform 250ms ease-out; }
+
+.routes-menu-leave {
+  transform: translateX(0%); }
+
+.routes-menu-leave.routes-menu-leave-active {
+  transform: translateX(-100%);
+  transition: transform 150ms ease-in; }
+
+.route-tabs {
+  /*    flex: 0 0 auto;*/ }
+
+.route-content {
+  flex: auto;
+  height: 100%;
+  position: relative; }
+
+.route-content > :nth-child(1n+0) {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0; }
+
+.aex-map-wrapper {
+  height: 100%; }
+  .aex-map-wrapper .mapboxgl-map {
+    visibility: inherit !important;
+    /* Don't like it but visibility is being set directly on this element. */ }
+
+#react-root {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0; }
+
+#routes-menu-transition {
+  display: block;
+  left: 0;
+  position: absolute;
+  top: 52px; }
+
+.application {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin: 0 auto;
+  max-width: 1000px;
+  overflow: hidden;
+  position: relative; }
+
+.application > :nth-child(1n+0) {
+  flex: 0; }
+
+.application > .header {
+  display: flex;
+  flex: 0 0 auto;
+  height: 52px; }
+
+.application > .content {
+  display: flex;
+  flex: 1;
+  flex-direction: column; }
+
+/*# sourceMappingURL=app.css.map*/
