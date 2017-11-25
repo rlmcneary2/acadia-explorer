@@ -32,9 +32,11 @@ on_success:
   - dir .\ /a
   - git checkout -b gh-pages
   - git add .
-  - git commit -m "AppVeyor build - %APPVEYOR_REPO_BRANCH%" -a
+  - set message="AppVeyor build - %APPVEYOR_REPO_BRANCH%"
+  - git commit -m %message% -a
   - git remote -v
-  - git push origin gh-pages
+  - ps: Get-Content "$env:USERPROFILE\.git-credentials" | foreach {$_}
+  - ps: git push origin gh-pages
 
 test: off
 
