@@ -20,12 +20,27 @@ async function messageHandler(evt: MessageEvent) {
         error = err;
     }
 
-    const { ok, status, statusText } = res;
+    let ok: boolean;
+    let status: number;
+    let statusText: string;
+    if (res) {
+        ({ ok, status, statusText } = res);
 
-    if (!ok || error) {
-        if ((res as any).error) {
-            res = (res as any).error();
+        if (!ok || error) {
+            if ((res as any).error) {
+                res = (res as any).error();
+            }
         }
+    } else {
+        ok = false;
+        error = error || "Unknown error.";
+    }
+
+    if (error && error instanceof Error) {
+        // An Error instance can't be copied in postMessage() so create a plain
+        // object with the information available.
+        const { message, name } = error;
+        error = { message, name };
     }
 
     const workerResponse: any = {
