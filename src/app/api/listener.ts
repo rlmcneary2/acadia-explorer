@@ -6,6 +6,7 @@ import { HttpRequestDefinedUids } from "../action/interfaces";
 import { State } from "../reducer/interfaces";
 import * as redux from "redux";
 import * as toGeoJSON from "@mapbox/togeojson";
+import apiData from "./data";
 
 
 export default (store: redux.Store<{}>) => {
@@ -40,7 +41,7 @@ function httpHandler(dispatch: redux.Dispatch<{}>, state: State) {
                     responseType: "text",
                     routeId: item.RouteId,
                     uid: uid,
-                    url: new URL(`https://islandexplorertracker.availtec.com/InfoPoint/Resources/Traces/${item.RouteTraceFilename}`)
+                    url: new URL(`${apiData.domain}/InfoPoint/Resources/Traces/${item.RouteTraceFilename}`)
                 } as any)));
 
                 uid++;
@@ -48,7 +49,7 @@ function httpHandler(dispatch: redux.Dispatch<{}>, state: State) {
                 dispatch(actionHttp.request(({
                     routeId: item.RouteId,
                     uid: uid,
-                    url: new URL(`https://islandexplorertracker.availtec.com/InfoPoint/rest/Stops/GetAllStopsForRoutes?routeIDs=${item.RouteId}`)
+                    url: new URL(`${apiData.domain}/InfoPoint/rest/Stops/GetAllStopsForRoutes?routeIDs=${item.RouteId}`)
                 } as any)));
 
                 uid++;
