@@ -12,7 +12,7 @@
     "url": "git+https://github.com/rlmcneary2/acadia-explorer.git"
   },
   "author": "Richard L. McNeary II",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/rlmcneary2/acadia-explorer/issues"
   },
