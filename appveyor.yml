@@ -1,6 +1,3 @@
-#artifacts:
-#  - path: dist
-
 branches:
   only:
     - $env.source_branch
@@ -25,7 +22,6 @@ on_success:
   - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
   - git config --global user.email "%APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL%"
   - git config --global user.name "%APPVEYOR_REPO_COMMIT_AUTHOR%"
-#  - dir .\ /a
   - git checkout -b gh-pages
   - git add .
   - git commit -m "AppVeyor build - branch=%APPVEYOR_REPO_BRANCH%, commit=%APPVEYOR_REPO_COMMIT%" -a
