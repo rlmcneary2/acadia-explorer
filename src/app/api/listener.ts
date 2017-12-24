@@ -126,7 +126,7 @@ function httpHandler(dispatch: redux.Dispatch<{}>, state: State) {
 
 
 let _busLocationRequests: number[] = [];
-let _busLocationInterval = null;
+let _busLocationTimeout: number = null;
 function busLocationsHandler(dispatch: redux.Dispatch<{}>, state: State) {
     // Create a new array every time state changes.
     _busLocationRequests = state.api.busLocations.reduce((acc: number[], item) => {
@@ -138,19 +138,25 @@ function busLocationsHandler(dispatch: redux.Dispatch<{}>, state: State) {
     }, []);
 
     if (0 < _busLocationRequests.length) {
-        if (_busLocationInterval === null) {
-            _busLocationInterval = setInterval(busLocationInterval, 30 * 1000);
+        if (_busLocationTimeout === null) {
+            _busLocationTimeout = setTimeout(busLocationTimeout);
         }
     }
 }
 
-function busLocationInterval() {
+function busLocationTimeout() {
     if (_busLocationRequests.length < 1) {
-        clearInterval(_busLocationInterval);
-        _busLocationInterval = null;
+        _busLocationTimeout = null;
         return;
     }
 
+    const start = Date.now();
+
     // TODO: Get the bus locations!
-    console.log ("TODO: get bus locations.");
+    console.log("TODO: get bus locations.");
+
+    const stop = Date.now();
+
+    const timeout = (30 * 1000) - (stop - start);
+    _busLocationTimeout = window.setTimeout(busLocationTimeout, timeout < 0 ? 0 : timeout);
 }
