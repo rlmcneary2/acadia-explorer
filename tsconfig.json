@@ -35,10 +35,7 @@
         "removeComments": false,
         "sourceMap": true,
         "suppressImplicitAnyIndexErrors": false,
-        "target": "es2017",
-        "types": [
-            "node"
-        ]
+        "target": "es2017"
     },
     "exclude": [
         "node_modules"
