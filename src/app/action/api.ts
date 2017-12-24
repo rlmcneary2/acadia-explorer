@@ -28,10 +28,19 @@ import { RouteGeo } from "@reducer/api";
 namespace actionApi {
 
     export const types = Object.freeze({
+        addBusLocations: "addBusLocations",
         updateRoutes: "updateRoutes",
         updateStops: "updateStops",
         updateKmlFiles: "updateKmlFiles"
     });
+
+    export function addBusLocations(routeId: number, requestId: string): DataActionId<number, string> {
+        return {
+            id: routeId,
+            data: requestId,
+            type: actionApi.types.addBusLocations
+        };
+    }
 
     export function updateKmlFiles(data: RouteGeo): DataAction<RouteGeo> {
         return {

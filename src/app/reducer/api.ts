@@ -25,10 +25,24 @@ import { actionApi } from "../action/api";
 import { BaseAction, DataAction, DataActionId } from "../action/interfaces";
 
 
-export default (state: State = { routeGeos: [], routeStops: [] }, action: BaseAction): State => {
+export default (state: State = { busLocations: [], routeGeos: [], routeStops: [] }, action: BaseAction): State => {
     let nextState: State;
 
     switch (action.type) {
+
+        case actionApi.types.addBusLocations: {
+            const a = action as DataActionId<number, string>;
+
+            const index = state.busLocations.findIndex(item => item.requestId === a.data);
+            if (index < 0) {
+                nextState = Object.assign({}, state);
+                const bl = state.busLocations ? [...state.busLocations] : [];
+                bl.push({ requestId: a.data, routeId: a.id });
+                nextState.busLocations = bl;
+            }
+
+            break;
+        }
 
         case actionApi.types.updateKmlFiles: {
             const a = action as DataAction<RouteGeo>;
@@ -75,6 +89,12 @@ export default (state: State = { routeGeos: [], routeStops: [] }, action: BaseAc
 };
 
 
+interface BusLocationRequest {
+    locations?: any[];
+    requestId: string;
+    routeId: number;
+}
+
 interface RouteGeo {
     id: number;
     geoJson: {
@@ -88,10 +108,11 @@ interface RouteStops {
 }
 
 interface State {
+    busLocations: BusLocationRequest[];
     routeGeos: RouteGeo[];
     routes?: any[];
     routeStops: RouteStops[];
 }
 
 
-export { RouteGeo, RouteStops, State };
+export { BusLocationRequest, RouteGeo, RouteStops, State };

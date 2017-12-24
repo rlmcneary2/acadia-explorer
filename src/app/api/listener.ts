@@ -33,6 +33,7 @@ import apiData from "./data";
 export default (store: redux.Store<{}>) => {
     const state = store.getState() as State;
     httpHandler(store.dispatch, state);
+    busLocationsHandler(store.dispatch, state);
 };
 
 
@@ -121,4 +122,35 @@ function httpHandler(dispatch: redux.Dispatch<{}>, state: State) {
         });
     }
 
+}
+
+
+let _busLocationRequests: number[] = [];
+let _busLocationInterval = null;
+function busLocationsHandler(dispatch: redux.Dispatch<{}>, state: State) {
+    // Create a new array every time state changes.
+    _busLocationRequests = state.api.busLocations.reduce((acc: number[], item) => {
+        if (!acc.some(x => x === item.routeId)) {
+            acc.push(item.routeId);
+        }
+
+        return acc;
+    }, []);
+
+    if (0 < _busLocationRequests.length) {
+        if (_busLocationInterval === null) {
+            _busLocationInterval = setInterval(busLocationInterval, 30 * 1000);
+        }
+    }
+}
+
+function busLocationInterval() {
+    if (_busLocationRequests.length < 1) {
+        clearInterval(_busLocationInterval);
+        _busLocationInterval = null;
+        return;
+    }
+
+    // TODO: Get the bus locations!
+    console.log ("TODO: get bus locations.");
 }

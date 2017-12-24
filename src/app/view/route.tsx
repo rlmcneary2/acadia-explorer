@@ -26,10 +26,13 @@ import LinkButton, { Props as LinkButtonProps } from "@controls/linkButton";
 import { RouteGeo, RouteStops } from "@reducer/api";
 import { State as ReduxState } from "@reducer/interfaces";
 import * as React from "react";
+import * as redux from "redux";
 import { connect } from "react-redux";
 import * as GeoJSON from "geojson";
+import { actionApi } from "@action/api";
 
 
+const ACTION_ADD_BUS_LOCATION_REQUEST_ID = "IslandExplorerRoute Component";
 const ROUTE_LINE_WIDTH = 8;
 const START_LATITUDE = 44.3420759;
 const START_LONGITUDE = -68.2654881;
@@ -38,7 +41,9 @@ const ZOOM_TO_FIT_PADDING = 100;
 
 
 interface InternalProps extends Props {
+    componentWillUnmount: (props: InternalProps) => void;
     route?: any;
+    routeChanged: (routeId: number) => void;
     routeGeos?: RouteGeo[];
     routeStops?: RouteStops[];
 }
@@ -75,7 +80,7 @@ interface State {
 
 
 // This is the container.
-export default connect(mapStateToProps)((props: InternalProps): JSX.Element => {
+export default connect(mapStateToProps, mapDispatchToProps)((props: InternalProps): JSX.Element => {
     return (<IslandExplorerRoute {...props } />);
 });
 
@@ -87,7 +92,8 @@ function mapStateToProps(state: ReduxState, ownProps: Props): InternalProps {
         route = state.api.routes.find(item => item.RouteId === routeId);
     }
 
-    const props: InternalProps = {
+    // InternalProps
+    const props: any = {
         location,
         match
     };
@@ -104,7 +110,26 @@ function mapStateToProps(state: ReduxState, ownProps: Props): InternalProps {
         props.routeStops = state.api.routeStops;
     }
 
-    return props;
+    return props as InternalProps;
+}
+
+function mapDispatchToProps(dispatch: redux.Dispatch<{}>): InternalProps {
+    const dispatchProps = {
+
+        componentWillUnmount: (props: InternalProps) => {
+            // TODO: remove bus locations for ACTION_ADD_BUSES_REQUEST.
+            console.log ("TODO: remove bus locations for ACTION_ADD_BUSES_REQUEST.");
+        },
+
+        routeChanged: (routeId: number) => {
+            dispatch(
+                actionApi.addBusLocations(routeId, ACTION_ADD_BUS_LOCATION_REQUEST_ID)
+            );
+        }
+
+    };
+
+    return dispatchProps as InternalProps;
 }
 
 
@@ -129,11 +154,22 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         ) {
             const { Color: color, RouteId: id, ShortName: shortName } = nextProps.route;
             this.setState({ activeRoute: { color, id, shortName } });
+
+            // TODO: kickoff request for the locations of buses on this route. When
+            // does the request for bus locations stop? First when another route is
+            // chosen. Second when the route component is being unmounted.
+
+            // Invoke action to send the bus location request and stop any existing
+            // bus location requests. This action should take: a request ID (string)
+            // the route ID (number). The request ID will identify that the route
+            // component made the request and can only change its own request.
+            nextProps.routeChanged(nextProps.route.RouteId);
         }
     }
 
     public componentWillUnmount() {
         this._mapIsInitializedHandlerBound = null;
+        this.props.componentWillUnmount(this.props);
     }
 
     public render(): JSX.Element {
