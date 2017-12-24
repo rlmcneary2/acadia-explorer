@@ -21,6 +21,9 @@
         "noUnusedParameters": false,
         "outDir": "ts-temp",
         "paths": {
+            "@action/*": [
+                "src/app/action/*"
+            ],
             "@controls/*": [
                 "src/app/view/common/controls/*"
             ],

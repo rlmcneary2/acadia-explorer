@@ -123,6 +123,7 @@ module.exports = {
     ],
     resolve: {
         alias: {
+            "@action": path.resolve(__dirname, "src/app/action/"),
             "@controls": path.resolve(__dirname, "src/app/view/common/controls/"),
             "@reducer": path.resolve(__dirname, "src/app/reducer/")
         },
