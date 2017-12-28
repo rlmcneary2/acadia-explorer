@@ -125,11 +125,16 @@ function httpHandler(dispatch: redux.Dispatch<{}>, state: State) {
 }
 
 
-let _busLocationRequests: number[] = [];
-let _busLocationTimeout: number = null;
+let _vehicleLocationsRequest: {
+    activeRoutes: number[];
+    start: number;
+    stop: number;
+    timeoutId: number;
+} = null;
+
 function busLocationsHandler(dispatch: redux.Dispatch<{}>, state: State) {
-    // Create a new array every time state changes.
-    _busLocationRequests = state.api.busLocations.reduce((acc: number[], item) => {
+    const nextVehicleLocationsRequest: any = {};
+    nextVehicleLocationsRequest.activeRoutes = state.api.busLocations.reduce((acc: number[], item) => {
         if (!acc.some(x => x === item.routeId)) {
             acc.push(item.routeId);
         }
@@ -137,26 +142,54 @@ function busLocationsHandler(dispatch: redux.Dispatch<{}>, state: State) {
         return acc;
     }, []);
 
-    if (0 < _busLocationRequests.length) {
-        if (_busLocationTimeout === null) {
-            _busLocationTimeout = setTimeout(busLocationTimeout);
+    // TODO: Have any new routes been added? If so the current timeout (if any)
+    // must be canceled and a request that includes the locations of vehicles on
+    // all the current routes should be made right away.
+
+    let timeout = 0;
+
+    // Has a response been returned from a request for vehicle locations?
+    const request = state.http.requests.find(item => item.response && item.uid === HttpRequestDefinedUids.GetAllVehiclesForRoutes);
+    if (request) {
+        console.log("listener busLocationHandler - request: %O", request);
+        _vehicleLocationsRequest.stop = Date.now();
+        dispatch(actionHttp.removeRequest(HttpRequestDefinedUids.GetAllVehiclesForRoutes));
+
+        if (request.response.ok) {
+            const data = new Map<number, object[]>();
+            _vehicleLocationsRequest.activeRoutes.forEach(id => {
+                data.set(id, (request.response.response as any[]).filter(vehicle => vehicle.RouteId === id));
+            });
+
+            dispatch(actionApi.updateBusLocations(data));
+
+            timeout = (30 * 1000) - (_vehicleLocationsRequest.stop - _vehicleLocationsRequest.start);
+
+            _vehicleLocationsRequest = null;
+        }
+    }
+
+    if (0 < nextVehicleLocationsRequest.activeRoutes.length) {
+        if (_vehicleLocationsRequest === null) {
+            console.log(`listener busLocationHandler - timeout: ${Math.round(timeout < 0 ? 0 : timeout / 1000)}`);
+            nextVehicleLocationsRequest.timeoutId = window.setTimeout(() => busLocationTimeout(dispatch), timeout < 0 ? 0 : timeout);
+            _vehicleLocationsRequest = nextVehicleLocationsRequest;
         }
     }
 }
 
-function busLocationTimeout() {
-    if (_busLocationRequests.length < 1) {
-        _busLocationTimeout = null;
+function busLocationTimeout(dispatch: redux.Dispatch<{}>) {
+    if (_vehicleLocationsRequest.activeRoutes.length < 1) {
+        _vehicleLocationsRequest = null;
         return;
     }
 
-    const start = Date.now();
+    _vehicleLocationsRequest.start = Date.now();
 
-    // TODO: Get the bus locations!
-    console.log("TODO: get bus locations.");
+    console.log("listener busLocationHandler - getting bus locations.");
 
-    const stop = Date.now();
-
-    const timeout = (30 * 1000) - (stop - start);
-    _busLocationTimeout = window.setTimeout(busLocationTimeout, timeout < 0 ? 0 : timeout);
+    dispatch(actionHttp.request(({
+        uid: HttpRequestDefinedUids.GetAllVehiclesForRoutes,
+        url: new URL(`${apiData.domain}/InfoPoint/rest/Vehicles/GetAllVehiclesForRoutes?routeIDs=${_vehicleLocationsRequest.activeRoutes.join(",")}`)
+    } as any)));
 }

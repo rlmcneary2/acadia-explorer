@@ -29,6 +29,7 @@ namespace actionApi {
 
     export const types = Object.freeze({
         addBusLocations: "addBusLocations",
+        updateBusLocations: "updateBusLocations",
         updateRoutes: "updateRoutes",
         updateStops: "updateStops",
         updateKmlFiles: "updateKmlFiles"
@@ -39,6 +40,13 @@ namespace actionApi {
             id: routeId,
             data: requestId,
             type: actionApi.types.addBusLocations
+        };
+    }
+
+    export function updateBusLocations(locations: Map<number, object[]>): DataAction<Map<number, object[]>> {
+        return {
+            data: locations,
+            type: actionApi.types.updateBusLocations
         };
     }
 

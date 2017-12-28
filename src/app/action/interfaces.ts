@@ -63,7 +63,8 @@ interface HttpRequestStartData {
 }
 
 enum HttpRequestDefinedUids {
-    GetRoutes = 1000000
+    GetRoutes = 1000000,
+    GetAllVehiclesForRoutes = 1000001
 }
 
 export {

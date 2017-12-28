@@ -44,6 +44,27 @@ export default (state: State = { busLocations: [], routeGeos: [], routeStops: []
             break;
         }
 
+        case actionApi.types.updateBusLocations: {
+            const a = action as DataAction<Map<number, object[]>>;
+
+            const nextBusLocations: BusLocationRequest[] = [];
+            a.data.forEach((vehicles, id) => {
+                state.busLocations.forEach(bl => {
+                    if (bl.routeId === id) {
+                        const { requestId, routeId } = bl;
+                        nextBusLocations.push({ requestId, routeId, vehicles });
+                    } else {
+                        nextBusLocations.push(bl);
+                    }
+                });
+            });
+
+            nextState = Object.assign({}, state);
+            nextState.busLocations = nextBusLocations;
+
+            break;
+        }
+
         case actionApi.types.updateKmlFiles: {
             const a = action as DataAction<RouteGeo>;
 
@@ -90,7 +111,7 @@ export default (state: State = { busLocations: [], routeGeos: [], routeStops: []
 
 
 interface BusLocationRequest {
-    locations?: any[];
+    vehicles?: any[];
     requestId: string;
     routeId: number;
 }
