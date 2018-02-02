@@ -26,7 +26,8 @@ interface ControlTextContent {
     values?: object;
 }
 
-interface ControlLinkContent extends ControlTextContent {
+interface ControlLinkContent {
+    text: ControlTextContent | string;
     to: string;
 }
 

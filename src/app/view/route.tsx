@@ -70,7 +70,7 @@ interface Props {
 }
 
 interface State {
-    activeRoute: {
+    activeRoute?: {
         color: any;
         id: number;
         shortName: string;
@@ -118,7 +118,7 @@ function mapDispatchToProps(dispatch: redux.Dispatch<{}>): InternalProps {
 
         componentWillUnmount: (props: InternalProps) => {
             // TODO: remove bus locations for ACTION_ADD_BUSES_REQUEST.
-            console.log ("TODO: remove bus locations for ACTION_ADD_BUSES_REQUEST.");
+            console.log("TODO: remove bus locations for ACTION_ADD_BUSES_REQUEST.");
         },
 
         routeChanged: (routeId: number) => {
@@ -140,7 +140,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
     constructor() {
         super();
-        this.state = { activeRoute: { color: "", id: -1, shortName: "" }, layers: new Map<string, LayerProps>() };
+        this.state = { layers: new Map<string, LayerProps>() };
     }
 
     public componentWillMount() {
@@ -148,8 +148,10 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
     }
 
     public componentWillReceiveProps(nextProps: InternalProps) {
+        console.log("route componentWillReceiveProps - nextProps: %O", nextProps);
         if (
             nextProps.hasOwnProperty("route") &&
+            this.state.activeRoute &&
             nextProps.route.RouteId !== this.state.activeRoute.id
         ) {
             const { Color: color, RouteId: id, ShortName: shortName } = nextProps.route;
@@ -173,6 +175,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
     }
 
     public render(): JSX.Element {
+        console.log("route render - props: %O", this.props);
         const isShowMap = !this.props.location.pathname.endsWith("info");
         let content = null;
         if (this.props.hasOwnProperty("route")) {
@@ -196,11 +199,13 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
             // Use the information about layers in state to determine which
             // layer is visible on the map.
-            if (this.state.activeRoute && this.state.activeRoute.id) {
+            console.log("route render - state.activeRoute: %O", this.state.activeRoute);
+            const routeId = this._getActiveRouteId();
+            if (routeId !== null) {
                 const visibleLayersIds: string[] = [];
                 this.state.layers
                     .forEach(item => {
-                        if (item.id === this.state.activeRoute.id) {
+                        if (item.id === routeId) {
                             visibleLayersIds.push(this._routeLayerId(item.id));
                             visibleLayersIds.push(this._stopsLayerId(item.id));
                             visibleLayersIds.push(this._stopsLayerId(item.id, true));
@@ -211,7 +216,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                     mapProps.visibleLayersIds = visibleLayersIds;
                 }
 
-                mapProps.zoomToLayerId = this._routeLayerId(this.state.activeRoute.id);
+                mapProps.zoomToLayerId = this._routeLayerId(routeId);
             }
 
             // It would be nice to use a react router Switch or Redirect here but we
@@ -232,7 +237,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
         const linkButtonProps: LinkButtonProps = {
             content: {
-                id: !isShowMap ? "Map" : "Info"
+                id: !isShowMap ? "Map" : "INFO"
             },
             to: !isShowMap ? `/route/${this.props.match.params.id}/map` : `/route/${this.props.match.params.id}/info`
         };
@@ -401,6 +406,16 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         };
 
         return layer;
+    }
+
+    private _getActiveRouteId(): number {
+        if (this.state.activeRoute) {
+            return this.state.activeRoute.id;
+        } else if (this.props.route) {
+            return this.props.route.RouteId;
+        }
+
+        return null;
     }
 
     private _mapInitialized = false;

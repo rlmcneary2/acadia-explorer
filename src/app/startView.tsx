@@ -26,13 +26,15 @@ import { IntlProvider } from "react-intl";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import App from "./view/app";
+const messages = require("../../locale/en-US.json");
 
 
 export default ({ store }) => {
     const locale = "en-US";
     const intlProps = {
         key: locale, // Set the key value to get React to re-render when the locale changes.
-        locale
+        locale,
+        messages
     };
 
     return (

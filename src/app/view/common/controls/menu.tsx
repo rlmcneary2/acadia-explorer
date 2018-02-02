@@ -55,8 +55,16 @@ class Menu extends React.Component<Props, JSX.Element> {
             return null;
         }
 
-        return (this.props.items as ControlTextContent[]).map((item): JSX.Element => {
-            let content: JSX.Element = (<FormattedMessage id={item.id} values={item.values} />);
+        return (this.props.items as ControlLinkContent[]).map((item): JSX.Element => {
+            let content: JSX.Element;
+            let key: string;
+            if (typeof item.text === "string") {
+                content = (<span>{item.text}</span>);
+                key = item.text;
+            } else {
+                content = (<FormattedMessage id={item.text.id} values={item.text.values} />);
+                key = item.text.id;
+            }
 
             if (isNavigationItem(item)) {
                 content = (<Link to={item.to}>{content}</Link>);
@@ -69,7 +77,7 @@ class Menu extends React.Component<Props, JSX.Element> {
                 };
             }
 
-            return (<li className="menu-item" key={item.id} onClick={clickHandler} role="menuitem">{content}</li>);
+            return (<li className="menu-item" key={key} onClick={clickHandler} role="menuitem">{content}</li>);
         });
     }
 

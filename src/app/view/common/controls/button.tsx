@@ -34,7 +34,7 @@ interface Props {
      */
     children?: JSX.Element;
     click?: (props: Props) => void;
-    content: ControlTextContent;
+    content: ControlTextContent | string;
     isLink?: boolean;
     isPrimary?: boolean;
 }
@@ -44,8 +44,13 @@ export default (props: Props): JSX.Element => {
     let content: JSX.Element = null;
     if (props.children) {
         content = props.children;
-    } else if (props.content.id) {
-        content = (<FormattedMessage {...props.content } />);
+    } else {
+        if (typeof props.content === "string") {
+            content = (<span>{props.content}</span>);
+        } else {
+            content = (<FormattedMessage {...props.content } />);
+
+        }
     }
 
     const classNames = ["control"];

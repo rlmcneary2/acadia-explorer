@@ -97,13 +97,13 @@ class App extends React.Component<Props> {
 
         let items: ControlLinkContent[] = this.props.routes.map(item => {
             return {
-                id: item.LongName,
+                text: item.LongName,
                 to: `/route/${item.RouteId}`
             };
         });
 
         items = [{
-            id: "NONE",
+            text: { id: "NONE" },
             to: "/"
         }, ...items];
 
