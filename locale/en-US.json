@@ -1,4 +1,5 @@
 {
-    "INFO": "Info",
+    "INFO": "Route information",
+    "MAP": "Route map",
     "NONE": "No route"
 }

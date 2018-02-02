@@ -237,7 +237,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
         const linkButtonProps: LinkButtonProps = {
             content: {
-                id: !isShowMap ? "Map" : "INFO"
+                id: !isShowMap ? "MAP" : "INFO"
             },
             to: !isShowMap ? `/route/${this.props.match.params.id}/map` : `/route/${this.props.match.params.id}/info`
         };
