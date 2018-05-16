@@ -22,7 +22,6 @@
 
 
 import { actionApp } from "./action/app";
-import apiListener from "./api/listener";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import reducers from "./reducer/reducers";
@@ -69,7 +68,6 @@ export default async () => {
     const store = redux.createStore(reducers, {}, reduxMiddleware);
 
     // Add listeners.
-    store.subscribe(() => apiListener(store));
 
     // Dispatch the initialize action.
     store.dispatch(actionApp.initialize());

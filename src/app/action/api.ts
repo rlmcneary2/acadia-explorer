@@ -23,12 +23,18 @@
 
 import { DataAction, DataActionId } from "./interfaces";
 import { RouteGeo } from "@reducer/api";
+import { http } from "../network/http";
+import apiData from "../api/data";
+import { WorkerResponse } from "../network/httpInterfaces";
+import * as toGeoJSON from "@mapbox/togeojson";
+import { FeatureCollection } from "geojson";
 
 
 namespace actionApi {
 
     export const types = Object.freeze({
         addBusLocations: "addBusLocations",
+        getRoutes: "getRoutes",
         updateBusLocations: "updateBusLocations",
         updateRoutes: "updateRoutes",
         updateStops: "updateStops",
@@ -40,6 +46,23 @@ namespace actionApi {
             id: routeId,
             data: requestId,
             type: actionApi.types.addBusLocations
+        };
+    }
+
+    export function getRoutes() {
+        return async dispatch => {
+            const res = await routes();
+            const { ok } = res;
+            if (!ok) {
+                // Error action.
+                return;
+            }
+
+            const response: any[] = res.response;
+            dispatch(actionApi.updateRoutes(response));
+
+            routeTraces(dispatch, response);
+            routeStops(dispatch, response);
         };
     }
 
@@ -76,3 +99,27 @@ namespace actionApi {
 
 
 export { actionApi };
+
+
+async function routes(): Promise<WorkerResponse> {
+    return await http.get(`${apiData.domain}/InfoPoint/rest/Routes/GetVisibleRoutes`);
+}
+
+async function routeTraces(dispatch, routes: any[]): Promise<void> {
+    routes.forEach(async route => {
+        const res = await http.get(`${apiData.domain}/InfoPoint/Resources/Traces/${route.RouteTraceFilename}`, null, "text");
+
+        // Convert from KML to geojson.
+        const xml = new DOMParser().parseFromString(res.response, "text/xml");
+        const geoJson: FeatureCollection = toGeoJSON.kml(xml);
+
+        dispatch(actionApi.updateKmlFiles({ id: route.RouteId, geoJson }));
+    });
+}
+
+async function routeStops(dispatch, routes: any[]) {
+    routes.forEach(async route => {
+        const res = await http.get(`${apiData.domain}/InfoPoint/rest/Stops/GetAllStopsForRoutes?routeIDs=${route.RouteId}`);
+        dispatch(actionApi.updateStops(route.RouteId, res.response));
+    });
+}

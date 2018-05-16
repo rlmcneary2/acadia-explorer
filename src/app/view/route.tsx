@@ -28,9 +28,8 @@ import { State as ReduxState } from "@reducer/interfaces";
 import * as React from "react";
 import * as redux from "redux";
 import { connect } from "react-redux";
-import * as GeoJSON from "geojson";
+import * as GeoJSON from "geojson/geojson"; // There is a name collision here, this line must exist to import the geojson package (not an @types package).
 import { actionApi } from "@action/api";
-
 
 const ACTION_ADD_BUS_LOCATION_REQUEST_ID = "IslandExplorerRoute Component";
 const ROUTE_LINE_WIDTH = 8;
