@@ -26,6 +26,22 @@
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.0.0.tgz#c1de4293081424da3ac30c23afa850af1019bb54"
 
+"@types/geojson@*":
+  version "7946.0.3"
+  resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.3.tgz#e5791534ab0acfb2b3a39b713966cfcee85d469f"
+
+"@types/leaflet@^0":
+  version "0.7.31"
+  resolved "https://registry.yarnpkg.com/@types/leaflet/-/leaflet-0.7.31.tgz#c99eaaba8dc7e695868588891f24e441898dfc79"
+  dependencies:
+    "@types/geojson" "*"
+
+"@types/mapbox@^1.6.37":
+  version "1.6.37"
+  resolved "https://registry.yarnpkg.com/@types/mapbox/-/mapbox-1.6.37.tgz#289bde7c773b7d835f75597ce051a7869ddf16d7"
+  dependencies:
+    "@types/leaflet" "^0"
+
 "@types/node@^7.0.12":
   version "7.0.38"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.38.tgz#140ecc61930b328e72914237c58dd62c8829e94d"
