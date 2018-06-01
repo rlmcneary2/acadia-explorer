@@ -31,7 +31,6 @@ import { connect } from "react-redux";
 import * as GeoJSON from "geojson/geojson"; // There is a name collision here, this line must exist to import the geojson package (not an @types package).
 import { actionApi } from "@action/api";
 
-const ACTION_ADD_BUS_LOCATION_REQUEST_ID = "IslandExplorerRoute Component";
 const ROUTE_LINE_WIDTH = 8;
 const START_LATITUDE = 44.3420759;
 const START_LONGITUDE = -68.2654881;
@@ -80,7 +79,7 @@ interface State {
 
 // This is the container.
 export default connect(mapStateToProps, mapDispatchToProps)((props: InternalProps): JSX.Element => {
-    return (<IslandExplorerRoute {...props } />);
+    return (<IslandExplorerRoute {...props} />);
 });
 
 function mapStateToProps(state: ReduxState, ownProps: Props): InternalProps {
@@ -112,7 +111,7 @@ function mapStateToProps(state: ReduxState, ownProps: Props): InternalProps {
     return props as InternalProps;
 }
 
-function mapDispatchToProps(dispatch: redux.Dispatch<{}>): InternalProps {
+function mapDispatchToProps(dispatch: redux.Dispatch<any>): InternalProps {
     const dispatchProps = {
 
         componentWillUnmount: (props: InternalProps) => {
@@ -121,9 +120,7 @@ function mapDispatchToProps(dispatch: redux.Dispatch<{}>): InternalProps {
         },
 
         routeChanged: (routeId: number) => {
-            dispatch(
-                actionApi.addBusLocations(routeId, ACTION_ADD_BUS_LOCATION_REQUEST_ID)
-            );
+            dispatch(actionApi.getBusLocations([routeId]) as any);
         }
 
     };

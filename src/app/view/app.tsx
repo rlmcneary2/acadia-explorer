@@ -82,11 +82,11 @@ class App extends React.Component<Props> {
     }
 
 
-    private _onNavigationMenuButtonClick = () => {
+    private _onNavigationMenuButtonClick() {
         this.setState({ showRoutesMenu: false });
-    };
+    }
 
-    private createRoutesMenu: () => JSX.Element = () => {
+    private createRoutesMenu(): JSX.Element {
         if (!this.state.showRoutesMenu) {
             return null;
         }
@@ -116,7 +116,7 @@ class App extends React.Component<Props> {
         return (
             <Menu {...menuProps} />
         );
-    };
+    }
 }
 
 

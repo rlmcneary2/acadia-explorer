@@ -26,6 +26,7 @@ import { RouteGeo } from "@reducer/api";
 import { http } from "../network/http";
 import apiData from "../api/data";
 import { WorkerResponse } from "../network/httpInterfaces";
+import { Dispatch } from "redux";
 import * as toGeoJSON from "@mapbox/togeojson";
 import { FeatureCollection } from "geojson";
 
@@ -34,6 +35,7 @@ namespace actionApi {
 
     export const types = Object.freeze({
         addBusLocations: "addBusLocations",
+        getBusLocations: "getBusLocations",
         getRoutes: "getRoutes",
         updateBusLocations: "updateBusLocations",
         updateRoutes: "updateRoutes",
@@ -49,7 +51,7 @@ namespace actionApi {
         };
     }
 
-    export function getRoutes() {
+    export function getRoutes(): (dispatch: Dispatch<any>) => Promise<void> {
         return async dispatch => {
             const res = await routes();
             const { ok } = res;
@@ -58,11 +60,17 @@ namespace actionApi {
                 return;
             }
 
-            const response: any[] = res.response;
-            dispatch(actionApi.updateRoutes(response));
+            dispatch(actionApi.updateRoutes(res.response));
 
-            routeTraces(dispatch, response);
-            routeStops(dispatch, response);
+            routeTraces(dispatch, res.response);
+            routeStops(dispatch, res.response);
+            // busLocations(dispatch, res.response);
+        };
+    }
+
+    export function getBusLocations(routes: any[]): (dispatch: Dispatch<any>) => Promise<void> {
+        return async dispatch => {
+            busLocations(dispatch, routes);
         };
     }
 
@@ -100,6 +108,18 @@ namespace actionApi {
 
 export { actionApi };
 
+
+async function busLocations(dispatch, routes: any[]): Promise<void> {
+    const routeIds: number[] = routes.map(item => item.RouteId);
+
+    const res = await http.get(`${apiData.domain}/InfoPoint/rest/Vehicles/GetAllVehiclesForRoutes?routeIDs=${routeIds.join(",")}`);
+    const data = new Map<number, object[]>();
+    routeIds.forEach(id => {
+        data.set(id, (res.response as any[]).filter(vehicle => vehicle.RouteId === id));
+    });
+
+    dispatch(actionApi.updateBusLocations(data));
+}
 
 async function routes(): Promise<WorkerResponse> {
     return await http.get(`${apiData.domain}/InfoPoint/rest/Routes/GetVisibleRoutes`);
