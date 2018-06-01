@@ -43,11 +43,11 @@ export { http };
 
 /**
  * Invoked by the Task to make the request to the remote.
- * @param {RequestSignature} httpMethod Must pass the function (not a string with the name) because after WebPack the function can't be found by name.
- * @param {string} url The URL of the resource.
- * @param {Headers} [headers] Request headers.
- * @param {string} [responseType] The fetch function to use when reading the response.
- * @returns {Promise<WorkerResponse>} The response from the remote.
+ * @param httpMethod Must pass the function (not a string with the name) because after WebPack the function can't be found by name.
+ * @param url The URL of the resource.
+ * @param [headers] Request headers.
+ * @param [responseType] The fetch function to use when reading the response.
+ * @returns The response from the remote.
  */
 async function handleTask(httpMethod: RequestSignature, url: string, headers?: Headers, responseType?: string) {
     const callback: TaskCallback<WorkerResponse> = (t): Promise<WorkerResponse> => {
