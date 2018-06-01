@@ -26,8 +26,8 @@ import { actionApi } from "./api";
 
 namespace actionApp {
 
-    export function initialize(): (any) => void {
-        return dispatch => {
+    export function initialize(): (dispatch: any) => Promise<void> {
+        return async dispatch => {
             dispatch(actionApi.getRoutes());
         };
     }
