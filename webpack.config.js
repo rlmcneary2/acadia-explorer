@@ -22,11 +22,13 @@
  */
 
 
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const fs = require("fs");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 const webpack = require("webpack");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const convert = require('koa-connect');
+const history = require('connect-history-api-fallback');
 
 
 const _OUTPUT_DIR = "dist";
@@ -45,29 +47,23 @@ const babelOptions = {
 
 /**
  * @module
- * This is a webpack2 configuration file.
+ * This is a webpack 4 configuration file.
  */
 module.exports = {
-    devServer: {
-        contentBase: path.resolve(__dirname, _OUTPUT_DIR),
-        historyApiFallback: true,
-        inline: true
-    },
     devtool: "source-maps",
     entry: {
         app: `./${_SOURCE_DIR}/index.ts`
     },
+    mode: process.env.WEBPACK_SERVE ? "development" : "production",
     module: {
         rules: [
             {
                 test: /\.scss$/,
-                use: ExtractTextPlugin.extract({
-                    use: [{
-                        loader: "css-loader"
-                    }, {
-                        loader: "sass-loader"
-                    }]
-                })
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    "css-loader",
+                    "sass-loader"
+                ]
             },
             {
                 test: /\.tsx?$/,
@@ -116,10 +112,8 @@ module.exports = {
     },
     plugins: [
         new webpack.BannerPlugin({ banner: fs.readFileSync("./LICENSE", "utf8") }),
-        new webpack.DefinePlugin({ "process.env": { NODE_ENV: process.env.NODE_ENV } }),
-        new webpack.LoaderOptionsPlugin({ debug: true }),
-        new ExtractTextPlugin("app.css"),
         new HtmlWebpackPlugin({ inject: "head", template: "./src/index.template.html", title: "Acadia Island Explorer" }),
+        new MiniCssExtractPlugin({ filename: "[name].css" })
     ],
     resolve: {
         alias: {
@@ -128,6 +122,12 @@ module.exports = {
             "@reducer": path.resolve(__dirname, "src/app/reducer/")
         },
         extensions: [".js", "json", ".jsx", "scss", ".ts", ".tsx"]
+    },
+    serve: {
+        content: path.resolve(__dirname, _OUTPUT_DIR),
+        add: (app, middleware, options) => {
+            app.use(convert(history()));
+        }
     },
     target: "web"
 };
