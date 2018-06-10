@@ -42,14 +42,15 @@ interface ComponentState {
 
 class App extends React.Component<Props> {
 
-    constructor(
-        public state: ComponentState,
-        private _toggleNavigationMenuDisplay: () => void
-    ) {
-        super();
+    constructor(props: Props) {
+        super(props);
         this.state = { showRoutesMenu: false };
         this._toggleNavigationMenuDisplay = toggleNavigationMenuDisplay.bind(this);
     }
+
+    public state: ComponentState;
+
+    private _toggleNavigationMenuDisplay: () => void;
 
     public render() {
         const routesMenu = this.createRoutesMenu();

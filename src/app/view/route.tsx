@@ -134,8 +134,8 @@ function mapDispatchToProps(dispatch: redux.Dispatch<any>): InternalProps {
  */
 class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
-    constructor() {
-        super();
+    constructor(props: InternalProps) {
+        super(props);
         this.state = { layers: new Map<string, LayerProps>() };
     }
 
