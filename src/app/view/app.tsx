@@ -111,7 +111,7 @@ class App extends React.Component<Props> {
             items
         };
 
-        (menuProps as any).select = this._onNavigationMenuButtonClick;
+        (menuProps as any).select = () => this._onNavigationMenuButtonClick();
 
         return (
             <Menu {...menuProps} />
