@@ -107,6 +107,7 @@ module.exports = {
     },
     output: {
         filename: "[name].js",
+        globalObject: "this", // temporary workaround for https://github.com/webpack/webpack/issues/6642
         path: path.resolve(__dirname, _OUTPUT_DIR),
         publicPath: "/"
     },
