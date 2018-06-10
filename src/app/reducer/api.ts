@@ -35,10 +35,9 @@ export default (state: State = { busLocations: [], routeGeos: [], routeStops: []
 
             const index = state.busLocations.findIndex(item => item.requestId === a.data);
             if (index < 0) {
-                nextState = Object.assign({}, state);
                 const bl = state.busLocations ? [...state.busLocations] : [];
                 bl.push({ requestId: a.data, routeId: a.id });
-                nextState.busLocations = bl;
+                nextState = { ...state, busLocations: bl };
             }
 
             break;
@@ -59,7 +58,7 @@ export default (state: State = { busLocations: [], routeGeos: [], routeStops: []
                 });
             });
 
-            nextState = Object.assign({}, state);
+            nextState = { ...state };
             nextState.busLocations = nextBusLocations;
 
             break;
@@ -72,10 +71,9 @@ export default (state: State = { busLocations: [], routeGeos: [], routeStops: []
             // exist.
             const index = state.routeGeos.findIndex(item => item.id === a.data.id);
             if (index < 0) {
-                nextState = Object.assign({}, state);
                 const rg = state.routeGeos ? [...state.routeGeos] : [];
                 rg.push(a.data);
-                nextState.routeGeos = rg;
+                nextState = { ...state, routeGeos: rg };
             }
 
             break;
@@ -83,8 +81,7 @@ export default (state: State = { busLocations: [], routeGeos: [], routeStops: []
 
         case actionApi.types.updateRoutes: {
             const a = action as DataAction<any>;
-            nextState = Object.assign({}, state);
-            nextState.routes = a.data;
+            nextState = { ...state, routes: a.data };
             break;
         }
 
@@ -95,10 +92,9 @@ export default (state: State = { busLocations: [], routeGeos: [], routeStops: []
             // exist.
             const index = state.routeStops.findIndex(item => item.id === a.id);
             if (index < 0) {
-                nextState = Object.assign({}, state);
                 const rs = state.routeStops ? [...state.routeStops] : [];
                 rs.push({ id: a.id, stops: a.data });
-                nextState.routeStops = rs;
+                nextState = { ...state, routeStops: rs };
             }
 
             break;

@@ -21,15 +21,17 @@
  */
 
 
-import mbx from "./MapBox/map";
+import { actionApi } from "@action/api";
 import LinkButton, { Props as LinkButtonProps } from "@controls/linkButton";
 import { RouteGeo, RouteStops } from "@reducer/api";
 import { State as ReduxState } from "@reducer/interfaces";
-import * as React from "react";
-import * as redux from "redux";
-import { connect } from "react-redux";
+/* tslint:disable-next-line: no-submodule-imports */
 import * as GeoJSON from "geojson/geojson"; // There is a name collision here, this line must exist to import the geojson package (not an @types package).
-import { actionApi } from "@action/api";
+import * as React from "react";
+import { connect } from "react-redux";
+import * as redux from "redux";
+import mbx from "./MapBox/map";
+
 
 const ROUTE_LINE_WIDTH = 8;
 const START_LATITUDE = 44.3420759;
@@ -86,7 +88,7 @@ function mapStateToProps(state: ReduxState, ownProps: Props): InternalProps {
     const { location, match } = ownProps;
     let route;
     if (state.api.routes && 0 < state.api.routes.length && match.params.id) {
-        const routeId = parseInt(match.params.id);
+        const routeId = parseInt(match.params.id, 10);
         route = state.api.routes.find(item => item.RouteId === routeId);
     }
 
@@ -139,8 +141,11 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         this.state = { layers: new Map<string, LayerProps>() };
     }
 
+
+    public state: State;
+
     public componentWillMount() {
-        this._mapIsInitializedHandlerBound = this._mapIsInitializedHandler.bind(this);
+        this.mapIsInitializedHandlerBound = this._mapIsInitializedHandler.bind(this);
     }
 
     public componentWillReceiveProps(nextProps: InternalProps) {
@@ -166,7 +171,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
     }
 
     public componentWillUnmount() {
-        this._mapIsInitializedHandlerBound = null;
+        this.mapIsInitializedHandlerBound = null;
         this.props.componentWillUnmount(this.props);
     }
 
@@ -180,10 +185,10 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                     color: "#FFF",
                     width: ROUTE_LINE_WIDTH + 6
                 },
-                mapIsInitialized: this._mapIsInitializedHandlerBound,
                 isVisible: isShowMap,
                 latitude: START_LATITUDE,
                 longitude: START_LONGITUDE,
+                mapIsInitialized: this.mapIsInitializedHandlerBound,
                 zoom: START_ZOOM,
                 zoomToFit: true,
                 zoomToFitPadding: ZOOM_TO_FIT_PADDING
@@ -248,21 +253,19 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         );
     }
 
-    public state: State;
 
+    private mapInitialized = false;
+    private mapIsInitializedHandlerBound: () => void;
 
     private _createMapGLLayers(): mbx.MapGLLayer[] {
-        if (!this._mapInitialized) {
+        if (!this.mapInitialized) {
             return [];
         }
 
         const layers: mbx.MapGLLayer[] = [];
         if (this.props.routeGeos && 0 < this.props.routeGeos.length) {
-            let rg: RouteGeo;
             let layer: mbx.MapGLLayer;
-            for (let i = 0; i < this.props.routeGeos.length; i++) {
-                rg = this.props.routeGeos[i];
-
+            for (const rg of this.props.routeGeos) {
                 if (!this.state.layers.has(this._routeLayerId(rg.id))) {
                     layer = this._createMapGLRouteLayer(rg);
                     layers.push(layer);
@@ -273,8 +276,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
         if (this.props.routeStops && this.props.routeStops.length) {
             let color: string;
-            for (let i = 0; i < this.props.routeStops.length; i++) {
-                const rs = this.props.routeStops[i];
+            for (const rs of this.props.routeStops) {
                 if (!this.state.layers.has(this._routeLayerId(rs.id))) {
                     continue;
                 }
@@ -309,11 +311,11 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 "line-opacity": feature.properties["stroke-opcaity"] || 1,
                 "line-width": ROUTE_LINE_WIDTH
             },
-            type: "line",
             source: {
                 data: geoJson,
                 type: "geojson"
-            }
+            },
+            type: "line"
         };
 
         return layer;
@@ -350,11 +352,11 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             id: this._stopsLayerId(routeStops.id),
             layout: {},
             paint,
-            type: "circle",
             source: {
                 data: geoJson,
                 type: "geojson"
-            }
+            },
+            type: "circle"
         };
 
         return layer;
@@ -394,11 +396,11 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 }
             },
             paint,
-            type: "symbol",
             source: {
                 data: geoJson,
                 type: "geojson"
-            }
+            },
+            type: "symbol"
         };
 
         return layer;
@@ -414,14 +416,10 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         return null;
     }
 
-    private _mapInitialized = false;
-
     private _mapIsInitializedHandler() {
-        this._mapInitialized = true;
+        this.mapInitialized = true;
         this.forceUpdate();
     }
-
-    private _mapIsInitializedHandlerBound: () => void;
 
     private _routeLayerId(id: number): string {
         return `${id}`;
