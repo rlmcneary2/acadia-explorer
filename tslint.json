@@ -36,6 +36,7 @@
         ],
         "no-consecutive-blank-lines": [true, 2],
         "no-implicit-dependencies": false,
+        "no-var-requires": false,
         "one-line": [
             true,
             "check-open-brace",

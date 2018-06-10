@@ -21,13 +21,13 @@
  */
 
 
-import { actionApp } from "./action/app";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import reducers from "./reducer/reducers";
 import * as redux from "redux";
 import { createLogger } from "redux-logger";
 import reduxThunk from "redux-thunk";
+import { actionApp } from "./action/app";
+import reducers from "./reducer/reducers";
 import Start from "./startView";
 
 
@@ -36,12 +36,6 @@ export default async () => {
     if (navigator.serviceWorker) {
         await navigator.serviceWorker.register("serviceWorker.js", { scope: "/" });
     }
-
-    // Since the HTML is automatically generated add an element where the React
-    // components will be attached.
-    const reactRoot = document.createElement("div");
-    reactRoot.id = "react-root";
-    document.body.appendChild(reactRoot);
 
     // Setup React, Redux, React-Router
     const middlewareArgs = [reduxThunk];
@@ -59,7 +53,7 @@ export default async () => {
             action: () => "log",
             error: () => "log",
             nextState: () => "log",
-            prevState: () => "log",
+            prevState: () => "log"
         }
     });
     middlewareArgs.push(reduxLog);
@@ -72,5 +66,6 @@ export default async () => {
     // Dispatch the initialize action.
     store.dispatch(actionApp.initialize());
 
+    const reactRoot = document.getElementById("react-root");
     ReactDOM.render(React.createElement(Start, { store }), reactRoot);
 };
