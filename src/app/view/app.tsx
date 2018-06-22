@@ -24,8 +24,8 @@
 import { ControlLinkContent } from "@controls/interfaces";
 import Menu, { Props as MenuProps } from "@controls/menu";
 import * as React from "react";
-import { Route } from "react-router-dom";
 import { connect } from "react-redux";
+import { Route } from "react-router-dom";
 import { CSSTransitionGroup } from "react-transition-group";
 import { State } from "../reducer/interfaces";
 import IslandExplorerRoute from "./route";
@@ -45,12 +45,10 @@ class App extends React.Component<Props> {
     constructor(props: Props) {
         super(props);
         this.state = { showRoutesMenu: false };
-        this._toggleNavigationMenuDisplay = toggleNavigationMenuDisplay.bind(this);
+        this.toggleNavigationMenuDisplayBound = toggleNavigationMenuDisplay.bind(this);
     }
 
     public state: ComponentState;
-
-    private _toggleNavigationMenuDisplay: () => void;
 
     public render() {
         const routesMenu = this.createRoutesMenu();
@@ -67,7 +65,7 @@ class App extends React.Component<Props> {
                 <nav className="header">
                     <menu className="header">
                         <li>
-                            <button className="control" onClick={this._toggleNavigationMenuDisplay}>
+                            <button className="control" onClick={this.toggleNavigationMenuDisplayBound}>
                                 <span>Routes</span>
                             </button>
                         </li>
@@ -82,6 +80,8 @@ class App extends React.Component<Props> {
         );
     }
 
+
+    private toggleNavigationMenuDisplayBound: () => void;
 
     private _onNavigationMenuButtonClick() {
         this.setState({ showRoutesMenu: false });
