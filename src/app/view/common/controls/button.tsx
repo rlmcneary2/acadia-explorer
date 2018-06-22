@@ -21,9 +21,9 @@
  */
 
 
-import { ControlTextContent } from "./interfaces";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
+import { ControlTextContent } from "./interfaces";
 
 
 interface Props {
@@ -48,7 +48,7 @@ export default (props: Props): JSX.Element => {
         if (typeof props.content === "string") {
             content = (<span>{props.content}</span>);
         } else {
-            content = (<FormattedMessage {...props.content } />);
+            content = (<FormattedMessage {...props.content} />);
 
         }
     }
