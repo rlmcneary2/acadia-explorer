@@ -30,7 +30,7 @@ import * as GeoJSON from "geojson/geojson"; // There is a name collision here, t
 import * as React from "react";
 import { connect } from "react-redux";
 import * as redux from "redux";
-import mbx from "./MapBox/map";
+import { Map as MapboxMap, MapGLLayer, MapGLLayerCirclePaint, MapGLLayerSymbolPaint, Props as MapboxProps } from "./MapBox/map";
 
 
 const ROUTE_LINE_WIDTH = 8;
@@ -180,7 +180,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         const isShowMap = !this.props.location.pathname.endsWith("info");
         let content = null;
         if (this.props.hasOwnProperty("route")) {
-            const mapProps: mbx.Props = {
+            const mapProps: MapboxProps = {
                 background: {
                     color: "#FFF",
                     width: ROUTE_LINE_WIDTH + 6
@@ -227,7 +227,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             // otherwise the map will be displayed.
             content = (
                 <div className="route-content">
-                    <mbx.Map {...mapProps} />
+                    <MapboxMap {...mapProps} />
                     <h1 style={{ display: !isShowMap ? "initial" : "none" }}>Info please!</h1>
                 </div>
             );
@@ -257,14 +257,14 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
     private mapInitialized = false;
     private mapIsInitializedHandlerBound: () => void;
 
-    private _createMapGLLayers(): mbx.MapGLLayer[] {
+    private _createMapGLLayers(): MapGLLayer[] {
         if (!this.mapInitialized) {
             return [];
         }
 
-        const layers: mbx.MapGLLayer[] = [];
+        const layers: MapGLLayer[] = [];
         if (this.props.routeGeos && 0 < this.props.routeGeos.length) {
-            let layer: mbx.MapGLLayer;
+            let layer: MapGLLayer;
             for (const rg of this.props.routeGeos) {
                 if (!this.state.layers.has(this._routeLayerId(rg.id))) {
                     layer = this._createMapGLRouteLayer(rg);
@@ -300,7 +300,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
     private _createMapGLRouteLayer(routeGeo: RouteGeo) {
         const { geoJson } = routeGeo;
         const feature = geoJson && geoJson.features && 0 < geoJson.features.length ? geoJson.features[0] : null;
-        const layer: mbx.MapGLLayer = {
+        const layer: MapGLLayer = {
             id: this._routeLayerId(routeGeo.id),
             layout: {
                 "line-cap": "round",
@@ -334,7 +334,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
         const geoJson = GeoJSON.parse(data, { extra: { icon: "circle" }, Point: ["lat", "lng"] });
 
-        const paint: mbx.MapGLLayerCirclePaint = {
+        const paint: MapGLLayerCirclePaint = {
             "circle-color": color,
             "circle-radius": {
                 base: 1.25,
@@ -348,7 +348,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             }
         };
 
-        const layer: mbx.MapGLLayer = {
+        const layer: MapGLLayer = {
             id: this._stopsLayerId(routeStops.id),
             layout: {},
             paint,
@@ -375,13 +375,13 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
         const geoJson = GeoJSON.parse(data, { Point: ["lat", "lng"] });
 
-        const paint: mbx.MapGLLayerSymbolPaint = {
+        const paint: MapGLLayerSymbolPaint = {
             "text-halo-blur": 1,
             "text-halo-color": "#FFF",
             "text-halo-width": 6
         };
 
-        const layer: mbx.MapGLLayer = {
+        const layer: MapGLLayer = {
             id: this._stopsLayerId(routeStops.id, true),
             layout: {
                 "icon-allow-overlap": true,
