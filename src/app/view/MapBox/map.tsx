@@ -101,6 +101,8 @@ export interface Props {
         opacity?: number;
         width: number;
     };
+    /** The layer with this ID will be used to determine the bounds of the route that is displayed. */
+    boundsLayerId: string;
     mapIsInitialized: () => void;
     isVisible?: boolean;
     latitude: number;
@@ -320,9 +322,8 @@ export class Map extends React.Component<Props> {
 
         // Loop over all the layers and set their visibility.
         let layer;
-        let source;
         let isVisible: boolean;
-        let bounds;
+        let bounds: mapboxgl.LngLatBounds;
         for (const id of this.layerIds) {
             isVisible = props.visibleLayersIds.includes(id);
 
@@ -331,8 +332,8 @@ export class Map extends React.Component<Props> {
                 this.map.setLayoutProperty(id, "visibility", isVisible ? "visible" : "none");
             }
 
-            if (isVisible) {
-                source = this.map.getSource(id);
+            if (isVisible && props.boundsLayerId === id) {
+                const source = this.map.getSource(id);
                 if (source) {
                     bounds = this.getLayerBounds(source.serialize());
                 }

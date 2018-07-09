@@ -21,18 +21,19 @@
  */
 
 
+import { Dispatch } from "redux";
 import { actionApi } from "./api";
 
 
-namespace actionApp {
+const actionApp = Object.freeze({
 
-    export function initialize(): (dispatch: any) => Promise<void> {
+    initialize(): Dispatch<Promise<void>> {
         return async dispatch => {
             dispatch(actionApi.getRoutes());
         };
     }
 
-}
+});
 
 
 export { actionApp };

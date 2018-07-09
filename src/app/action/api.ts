@@ -21,95 +21,101 @@
  */
 
 
-import { DataAction, DataActionId } from "./interfaces";
-import { RouteGeo } from "@reducer/api";
-import { http } from "../network/http";
-import apiData from "../api/data";
-import { WorkerResponse } from "../network/httpInterfaces";
-import { Dispatch } from "redux";
 import * as toGeoJSON from "@mapbox/togeojson";
+import { RouteGeo } from "@reducer/api";
 import { FeatureCollection } from "geojson";
+import { Dispatch } from "redux";
+import apiData from "../api/data";
+import { http } from "../network/http";
+import { WorkerResponse } from "../network/httpInterfaces";
+import { DataAction, DataActionId } from "./interfaces";
 
 
-namespace actionApi {
+const actionApi = Object.freeze({
 
-    export const types = Object.freeze({
-        addBusLocations: "addBusLocations",
-        getBusLocations: "getBusLocations",
-        getRoutes: "getRoutes",
-        updateBusLocations: "updateBusLocations",
+    types: Object.freeze({
+        updateKmlFiles: "updateKmlFiles",
         updateRoutes: "updateRoutes",
         updateStops: "updateStops",
-        updateKmlFiles: "updateKmlFiles"
-    });
+        updateVehicles: "updateVehicles"
+    }),
 
-    export function addBusLocations(routeId: number, requestId: string): DataActionId<number, string> {
-        return {
-            id: routeId,
-            data: requestId,
-            type: actionApi.types.addBusLocations
-        };
-    }
-
-    export function getRoutes(): (dispatch: Dispatch<any>) => Promise<void> {
+    getRoutes(): Dispatch<Promise<void>> {
         return async dispatch => {
-            const res = await routes();
-            const { ok } = res;
+            const res = await allRoutes();
+            const { response, ok } = res;
             if (!ok) {
                 // Error action.
                 return;
             }
 
-            dispatch(actionApi.updateRoutes(res.response));
+            dispatch(createUpdateRoutesAction(response));
 
-            routeTraces(dispatch, res.response);
-            routeStops(dispatch, res.response);
-            // busLocations(dispatch, res.response);
+            traces(dispatch, response);
+            stops(dispatch, response);
+            vehicles(dispatch, response);
         };
-    }
+    },
 
-    export function getBusLocations(routes: any[]): (dispatch: Dispatch<any>) => Promise<void> {
+    getVehicles(routes: any[]): Dispatch<Promise<void>> {
         return async dispatch => {
-            busLocations(dispatch, routes);
+            vehicles(dispatch, routes);
         };
     }
 
-    export function updateBusLocations(locations: Map<number, object[]>): DataAction<Map<number, object[]>> {
-        return {
-            data: locations,
-            type: actionApi.types.updateBusLocations
-        };
-    }
-
-    export function updateKmlFiles(data: RouteGeo): DataAction<RouteGeo> {
-        return {
-            data,
-            type: actionApi.types.updateKmlFiles
-        };
-    }
-
-    export function updateRoutes(data: any): DataAction<any> {
-        return {
-            data,
-            type: actionApi.types.updateRoutes
-        };
-    }
-
-    export function updateStops(routeId: number, data): DataActionId<number, any> {
-        return {
-            id: routeId,
-            data,
-            type: actionApi.types.updateStops
-        };
-    }
-
-}
+});
 
 
 export { actionApi };
 
 
-async function busLocations(dispatch, routes: any[]): Promise<void> {
+/**
+ * @param data Map of route ID to response vehicle information.
+ */
+function createUpdateVehiclesAction(data: Map<number, object[]>): DataAction<Map<number, object[]>> {
+    return {
+        data,
+        type: actionApi.types.updateVehicles
+    };
+}
+
+/**
+ * @param data GeoJson information for a single route.
+ */
+function createUpdateKmlFilesAction(data: RouteGeo): DataAction<RouteGeo> {
+    return {
+        data,
+        type: actionApi.types.updateKmlFiles
+    };
+}
+
+/**
+ * @param routes Response route infromation.
+ */
+function createUpdateRoutesAction(data: any): DataAction<any> {
+    return {
+        data,
+        type: actionApi.types.updateRoutes
+    };
+}
+
+/**
+ * @param id The route ID.
+ * @param data Response stop information.
+ */
+function createUpdateStopsAction(id: number, data): DataActionId<number, any> {
+    return {
+        data,
+        id,
+        type: actionApi.types.updateStops
+    };
+}
+
+/**
+ * @param dispatch 
+ * @param routes Response route infromation.
+ */
+async function vehicles(dispatch: Dispatch<void>, routes: any[]): Promise<void> {
     const routeIds: number[] = routes.map(item => item.RouteId);
 
     const res = await http.get(`${apiData.domain}/InfoPoint/rest/Vehicles/GetAllVehiclesForRoutes?routeIDs=${routeIds.join(",")}`);
@@ -118,14 +124,18 @@ async function busLocations(dispatch, routes: any[]): Promise<void> {
         data.set(id, (res.response as any[]).filter(vehicle => vehicle.RouteId === id));
     });
 
-    dispatch(actionApi.updateBusLocations(data));
+    dispatch(createUpdateVehiclesAction(data));
 }
 
-async function routes(): Promise<WorkerResponse> {
-    return await http.get(`${apiData.domain}/InfoPoint/rest/Routes/GetVisibleRoutes`);
+async function allRoutes(): Promise<WorkerResponse> {
+    return http.get(`${apiData.domain}/InfoPoint/rest/Routes/GetVisibleRoutes`);
 }
 
-async function routeTraces(dispatch, routes: any[]): Promise<void> {
+/**
+ * @param dispatch 
+ * @param routes Response route infromation.
+ */
+async function traces(dispatch: Dispatch<void>, routes: any[]): Promise<void> {
     routes.forEach(async route => {
         const res = await http.get(`${apiData.domain}/InfoPoint/Resources/Traces/${route.RouteTraceFilename}`, null, "text");
 
@@ -133,13 +143,17 @@ async function routeTraces(dispatch, routes: any[]): Promise<void> {
         const xml = new DOMParser().parseFromString(res.response, "text/xml");
         const geoJson: FeatureCollection = toGeoJSON.kml(xml);
 
-        dispatch(actionApi.updateKmlFiles({ id: route.RouteId, geoJson }));
+        dispatch(createUpdateKmlFilesAction({ id: route.RouteId, geoJson }));
     });
 }
 
-async function routeStops(dispatch, routes: any[]) {
+/**
+ * @param dispatch 
+ * @param routes Response route infromation.
+ */
+async function stops(dispatch: Dispatch<void>, routes: any[]) {
     routes.forEach(async route => {
         const res = await http.get(`${apiData.domain}/InfoPoint/rest/Stops/GetAllStopsForRoutes?routeIDs=${route.RouteId}`);
-        dispatch(actionApi.updateStops(route.RouteId, res.response));
+        dispatch(createUpdateStopsAction(route.RouteId, res.response));
     });
 }

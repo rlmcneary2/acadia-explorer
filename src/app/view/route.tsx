@@ -23,7 +23,7 @@
 
 import { actionApi } from "@action/api";
 import LinkButton, { Props as LinkButtonProps } from "@controls/linkButton";
-import { RouteGeo, RouteStops } from "@reducer/api";
+import { RouteGeo, RouteStops, RouteVehicles } from "@reducer/api";
 import { State as ReduxState } from "@reducer/interfaces";
 /* tslint:disable-next-line: no-submodule-imports */
 import * as GeoJSON from "geojson/geojson"; // There is a name collision here, this line must exist to import the geojson package (not an @types package).
@@ -44,8 +44,9 @@ interface InternalProps extends Props {
     componentWillUnmount: (props: InternalProps) => void;
     route?: any;
     routeChanged: (routeId: number) => void;
-    routeGeos?: RouteGeo[];
-    routeStops?: RouteStops[];
+    routeGeos: RouteGeo[];
+    routeStops: RouteStops[];
+    routeVehicles: RouteVehicles[];
 }
 
 interface LayerProps {
@@ -92,25 +93,19 @@ function mapStateToProps(state: ReduxState, ownProps: Props): InternalProps {
         route = state.api.routes.find(item => item.RouteId === routeId);
     }
 
-    // InternalProps
+    const { routeGeos = [], routeStops = [], routeVehicles = [] } = state.api || {};
+
+    // InternalProps - the callback functions are added by mapDispatchToProps.
     const props: any = {
         location,
-        match
+        match,
+        route,
+        routeGeos,
+        routeStops,
+        routeVehicles
     };
 
-    if (route) {
-        props.route = route;
-    }
-
-    if (state.api.routeGeos && 0 < state.api.routeGeos.length) {
-        props.routeGeos = state.api.routeGeos;
-    }
-
-    if (state.api.routeStops && 0 < state.api.routeStops.length) {
-        props.routeStops = state.api.routeStops;
-    }
-
-    return props as InternalProps;
+    return props;
 }
 
 function mapDispatchToProps(dispatch: redux.Dispatch<any>): InternalProps {
@@ -122,7 +117,7 @@ function mapDispatchToProps(dispatch: redux.Dispatch<any>): InternalProps {
         },
 
         routeChanged: (routeId: number) => {
-            dispatch(actionApi.getBusLocations([routeId]) as any);
+            dispatch(actionApi.getVehicles([routeId]) as any);
         }
 
     };
@@ -192,7 +187,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 zoom: START_ZOOM,
                 zoomToFit: true,
                 zoomToFitPadding: ZOOM_TO_FIT_PADDING
-            };
+            } as any;
 
             // Layers only passed to the Map component once so eventually the
             // mapProps.layers will be an empty array.
@@ -210,6 +205,11 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                             visibleLayersIds.push(this._routeLayerId(item.id));
                             visibleLayersIds.push(this._stopsLayerId(item.id));
                             visibleLayersIds.push(this._stopsLayerId(item.id, true));
+                            visibleLayersIds.push(this._vehiclesLayerId(item.id));
+
+                            // The route "trace" layer is used to determine the
+                            // bounds to be displayed.
+                            mapProps.boundsLayerId = this._routeLayerId(item.id);
                         }
                     });
 
@@ -263,7 +263,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         }
 
         const layers: MapGLLayer[] = [];
-        if (this.props.routeGeos && 0 < this.props.routeGeos.length) {
+        if (this.props.routeGeos && this.props.routeGeos.length) {
             let layer: MapGLLayer;
             for (const rg of this.props.routeGeos) {
                 if (!this.state.layers.has(this._routeLayerId(rg.id))) {
@@ -294,10 +294,30 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             }
         }
 
+        if (this.props.routeVehicles && this.props.routeVehicles.length) {
+            const color = "#ff00fa";
+            for (const rv of this.props.routeVehicles) {
+                const { id } = rv;
+                if (!this.state.layers.has(this._routeLayerId(id))) {
+                    continue;
+                }
+
+                if (this.state.layers.has(this._vehiclesLayerId(id))) {
+                    continue;
+                }
+
+                layers.push(this._createMapGLVehiclesLayer(rv, color));
+                this.state.layers.set(this._vehiclesLayerId(id), { id });
+
+                // layers.push(this._createMapGLStopsTextLayer(rs, color));
+                // this.state.layers.set(this._stopsLayerId(id, true), { id });
+            }
+        }
+
         return layers;
     }
 
-    private _createMapGLRouteLayer(routeGeo: RouteGeo) {
+    private _createMapGLRouteLayer(routeGeo: RouteGeo): MapGLLayer {
         const { geoJson } = routeGeo;
         const feature = geoJson && geoJson.features && 0 < geoJson.features.length ? geoJson.features[0] : null;
         const layer: MapGLLayer = {
@@ -321,7 +341,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         return layer;
     }
 
-    private _createMapGLStopsLayer(routeStops: RouteStops, color: string) {
+    private _createMapGLStopsLayer(routeStops: RouteStops, color: string): MapGLLayer {
         // Convert route stops to geojson points.
         const data = routeStops.stops.map(item => {
             const { Latitude: lat, Longitude: lng, Name: name } = item;
@@ -362,7 +382,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         return layer;
     }
 
-    private _createMapGLStopsTextLayer(routeStops: RouteStops, color: string) {
+    private _createMapGLStopsTextLayer(routeStops: RouteStops, color: string): MapGLLayer {
         // Convert route stops to geojson points.
         const data = routeStops.stops.map(item => {
             const { Latitude: lat, Longitude: lng, Name: name } = item;
@@ -406,6 +426,47 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         return layer;
     }
 
+    private _createMapGLVehiclesLayer(routeVehicles: RouteVehicles, color: string): MapGLLayer {
+        // Convert route stops to geojson points.
+        const data = routeVehicles.vehicles.map(item => {
+            const { Latitude: lat, Longitude: lng, Name: name } = item;
+            return {
+                lat,
+                lng,
+                name
+            };
+        });
+
+        const geoJson = GeoJSON.parse(data, { extra: { icon: "circle" }, Point: ["lat", "lng"] });
+
+        const paint: MapGLLayerCirclePaint = {
+            "circle-color": color,
+            "circle-radius": {
+                base: 1.25,
+                stops: [[10, 11], [14, 12]]
+            },
+            "circle-stroke-color": "#FFF",
+            "circle-stroke-opacity": 0.8,
+            "circle-stroke-width": {
+                base: 1.25,
+                stops: [[10, 7], [14, 8]]
+            }
+        };
+
+        const layer: MapGLLayer = {
+            id: this._vehiclesLayerId(routeVehicles.id),
+            layout: {},
+            paint,
+            source: {
+                data: geoJson,
+                type: "geojson"
+            },
+            type: "circle"
+        };
+
+        return layer;
+    }
+
     private _getActiveRouteId(): number {
         if (this.state.activeRoute) {
             return this.state.activeRoute.id;
@@ -427,6 +488,10 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
     private _stopsLayerId(id: number, isLabelLayer = false): string {
         return `${id}_STOPS${isLabelLayer ? "_LABELS" : ""}`;
+    }
+
+    private _vehiclesLayerId(id: number, isLabelLayer = false): string {
+        return `${id}_VEHICLES${isLabelLayer ? "_LABELS" : ""}`;
     }
 
 }

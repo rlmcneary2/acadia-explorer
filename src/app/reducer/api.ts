@@ -21,46 +21,25 @@
  */
 
 
+import { FeatureCollection } from "geojson";
 import { actionApi } from "../action/api";
 import { BaseAction, DataAction, DataActionId } from "../action/interfaces";
 
 
-export default (state: State = { busLocations: [], routeGeos: [], routeStops: [] }, action: BaseAction): State => {
+export default (state: State = { routeGeos: [], routes: [], routeStops: [], routeVehicles: [] }, action: BaseAction): State => {
     let nextState: State;
 
     switch (action.type) {
 
-        case actionApi.types.addBusLocations: {
-            const a = action as DataActionId<number, string>;
-
-            const index = state.busLocations.findIndex(item => item.requestId === a.data);
-            if (index < 0) {
-                const bl = state.busLocations ? [...state.busLocations] : [];
-                bl.push({ requestId: a.data, routeId: a.id });
-                nextState = { ...state, busLocations: bl };
-            }
-
-            break;
-        }
-
-        case actionApi.types.updateBusLocations: {
+        case actionApi.types.updateVehicles: {
             const a = action as DataAction<Map<number, object[]>>;
 
-            const nextBusLocations: BusLocationRequest[] = [];
+            const routeVehicles: RouteVehicles[] = [];
             a.data.forEach((vehicles, id) => {
-                state.busLocations.forEach(bl => {
-                    if (bl.routeId === id) {
-                        const { requestId, routeId } = bl;
-                        nextBusLocations.push({ requestId, routeId, vehicles });
-                    } else {
-                        nextBusLocations.push(bl);
-                    }
-                });
+                routeVehicles.push({ id, vehicles });
             });
 
-            nextState = { ...state };
-            nextState.busLocations = nextBusLocations;
-
+            nextState = { ...state, routeVehicles };
             break;
         }
 
@@ -106,17 +85,9 @@ export default (state: State = { busLocations: [], routeGeos: [], routeStops: []
 };
 
 
-interface BusLocationRequest {
-    vehicles?: any[];
-    requestId: string;
-    routeId: number;
-}
-
 interface RouteGeo {
     id: number;
-    geoJson: {
-        features: any[];
-    };
+    geoJson: FeatureCollection;
 }
 
 interface RouteStops {
@@ -124,12 +95,20 @@ interface RouteStops {
     stops: any[];
 }
 
+interface RouteVehicles {
+    /**
+     * The ID of the route the vehicle is on.
+     */
+    id: number;
+    vehicles: any[];
+}
+
 interface State {
-    busLocations: BusLocationRequest[];
     routeGeos: RouteGeo[];
-    routes?: any[];
+    routes: any[];
     routeStops: RouteStops[];
+    routeVehicles: RouteVehicles[];
 }
 
 
-export { BusLocationRequest, RouteGeo, RouteStops, State };
+export { RouteGeo, RouteStops, RouteVehicles, State };
