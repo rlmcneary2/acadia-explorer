@@ -5,7 +5,7 @@
 
 [context.production]
   command = "npm run build"
-  publish = "dist/"
+  publish = "dist"
 
 [[redirects]]
   from = "/*"
