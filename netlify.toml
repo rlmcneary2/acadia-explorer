@@ -5,7 +5,7 @@
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "10.6"
+  NODE_VERSION = "8.6"
 
 [[redirects]]
   from = "/*"
