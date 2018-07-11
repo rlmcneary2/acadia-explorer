@@ -1,11 +1,11 @@
 [Settings]
 
-[build.environment]
-  NODE_VERSION = "10.3.0"
-
-[context.production]
+[build]
   command = "npm run build"
   publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "10.3.0"
 
 [[redirects]]
   from = "/*"
