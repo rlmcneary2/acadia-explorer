@@ -7,6 +7,9 @@
 [build.environment]
   NODE_VERSION = "10.6"
 
+[context.develop]
+  NODE_ENV = "dev"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
