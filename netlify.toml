@@ -7,8 +7,9 @@
 [build.environment]
   NODE_VERSION = "10.6"
 
-[context.develop]
-  NODE_ENV = "dev"
+[context.develop.environment]
+  command = "ECHO Develop Environment"
+  NODE_ENV = "development"
 
 [[redirects]]
   from = "/*"
