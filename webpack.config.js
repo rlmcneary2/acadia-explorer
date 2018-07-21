@@ -49,12 +49,12 @@ const babelOptions = {
  * @module
  * This is a webpack 4 configuration file.
  */
-module.exports = {
+const config = {
     devtool: "source-maps",
     entry: {
         app: `./${_SOURCE_DIR}/index.ts`
     },
-    mode: process.env.WEBPACK_SERVE ? "development" : "production",
+    mode: process.env.WEBPACK_SERVE ? "development" : process.env.NODE_ENV || "development",
     module: {
         rules: [
             {
@@ -132,3 +132,7 @@ module.exports = {
     },
     target: "web"
 };
+
+console.log(`webpack.config.js - mode: '${config.mode}'.`);
+
+module.exports = config;
