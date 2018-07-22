@@ -120,7 +120,8 @@ const config = {
         alias: {
             "@action": path.resolve(__dirname, "src/app/action/"),
             "@controls": path.resolve(__dirname, "src/app/view/common/controls/"),
-            "@reducer": path.resolve(__dirname, "src/app/reducer/")
+            "@reducer": path.resolve(__dirname, "src/app/reducer/"),
+            "@util": path.resolve(__dirname, "src/app/util/")
         },
         extensions: [".js", "json", ".jsx", "scss", ".ts", ".tsx"]
     },

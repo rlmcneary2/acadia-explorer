@@ -25,6 +25,7 @@ import { actionApi } from "@action/api";
 import LinkButton, { Props as LinkButtonProps } from "@controls/linkButton";
 import { RouteGeo, RouteStops, RouteVehicles } from "@reducer/api";
 import { State as ReduxState } from "@reducer/interfaces";
+import logg from "@util/logg";
 /* tslint:disable-next-line: no-submodule-imports */
 import * as GeoJSON from "geojson/geojson"; // There is a name collision here, this line must exist to import the geojson package (not an @types package).
 import * as React from "react";
@@ -113,7 +114,7 @@ function mapDispatchToProps(dispatch: redux.Dispatch<any>): InternalProps {
 
         componentWillUnmount: (props: InternalProps) => {
             // TODO: remove bus locations for ACTION_ADD_BUSES_REQUEST.
-            console.log("TODO: remove bus locations for ACTION_ADD_BUSES_REQUEST.");
+            logg.debug(() => "TODO: remove bus locations for ACTION_ADD_BUSES_REQUEST.");
         },
 
         routeChanged: (routeId: number) => {
@@ -144,7 +145,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
     }
 
     public componentWillReceiveProps(nextProps: InternalProps) {
-        console.log("route componentWillReceiveProps - nextProps: %O", nextProps);
+        logg.debug(() => ["route componentWillReceiveProps - nextProps: %O", nextProps]);
         if (
             nextProps.hasOwnProperty("route") &&
             this.state.activeRoute &&
@@ -171,7 +172,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
     }
 
     public render(): JSX.Element {
-        console.log("route render - props: %O", this.props);
+        logg.debug(() => ["route render - props: %O", this.props]);
         const isShowMap = !this.props.location.pathname.endsWith("info");
         let content = null;
         if (this.props.hasOwnProperty("route")) {
@@ -195,7 +196,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
             // Use the information about layers in state to determine which
             // layer is visible on the map.
-            console.log("route render - state.activeRoute: %O", this.state.activeRoute);
+            logg.info(() => ["route render - state.activeRoute: %O", this.state.activeRoute]);
             const routeId = this._getActiveRouteId();
             if (routeId !== null) {
                 const visibleLayersIds: string[] = [];
