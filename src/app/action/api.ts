@@ -26,6 +26,7 @@ import { RouteGeo } from "@reducer/api";
 import { FeatureCollection } from "geojson";
 import { Dispatch } from "redux";
 import apiData from "../api/data";
+import vehicleService from "../api/vehicleService";
 import { http } from "../network/http";
 import { WorkerResponse } from "../network/httpInterfaces";
 import { DataAction, DataActionId } from "./interfaces";
@@ -40,6 +41,16 @@ const actionApi = Object.freeze({
         updateVehicles: "updateVehicles"
     }),
 
+    /**
+     * @param data Map of route ID to response vehicle information.
+     */
+    createUpdateVehiclesAction(data: Map<number, object[]>): DataAction<Map<number, object[]>> {
+        return {
+            data,
+            type: actionApi.types.updateVehicles
+        };
+    },
+
     getRoutes(): Dispatch<Promise<void>> {
         return async dispatch => {
             const res = await allRoutes();
@@ -53,13 +64,19 @@ const actionApi = Object.freeze({
 
             traces(dispatch, response);
             stops(dispatch, response);
-            vehicles(dispatch, response);
+            if (!vehicleService.hasDispatch()) {
+                vehicleService.setDispatch(dispatch);
+            }
+            vehicleService.addRoutes(response);
         };
     },
 
     getVehicles(routes: any[]): Dispatch<Promise<void>> {
         return async dispatch => {
-            vehicles(dispatch, routes);
+            if (!vehicleService.hasDispatch()) {
+                vehicleService.setDispatch(dispatch);
+            }
+            vehicleService.addRoutes(routes);
         };
     }
 
@@ -68,16 +85,6 @@ const actionApi = Object.freeze({
 
 export { actionApi };
 
-
-/**
- * @param data Map of route ID to response vehicle information.
- */
-function createUpdateVehiclesAction(data: Map<number, object[]>): DataAction<Map<number, object[]>> {
-    return {
-        data,
-        type: actionApi.types.updateVehicles
-    };
-}
 
 /**
  * @param data GeoJson information for a single route.
@@ -109,22 +116,6 @@ function createUpdateStopsAction(id: number, data): DataActionId<number, any> {
         id,
         type: actionApi.types.updateStops
     };
-}
-
-/**
- * @param dispatch 
- * @param routes Response route infromation.
- */
-async function vehicles(dispatch: Dispatch<void>, routes: any[]): Promise<void> {
-    const routeIds: number[] = routes.map(item => item.RouteId);
-
-    const res = await http.get(`${apiData.domain}/InfoPoint/rest/Vehicles/GetAllVehiclesForRoutes?routeIDs=${routeIds.join(",")}`);
-    const data = new Map<number, object[]>();
-    routeIds.forEach(id => {
-        data.set(id, (res.response as any[]).filter(vehicle => vehicle.RouteId === id));
-    });
-
-    dispatch(createUpdateVehiclesAction(data));
 }
 
 async function allRoutes(): Promise<WorkerResponse> {
