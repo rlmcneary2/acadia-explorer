@@ -33,9 +33,9 @@ import Start from "./startView";
 
 export default async () => {
     // Register our service worker.
-    if (navigator.serviceWorker) {
-        await navigator.serviceWorker.register("serviceWorker.js", { scope: "/" });
-    }
+    // if (navigator.serviceWorker) {
+    //     await navigator.serviceWorker.register("sw.js", { scope: "/" });
+    // }
 
     // Setup React, Redux, React-Router
     const middlewareArgs = [reduxThunk];
