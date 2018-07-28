@@ -21,8 +21,14 @@
  */
 
 
+import logg from "@util/logg";
 import { WorkerRequest, WorkerResponse } from "./httpInterfaces";
 
+
+const LOGG_CATEGORY = "hwrk";
+
+
+logg.debug(() => "httpWorker - starting.", LOGG_CATEGORY);
 
 const worker = (self as any) as Worker; // "as" gymanstics to prevent tslint errors.
 worker.addEventListener("message", evt => {
@@ -107,5 +113,5 @@ async function fetchResponse(request: WorkerRequest): Promise<Response> {
     const req = new Request(url, options);
 
 
-    return await fetch(req);
+    return fetch(req);
 }

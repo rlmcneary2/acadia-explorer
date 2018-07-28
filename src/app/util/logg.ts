@@ -20,21 +20,23 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+
 export default {
 
     /**
      * Add the "logg" parameter to the URL or localStorage to enable logging.
      */
-    debug(callback: CreateMessage) {
+    debug(callback: CreateMessage, category?: string) {
         if (!isLoggingEnabled()) {
             return;
         }
 
         logMessage(
             console.log,
-            "[D] ",
+            "[D]",
             "color: #7E7E7E;",
-            callback()
+            callback(),
+            category
         );
     },
 
@@ -43,48 +45,51 @@ export default {
      * @param callback This can return an Error object. The Error.message will
      * be printed. If Error.name exists it will be prefixed to the message.
      */
-    error(callback: CreateErrorMessage) {
+    error(callback: CreateErrorMessage, category?: string) {
         if (!isLoggingEnabled()) {
             return;
         }
 
         logMessage(
             console.error,
-            "[E] ",
+            "[E]",
             null,
-            callback()
+            callback(),
+            category
         );
     },
 
     /**
      * Add the "logg" parameter to the URL or localStorage to enable logging.
      */
-    info(callback: CreateMessage) {
+    info(callback: CreateMessage, category?: string) {
         if (!isLoggingEnabled()) {
             return;
         }
 
         logMessage(
             console.log,
-            "[I] ",
+            "[I]",
             null,
-            callback()
+            callback(),
+            category
         );
     },
 
     /**
      * Add the "logg" parameter to the URL or localStorage to enable logging.
      */
-    warn(callback: CreateMessage) {
+    warn(callback: CreateMessage, category?: string) {
         if (!isLoggingEnabled()) {
             return;
         }
 
         logMessage(
             console.warn,
-            "[W] ",
+            "[W]",
             null,
-            callback()
+            callback(),
+            category
         );
     }
 
@@ -92,6 +97,12 @@ export default {
 
 
 function isLoggingEnabled(): boolean {
+    if (!self.localStorage) {
+        // In worker context, there is no access to localStorage. For now return
+        // true.
+        return true;
+    }
+
     // If you don't want to worry about adding the parameter to the URL add a
     // "logg" entry to localStorage.
     if (Object.keys(localStorage).includes("logg")) {
@@ -103,20 +114,25 @@ function isLoggingEnabled(): boolean {
     return query.has("logg");
 }
 
-function logMessage(logFunc: (...args) => void, prefix: string, format: string, message: CreateErrorMessageResult) {
+function logMessage(logFunc: (...args) => void, prefix: string, format: string, message: CreateErrorMessageResult, category: string) {
     let args = [];
+    const cat = createCategory(category);
     if (typeof message === "string") {
-        args.push(`%c${prefix}${message}`);
+        args.push(`%c${prefix}${cat}${message}`);
     } else if (message instanceof Error) {
-        args.push(`%c${prefix}${message.name && message.name !== "Error" ? message.name + "-" : ""}${message.message}`);
+        args.push(`%c${prefix}${cat}${message.name && message.name !== "Error" ? message.name + "-" : ""}${message.message}`);
     } else if (Array.isArray(message) && message.length) {
-        args.push(`%c${prefix}${message[0]}`);
+        args.push(`%c${prefix}${cat}${message[0]}`);
         args = [...args, ...message.slice(1)];
     }
 
     args.splice(1, 0, format || "");
 
     (logFunc || console.log)(...args);
+}
+
+function createCategory(category: string): string {
+    return category ? `[${category}] ` : " ";
 }
 
 export type CreateMessage = () => CreateMessageResult;
