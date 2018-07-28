@@ -21,8 +21,9 @@
  */
 
 
+ // tslint:disable-next-line:no-submodule-imports
+import HttpWorker from "worker-loader?name=httpWorker.js!./httpWorker";
 import { WorkerHeader, WorkerRequest, WorkerResponse } from "./httpInterfaces";
-const HttpWorker = require("worker-loader?name=serviceWorker.js!./httpWorker");
 
 
 const worker = new HttpWorker() as Worker; // Singleton
