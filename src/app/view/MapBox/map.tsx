@@ -24,6 +24,10 @@
 import * as mapboxgl from "mapbox-gl";
 import * as React from "react";
 import InteractiveMap from "react-map-gl";
+import logg from "@util/logg";
+
+
+const LOG_CATEGORY = "maptsx";
 
 
 interface GeoJSON {
@@ -33,7 +37,11 @@ interface GeoJSON {
 export interface MapGLLayer {
     id: string;
     layout: MapGLLayerLineStringLayout | MapGLLayerSymbolLayout | {};
-    metadata?: {};
+    metadata?: {
+        acadiaExplorer?: {
+            isVehicle: boolean;
+        }
+    };
     paint?: MapGLLayerLineStringPaint | MapGLLayerCirclePaint | MapGLLayerSymbolPaint;
     type: "fill" | "line" | "symbol" | "circle" | "fill-extrusion" | "raster" | "background";
     source: {
@@ -220,6 +228,18 @@ export class Map extends React.Component<Props> {
 
     private addLayer(layer: MapGLLayer): boolean {
         const mapLayer = this.map.getLayer(layer.id);
+
+        // TODO: a vehicle layer must replace any existing layer. Should the
+        // layer be explicitly deleted via props or does the prop layer have a
+        // property to force the layer to update?
+        if (mapLayer && layer.metadata && layer.metadata.acadiaExplorer && layer.metadata.acadiaExplorer.isVehicle) {
+            logg.debug(() => `Map addLayer - updating layer source: ${layer.id}.`, LOG_CATEGORY);
+            mapLayer.source = null;
+            this.map
+                .removeSource(layer.id)
+                .addSource(layer.id, layer.source);
+            mapLayer.source = layer.id;
+        }
 
         let added: boolean;
         if (!mapLayer) {

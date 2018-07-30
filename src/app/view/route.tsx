@@ -304,14 +304,13 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 }
 
                 if (this.state.layers.has(this._vehiclesLayerId(id))) {
-                    continue;
+                    this.state.layers.delete(this._vehiclesLayerId(id));
                 }
 
-                layers.push(this._createMapGLVehiclesLayer(rv, color));
-                this.state.layers.set(this._vehiclesLayerId(id), { id });
-
-                // layers.push(this._createMapGLStopsTextLayer(rs, color));
-                // this.state.layers.set(this._stopsLayerId(id, true), { id });
+                if (rv.vehicles && rv.vehicles.length) {
+                    layers.push(this._createMapGLVehiclesLayer(rv, color));
+                    this.state.layers.set(this._vehiclesLayerId(id), { id });
+                }
             }
         }
 
@@ -457,6 +456,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         const layer: MapGLLayer = {
             id: this._vehiclesLayerId(routeVehicles.id),
             layout: {},
+            metadata: { acadiaExplorer: { isVehicle: true } },
             paint,
             source: {
                 data: geoJson,
