@@ -25,6 +25,10 @@ interface BaseAction {
     type: string;
 }
 
+interface BaseActionId<T> extends BaseAction {
+    id: T;
+}
+
 /**
  * An action response that has data.
  * @interface DataAction
@@ -44,6 +48,11 @@ interface DataAction<T> extends BaseAction {
  */
 interface DataActionId<S, T> extends DataAction<T> {
     id: S;
+}
+
+interface TickStartActionData {
+    startTime: number;
+    timeoutId: number;
 }
 
 interface HttpRequestEndData {
@@ -69,9 +78,11 @@ enum HttpRequestDefinedUids {
 
 export {
     BaseAction,
+    BaseActionId,
     DataAction,
     DataActionId,
     HttpRequestDefinedUids,
     HttpRequestEndData,
-    HttpRequestStartData
+    HttpRequestStartData,
+    TickStartActionData
 };

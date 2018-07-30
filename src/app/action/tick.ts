@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Richard L. McNeary II
+ * Copyright (c) 2018 Richard L. McNeary II
  *
  * MIT License
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -21,14 +21,42 @@
  */
 
 
-import { combineReducers } from "redux";
-import api from "./api";
-import tick from "./tick";
-import ui from "./ui";
+import { DataActionId, TickStartActionData } from "./interfaces";
 
 
-export default combineReducers({
-    api,
-    tick,
-    ui
+const actionTick = Object.freeze({
+
+    types: Object.freeze({
+        add: "add",
+        end: "end",
+        start: "start"
+    }),
+
+    add(id: string, interval: number): DataActionId<string, number> {
+        return {
+            data: interval,
+            id,
+            type: actionTick.types.add
+        };
+    },
+
+    start(id: string, startTime: number, timeoutId: number): DataActionId<string, TickStartActionData> {
+        return {
+            data: { startTime, timeoutId },
+            id,
+            type: actionTick.types.start
+        };
+    },
+
+    end(id: string, endTime: number): DataActionId<string, number> {
+        return {
+            data: endTime,
+            id,
+            type: actionTick.types.end
+        };
+    }
+
 });
+
+
+export { actionTick };
