@@ -6,6 +6,7 @@
     ],
     "rules": {
         "arrow-parens": false,
+        "array-type": false,
         "class-name": true,
         "comment-format": [
             true
