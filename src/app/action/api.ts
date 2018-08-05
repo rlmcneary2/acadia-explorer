@@ -21,15 +21,18 @@
  */
 
 
+import { actionTick } from "@action/tick";
 import * as toGeoJSON from "@mapbox/togeojson";
 import { RouteGeo } from "@reducer/api";
 import { FeatureCollection } from "geojson";
 import { Dispatch } from "redux";
 import apiData from "../api/data";
-import vehicleService from "../api/vehicleService";
 import { http } from "../network/http";
 import { WorkerResponse } from "../network/httpInterfaces";
 import { DataAction, DataActionId } from "./interfaces";
+
+
+const INTERVAL_UPDATE_VEHICLES = 15 * 1000; // Vehicles don't appear to update their location on the server in less than a minute.
 
 
 const actionApi = Object.freeze({
@@ -61,22 +64,21 @@ const actionApi = Object.freeze({
             }
 
             dispatch(createUpdateRoutesAction(response));
-
             traces(dispatch, response);
             stops(dispatch, response);
-            if (!vehicleService.hasDispatch()) {
-                vehicleService.setDispatch(dispatch);
-            }
-            vehicleService.addRoutes(response);
         };
     },
 
-    getVehicles(routes: any[]): Dispatch<Promise<void>> {
+    getVehicles(routeIds: number[], tickStartTime: number = null): Dispatch<Promise<void>> {
         return async dispatch => {
-            if (!vehicleService.hasDispatch()) {
-                vehicleService.setDispatch(dispatch);
-            }
-            vehicleService.addRoutes(routes);
+            const res = await http.get(`${apiData.domain}/InfoPoint/rest/Vehicles/GetAllVehiclesForRoutes?routeIDs=${routeIds.join(",")}`);
+            const data = new Map<number, object[]>();
+            routeIds.forEach(id => {
+                data.set(id, (res.response as any[]).filter(vehicle => vehicle.RouteId === id));
+            });
+
+            dispatch(actionApi.createUpdateVehiclesAction(data));
+            dispatch(actionTick.add("getVehicles", { actionType: actionApi.types.updateVehicles, interval: INTERVAL_UPDATE_VEHICLES, startTime: tickStartTime }));
         };
     }
 

@@ -148,8 +148,8 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         logg.debug(() => ["route componentWillReceiveProps - nextProps: %O", nextProps]);
         if (
             nextProps.hasOwnProperty("route") &&
-            this.state.activeRoute &&
-            nextProps.route.RouteId !== this.state.activeRoute.id
+            !this.state.activeRoute ||
+            (this.state.activeRoute && nextProps.route.RouteId !== this.state.activeRoute.id)
         ) {
             const { Color: color, RouteId: id, ShortName: shortName } = nextProps.route;
             this.setState({ activeRoute: { color, id, shortName } });

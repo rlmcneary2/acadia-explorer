@@ -21,7 +21,7 @@
  */
 
 
-import { DataActionId, TickStartActionData } from "./interfaces";
+import { BaseActionId, DataActionId, TickStartActionData } from "./interfaces";
 
 
 const actionTick = Object.freeze({
@@ -29,12 +29,13 @@ const actionTick = Object.freeze({
     types: Object.freeze({
         add: "add",
         end: "end",
+        remove: "remove",
         start: "start"
     }),
 
-    add(id: string, interval: number): DataActionId<string, number> {
+    add(id: string, data: { actionType: string; interval?: number; startTime?: number; }): DataActionId<string, { actionType: string; interval?: number;  startTime?: number; }> {
         return {
-            data: interval,
+            data,
             id,
             type: actionTick.types.add
         };
@@ -53,6 +54,13 @@ const actionTick = Object.freeze({
             data: endTime,
             id,
             type: actionTick.types.end
+        };
+    },
+
+    remove(id: string): BaseActionId<string> {
+        return {
+            id,
+            type: actionTick.types.remove
         };
     }
 

@@ -21,13 +21,13 @@
  */
 
 
+import logg from "@util/logg";
 import * as mapboxgl from "mapbox-gl";
 import * as React from "react";
 import InteractiveMap from "react-map-gl";
-import logg from "@util/logg";
 
 
-const LOG_CATEGORY = "maptsx";
+const LOG_CATEGORY = "mptsx";
 
 
 interface GeoJSON {
@@ -147,7 +147,7 @@ interface ViewportChanged {
 export type VisibilityType = "none" | "visible";
 
 
-export class Map extends React.Component<Props> {
+export class Map extends React.PureComponent<Props> {
 
     constructor(props: Props) {
         super(props);
@@ -185,7 +185,9 @@ export class Map extends React.Component<Props> {
         // As the KML / geojson information arrives update the map with the
         // available bus route and stop information. Layer visibility is set
         // during render.
-        this._updateMapLayers(nextProps);
+        if (nextProps.layers !== this.props.layers) {
+            this._updateMapLayers(nextProps);
+        }
     }
 
     public componentWillUnmount() {
@@ -229,16 +231,11 @@ export class Map extends React.Component<Props> {
     private addLayer(layer: MapGLLayer): boolean {
         const mapLayer = this.map.getLayer(layer.id);
 
-        // TODO: a vehicle layer must replace any existing layer. Should the
-        // layer be explicitly deleted via props or does the prop layer have a
-        // property to force the layer to update?
+        // Update a vehicle layer's source. The map will only redraw if the
+        // vehicle position changes.
         if (mapLayer && layer.metadata && layer.metadata.acadiaExplorer && layer.metadata.acadiaExplorer.isVehicle) {
             logg.debug(() => `Map addLayer - updating layer source: ${layer.id}.`, LOG_CATEGORY);
-            mapLayer.source = null;
-            this.map
-                .removeSource(layer.id)
-                .addSource(layer.id, layer.source);
-            mapLayer.source = layer.id;
+            this.map.getSource(layer.id).setData(layer.source.data);
         }
 
         let added: boolean;

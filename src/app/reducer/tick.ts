@@ -22,8 +22,11 @@
 
 
 import logg from "@util/logg";
-import { BaseAction, DataActionId, TickStartActionData } from "../action/interfaces";
+import { BaseAction, BaseActionId, DataActionId, TickStartActionData } from "../action/interfaces";
 import { actionTick } from "../action/tick";
+
+
+const LOG_CATEGORY = "tickr";
 
 
 export default (state: State = { ticks: [] }, action: BaseAction): State => {
@@ -32,15 +35,32 @@ export default (state: State = { ticks: [] }, action: BaseAction): State => {
     switch (action.type) {
 
         case actionTick.types.add: {
-            const { data: interval, id } = (action as DataActionId<string, number>);
+            const { data, id } = (action as DataActionId<string, { actionType: string; interval: number; startTime?: number; }>);
+            const { actionType, interval, startTime } = data;
             const index = state.ticks.findIndex(item => item.id === id);
-            if (index < 0) {
-                ({ ...nextState } = state);
-                nextState.ticks = [...state.ticks];
-                nextState.ticks.push({ id, interval });
-            } else {
-                logg.warn(() => `tick reducer - [${action.type}] entry already exists for tick id '${id}'.`);
+            const previousTickItem: TicksItem = -1 < index ? state.ticks[index] : ({} as any);
+
+            // Don't "add" a tick that is currently operating.
+            if (previousTickItem.state && previousTickItem.state !== "ended") {
+                break;
             }
+
+            const ticks = [...state.ticks];
+            if (-1 < index) {
+                ticks.splice(index, 1);
+            }
+
+            const nextTick: TicksItem = { ...copyPreviousTicksItem(previousTickItem), actionType, id, state: "added" };
+            if (interval) {
+                nextTick.interval = interval;
+            }
+
+            if (startTime) {
+                nextTick.startTime = startTime;
+            }
+
+            ticks.push(nextTick);
+            nextState = { ...state, ticks };
             break;
         }
 
@@ -48,12 +68,24 @@ export default (state: State = { ticks: [] }, action: BaseAction): State => {
             const { data: endTime, id } = (action as DataActionId<string, number>);
             const index = state.ticks.findIndex(item => item.id === id);
             if (-1 < index) {
-                ({ ...nextState } = state);
-                nextState.ticks = [...state.ticks];
-                nextState.ticks[index] = { ...nextState.ticks[index], ...{ endTime } };
+                const ticks: TicksItem[] = [...state.ticks];
+                ticks[index] = { ...state.ticks[index], ...{ endTime, state: "ended" } };
+                nextState = { ...state, ticks };
             } else {
-                logg.warn(() => `tick reducer - [${action.type}] no entry found for tick id '${id}'.`);
+                logg.warn(() => `tick reducer - [${action.type}] no entry found for tick id '${id}'.`, LOG_CATEGORY);
             }
+            break;
+        }
+
+        case actionTick.types.remove: {
+            const { id } = (action as BaseActionId<string>);
+            const index = state.ticks.findIndex(item => item.id === id);
+            if (-1 < index) {
+                const ticks = [...state.ticks];
+                ticks.splice(index, 1);
+                nextState = { ...state, ticks };
+            }
+
             break;
         }
 
@@ -62,11 +94,11 @@ export default (state: State = { ticks: [] }, action: BaseAction): State => {
             const { startTime, timeoutId } = data;
             const index = state.ticks.findIndex(item => item.id === id);
             if (-1 < index) {
-                ({ ...nextState } = state);
-                nextState.ticks = [...state.ticks];
-                nextState.ticks[index] = { ...nextState.ticks[index], ...{ id, startTime, timeoutId } };
+                const ticks = [...state.ticks];
+                ticks[index] = { ...state.ticks[index], ...{ id, startTime, state: "started", timeoutId } };
+                nextState = { ...state, ticks };
             } else {
-                logg.warn(() => `tick reducer - [${action.type}] no entry found for tick id '${id}'.`);
+                logg.warn(() => `tick reducer - [${action.type}] no entry found for tick id '${id}'.`, LOG_CATEGORY);
             }
             break;
         }
@@ -77,15 +109,23 @@ export default (state: State = { ticks: [] }, action: BaseAction): State => {
 };
 
 
+function copyPreviousTicksItem(tickItem: TicksItem): TicksItem {
+    const { endTime, startTime, state, ...result } = tickItem;
+    return result as any;
+}
+
+
 interface State {
     ticks: TicksItem[];
 }
 
 interface TicksItem {
+    actionType: string;
     endTime?: number;
     id: string;
     interval: number;
     startTime?: number;
+    state: "added" | "started" | "ended";
     timeoutId?: number;
 }
 

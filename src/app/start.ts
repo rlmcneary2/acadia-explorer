@@ -30,7 +30,6 @@ import { actionApp } from "./action/app";
 import tickListener from "./listener/tick";
 import reducers from "./reducer/reducers";
 import Start from "./startView";
-import { actionTick } from "@action/tick";
 
 
 export default async () => {
