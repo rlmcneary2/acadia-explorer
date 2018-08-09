@@ -21,33 +21,40 @@
  */
 
 
- @import "dimension";
- @import "prefixed";
-
-
 .control {
     &:focus {
         border-color: $color-focus;
         outline: none;
     }
     &:hover {
-        border-color: $color-primary-3;
+        background-color: $color-primary-0;
+        border-color: $color-primary-1;
     }
     &:active {
-        border-color: $color-primary-1;
-        background-color: $color-app-background
+        border-color: $color-primary-2;
+        background-color: $color-primary-1;
+        span {
+            color: $color-control-text-dark;
+        }
     }
     a {
-        color: $color-control-text;
+        color: $color-control-text-dark;
         display: block;
         height: 100%;
         text-decoration: none;
+    }
+    border: {
+        color: $color-primary-0;
+        radius: $control-height-half;
+        style: none;
+        width: 0;
     }
     box-sizing: border-box;
     height: $control-height;
     position: relative;
     span {
         @include user-select;
+        color: $color-control-text-light;
         font: {
             size: $text-control;
         }
@@ -62,14 +69,15 @@
 }
 
 button {
-    background-color: $color-gray-0;
-    border: {
-        color: $color-primary-2;
-        radius: $control-height-half;
-        style: solid;
-        width: $button-border-width;
-    }
+    background-color: $color-primary-2;
     margin-right: $control-margin-h;
     padding: $button-padding;
     width: $button-width;
+}
+
+button.control {
+    border: {
+        style: solid;
+        width: $button-border-width;
+    }
 }

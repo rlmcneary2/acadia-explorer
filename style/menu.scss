@@ -23,6 +23,9 @@
 
 .menu-item {
     @extend .control;
+    span {
+        color: $color-control-text-dark
+    }
 }
 
 .menu-container {
