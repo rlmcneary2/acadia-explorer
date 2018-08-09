@@ -45,7 +45,7 @@ button {
     & > span:focus{
         outline: none;
     }
-    background: $app-background-color;
+    background: $color-app-background;
     border: 0;
     font: {
         family: inherit;
@@ -112,7 +112,6 @@ $application-max-width: 1000px;
 .application > .header {
     display: flex;
     flex: 0 0 auto;
-    height: $control-height;
 }
 
 .application > .content {

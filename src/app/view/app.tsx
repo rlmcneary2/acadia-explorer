@@ -62,7 +62,7 @@ class App extends React.Component<Props> {
 
         return (
             <div className="application">
-                <nav className="header">
+                <nav className="control-container header">
                     <menu className="header">
                         <li>
                             <button className="control" onClick={this.toggleNavigationMenuDisplayBound}>

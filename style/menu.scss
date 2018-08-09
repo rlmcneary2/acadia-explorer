@@ -22,11 +22,11 @@
 
 
 .menu-item {
-    @include control;
+    @extend .control;
 }
 
 .menu-container {
-    background: $app-background-color;
+    background: $color-app-background;
     position: relative;
 }
 
