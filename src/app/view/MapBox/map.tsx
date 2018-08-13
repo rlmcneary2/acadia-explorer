@@ -22,9 +22,8 @@
 
 
 import logg from "@util/logg";
-import * as mapboxgl from "mapbox-gl";
 import * as React from "react";
-import InteractiveMap from "react-map-gl";
+import { InteractiveMap } from "react-map-gl";
 
 
 const LOG_CATEGORY = "mptsx";
@@ -256,14 +255,14 @@ export class Map extends React.PureComponent<Props> {
         return coordinate.slice(0, 2);
     }
 
-    private getLayerBounds(source: any): mapboxgl.LngLatBounds {
+    private getLayerBounds(source: any): mapboxgl.LngLatBoundsLike {
         const { data: geoJson } = source;
         if (!geoJson.features || geoJson.features.length < 1) {
             return [] as any;
         }
 
         let coordinates: number[][];
-        const bounds = geoJson.features
+        const bounds: mapboxgl.LngLatBounds[] = geoJson.features
             .map(feature => {
                 ({ coordinates } = feature.geometry);
                 coordinates = Array.isArray(coordinates[0]) ? coordinates : [(coordinates as any)];
@@ -272,7 +271,7 @@ export class Map extends React.PureComponent<Props> {
 
         const arrBounds: number[][] = [];
         bounds.forEach(b => b.toArray().forEach(c => arrBounds.push(c)));
-        return this.reduceToBounds(arrBounds);
+        return this.reduceToBounds(arrBounds).toArray();
     }
 
     private mapRef(mapComponent) {
@@ -340,7 +339,7 @@ export class Map extends React.PureComponent<Props> {
         // Loop over all the layers and set their visibility.
         let layer;
         let isVisible: boolean;
-        let bounds: mapboxgl.LngLatBounds;
+        let bounds: mapboxgl.LngLatBoundsLike;
         for (const id of this.layerIds) {
             isVisible = props.visibleLayersIds.includes(id);
 
@@ -359,12 +358,12 @@ export class Map extends React.PureComponent<Props> {
 
         // Update the map location and zoom to fit the selected route.
         if (props.zoomToFit && bounds) {
-            let args: any = [bounds];
+            const options: mapboxgl.FitBoundsOptions = {};
             if (props.zoomToFitPadding) {
-                args = [...args, { padding: props.zoomToFitPadding }];
+                options.padding = props.zoomToFitPadding;
             }
 
-            this.map.fitBounds(...args);
+            (this.map as mapboxgl.Map).fitBounds(bounds, options);
         }
     }
 
