@@ -21,11 +21,11 @@
  */
 
 
-$control-height: 85px;
+$control-height: 25px;
 $control-height-half: $control-height / 2;
 $control-margin-h: $control-height / 10;
-$control-padding: 10px;
+$control-padding: 3px;
 
 $button-border-width: if($control-height / 25 < 2, 2px, $control-height / 25);
-$button-padding: 10px;
+$button-padding: 3px;
 $button-width: $control-height * 3.5;

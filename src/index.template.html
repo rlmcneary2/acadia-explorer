@@ -22,11 +22,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, width=device-width">
         <!--
             Since this is an SPA with a client-side router all relative requests must be relative to the root, not the path currently displayed in the URL bar. The base HREF does that.
         -->
         <base href="/" />
-        <link href="https://api.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css" rel="stylesheet" />
+        <script src="//api.tiles.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.js"></script>
+        <link href="//api.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css" rel="stylesheet" />
     </head>
     <body>
         <div id="react-root"></div>
