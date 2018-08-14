@@ -29,75 +29,6 @@ import { InteractiveMap } from "react-map-gl";
 const LOG_CATEGORY = "mptsx";
 
 
-interface GeoJSON {
-    features: any[];
-}
-
-export interface MapGLLayer {
-    id: string;
-    layout: MapGLLayerLineStringLayout | MapGLLayerSymbolLayout | {};
-    metadata?: {
-        acadiaExplorer?: {
-            isVehicle: boolean;
-        }
-    };
-    paint?: MapGLLayerLineStringPaint | MapGLLayerCirclePaint | MapGLLayerSymbolPaint;
-    type: "fill" | "line" | "symbol" | "circle" | "fill-extrusion" | "raster" | "background";
-    source: {
-        type: "geojson";
-        data: GeoJSON;
-    };
-}
-
-export interface MapGLLayerCirclePaint {
-    "circle-color": string;
-    "circle-radius": number | MapGLCurveTypeStep;
-    "circle-stroke-color"?: string;
-    "circle-stroke-opacity"?: number;
-    "circle-stroke-width"?: number | MapGLCurveTypeStep;
-}
-
-export interface MapGLLayerSymbolPaint {
-    "text-color"?: string;
-    "text-halo-blur"?: number | MapGLCurveTypeStep;
-    "text-halo-color"?: string;
-    "text-halo-width"?: number | MapGLCurveTypeStep;
-}
-
-export interface MapGLLayerLayout {
-    visibility?: VisibilityType;
-}
-
-export interface MapGLLayerLineStringLayout extends MapGLLayerLayout {
-    "line-cap"?: "round";
-    "line-join"?: "round";
-}
-
-export interface MapGLLayerLineStringPaint {
-    "line-color"?: string;
-    "line-opacity"?: number;
-    "line-width"?: number;
-}
-
-export interface MapGLCurveTypeStep {
-    base: number;
-    stops: number[][];
-}
-
-export interface MapGLLayerSymbolLayout extends MapGLLayerLayout {
-    "icon-allow-overlap"?: boolean;
-    "icon-image"?: string;
-    "icon-optional"?: boolean;
-    "icon-size"?: number;
-    "text-allow-overlap": boolean;
-    "text-anchor"?: string | MapGLCurveTypeStep;
-    "text-field"?: string;
-    "text-offset"?: number | MapGLCurveTypeStep;
-    "text-size"?: number | MapGLCurveTypeStep;
-}
-
-export const PROPERTY_AFFECTS_ZOOM_TO_FIT = "acx:affectsZoomToFit";
-
 /**
  * The props for the map.
  * @interface Props
@@ -113,7 +44,7 @@ export interface Props {
     mapIsInitialized: () => void;
     isVisible?: boolean;
     latitude: number;
-    layers?: MapGLLayer[];
+    layers?: mapboxgl.Layer[];
     longitude: number;
     visibleLayersIds?: string[];
     zoom: number;
@@ -217,7 +148,7 @@ export class Map extends React.PureComponent<Props> {
 
     private initialized = false;
     private layerIds: string[] = [];
-    private map;
+    private map: mapboxgl.Map;
     private mapRefBound;
     private mapWrapperRefBound;
     private updateMapTimeout;
@@ -227,14 +158,15 @@ export class Map extends React.PureComponent<Props> {
         this.setState({ viewport });
     }
 
-    private addLayer(layer: MapGLLayer): boolean {
+    private addLayer(layer: mapboxgl.Layer): boolean {
         const mapLayer = this.map.getLayer(layer.id);
 
         // Update a vehicle layer's source. The map will only redraw if the
         // vehicle position changes.
         if (mapLayer && layer.metadata && layer.metadata.acadiaExplorer && layer.metadata.acadiaExplorer.isVehicle) {
             logg.debug(() => `Map addLayer - updating layer source: ${layer.id}.`, LOG_CATEGORY);
-            this.map.getSource(layer.id).setData(layer.source.data);
+            const source = this.map.getSource(layer.id) as mapboxgl.GeoJSONSource;
+            source.setData((layer.source as any).data);
         }
 
         let added: boolean;
@@ -349,7 +281,7 @@ export class Map extends React.PureComponent<Props> {
             }
 
             if (isVisible && props.boundsLayerId === id) {
-                const source = this.map.getSource(id);
+                const source = this.map.getSource(id) as any;
                 if (source) {
                     bounds = this.getLayerBounds(source.serialize());
                 }

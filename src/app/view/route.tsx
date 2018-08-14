@@ -31,14 +31,20 @@ import * as GeoJSON from "geojson/geojson"; // There is a name collision here, t
 import * as React from "react";
 import { connect } from "react-redux";
 import * as redux from "redux";
-import { Map as MapboxMap, MapGLLayer, MapGLLayerCirclePaint, MapGLLayerSymbolPaint, Props as MapboxProps } from "./MapBox/map";
+import { Map as MapboxMap, Props as MapboxProps } from "./MapBox/map";
 
 
-const ROUTE_LINE_WIDTH = 8;
+const ROUTE_LINE_WIDTH = 4;
 const START_LATITUDE = 44.3420759;
 const START_LONGITUDE = -68.2654881;
-const START_ZOOM = 10;
-const ZOOM_TO_FIT_PADDING = 100;
+const START_ZOOM = 8.5;
+const STOP_CIRCLE_RADIUS_BASE = 1.15;
+const STOP_CIRCLE_RADIUS_STEPS: ReadonlyArray<ReadonlyArray<number>> = [[10, 5], [14, 5]];
+const STOP_CIRCLE_STROKE_BASE = 1.15;
+const STOP_CIRCLE_STROKE_STEPS: ReadonlyArray<ReadonlyArray<number>> = [[10, 3], [14, 3]];
+const STOP_TEXT_BASE = 1.15;
+const STOP_TEXT_STEPS: ReadonlyArray<ReadonlyArray<number>> = [[10, 10], [14, 12]];
+const ZOOM_TO_FIT_PADDING = 25;
 
 
 interface InternalProps extends Props {
@@ -258,14 +264,14 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
     private mapInitialized = false;
     private mapIsInitializedHandlerBound: () => void;
 
-    private _createMapGLLayers(): MapGLLayer[] {
+    private _createMapGLLayers(): mapboxgl.Layer[] {
         if (!this.mapInitialized) {
             return [];
         }
 
-        const layers: MapGLLayer[] = [];
+        const layers: mapboxgl.Layer[] = [];
         if (this.props.routeGeos && this.props.routeGeos.length) {
-            let layer: MapGLLayer;
+            let layer: mapboxgl.Layer;
             for (const rg of this.props.routeGeos) {
                 if (!this.state.layers.has(this._routeLayerId(rg.id))) {
                     layer = this._createMapGLRouteLayer(rg);
@@ -317,10 +323,10 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         return layers;
     }
 
-    private _createMapGLRouteLayer(routeGeo: RouteGeo): MapGLLayer {
+    private _createMapGLRouteLayer(routeGeo: RouteGeo): mapboxgl.Layer {
         const { geoJson } = routeGeo;
         const feature = geoJson && geoJson.features && 0 < geoJson.features.length ? geoJson.features[0] : null;
-        const layer: MapGLLayer = {
+        const layer: mapboxgl.Layer = {
             id: this._routeLayerId(routeGeo.id),
             layout: {
                 "line-cap": "round",
@@ -341,7 +347,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         return layer;
     }
 
-    private _createMapGLStopsLayer(routeStops: RouteStops, color: string): MapGLLayer {
+    private _createMapGLStopsLayer(routeStops: RouteStops, color: string): mapboxgl.Layer {
         // Convert route stops to geojson points.
         const data = routeStops.stops.map(item => {
             const { Latitude: lat, Longitude: lng, Name: name } = item;
@@ -354,21 +360,21 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
         const geoJson = GeoJSON.parse(data, { extra: { icon: "circle" }, Point: ["lat", "lng"] });
 
-        const paint: MapGLLayerCirclePaint = {
+        const paint: mapboxgl.CirclePaint = {
             "circle-color": color,
             "circle-radius": {
-                base: 1.25,
-                stops: [[10, 11], [14, 12]]
+                base: STOP_CIRCLE_RADIUS_BASE,
+                stops: STOP_CIRCLE_RADIUS_STEPS as any[]
             },
             "circle-stroke-color": "#FFF",
             "circle-stroke-opacity": 0.8,
             "circle-stroke-width": {
-                base: 1.25,
-                stops: [[10, 7], [14, 8]]
+                base: STOP_CIRCLE_STROKE_BASE,
+                stops: STOP_CIRCLE_STROKE_STEPS as any[]
             }
         };
 
-        const layer: MapGLLayer = {
+        const layer: mapboxgl.Layer = {
             id: this._stopsLayerId(routeStops.id),
             layout: {},
             paint,
@@ -382,7 +388,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         return layer;
     }
 
-    private _createMapGLStopsTextLayer(routeStops: RouteStops, color: string): MapGLLayer {
+    private _createMapGLStopsTextLayer(routeStops: RouteStops, color: string): mapboxgl.Layer {
         // Convert route stops to geojson points.
         const data = routeStops.stops.map(item => {
             const { Latitude: lat, Longitude: lng, Name: name } = item;
@@ -395,13 +401,13 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
         const geoJson = GeoJSON.parse(data, { Point: ["lat", "lng"] });
 
-        const paint: MapGLLayerSymbolPaint = {
+        const paint: mapboxgl.SymbolPaint = {
             "text-halo-blur": 1,
             "text-halo-color": "#FFF",
             "text-halo-width": 6
         };
 
-        const layer: MapGLLayer = {
+        const layer: mapboxgl.Layer = {
             id: this._stopsLayerId(routeStops.id, true),
             layout: {
                 "icon-allow-overlap": true,
@@ -411,8 +417,8 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 "text-field": "{name}",
                 "text-offset": [0, 1],
                 "text-size": {
-                    base: 1.25,
-                    stops: [[10, 25], [14, 40]]
+                    base: STOP_TEXT_BASE,
+                    stops: STOP_TEXT_STEPS as any[]
                 }
             },
             paint,
@@ -426,7 +432,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         return layer;
     }
 
-    private _createMapGLVehiclesLayer(routeVehicles: RouteVehicles, color: string): MapGLLayer {
+    private _createMapGLVehiclesLayer(routeVehicles: RouteVehicles, color: string): mapboxgl.Layer {
         // Convert route stops to geojson points.
         const data = routeVehicles.vehicles.map(item => {
             const { Latitude: lat, Longitude: lng, Name: name } = item;
@@ -439,21 +445,21 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
         const geoJson = GeoJSON.parse(data, { extra: { icon: "circle" }, Point: ["lat", "lng"] });
 
-        const paint: MapGLLayerCirclePaint = {
+        const paint: mapboxgl.CirclePaint = {
             "circle-color": color,
             "circle-radius": {
-                base: 1.25,
-                stops: [[10, 11], [14, 12]]
+                base: STOP_CIRCLE_RADIUS_BASE,
+                stops: STOP_CIRCLE_RADIUS_STEPS as any[]
             },
             "circle-stroke-color": "#FFF",
             "circle-stroke-opacity": 0.8,
             "circle-stroke-width": {
-                base: 1.25,
-                stops: [[10, 7], [14, 8]]
+                base: STOP_CIRCLE_STROKE_BASE,
+                stops: STOP_CIRCLE_STROKE_STEPS as any[]
             }
         };
 
-        const layer: MapGLLayer = {
+        const layer: mapboxgl.Layer = {
             id: this._vehiclesLayerId(routeVehicles.id),
             layout: {},
             metadata: { acadiaExplorer: { isVehicle: true } },
