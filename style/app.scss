@@ -107,9 +107,9 @@ $application-max-width: 1000px;
     position: relative;
 }
 
-.application > :nth-child(1n+0) {
-    flex: 0;
-}
+// .application > :nth-child(1n+0) {
+//     flex: 1;
+// }
 
 .application > .header {
     display: flex;
