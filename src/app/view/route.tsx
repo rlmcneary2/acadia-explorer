@@ -31,7 +31,8 @@ import * as GeoJSON from "geojson/geojson"; // There is a name collision here, t
 import * as React from "react";
 import { connect } from "react-redux";
 import * as redux from "redux";
-import { Map as MapboxMap, Props as MapboxProps } from "./MapBox/map";
+// import { Map as MapboxMap, Props as MapboxProps } from "./MapBox/map";
+import { ReactMapBoxGL, Props as MapProps } from "./MapBox/mapboxgl";
 
 
 const ROUTE_LINE_WIDTH = 4;
@@ -177,97 +178,125 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         this.props.componentWillUnmount(this.props);
     }
 
+    // public render(): JSX.Element {
+    //     logg.debug(() => ["route render - props: %O", this.props]);
+    //     const isShowMap = !this.props.location.pathname.endsWith("info");
+    //     let content = null;
+    //     if (this.props.hasOwnProperty("route")) {
+    //         const mapProps: MapboxProps = {
+    //             background: {
+    //                 color: "#FFF",
+    //                 width: ROUTE_LINE_WIDTH + 6
+    //             },
+    //             isVisible: isShowMap,
+    //             latitude: START_LATITUDE,
+    //             longitude: START_LONGITUDE,
+    //             mapIsInitialized: this.mapIsInitializedHandlerBound,
+    //             zoom: START_ZOOM,
+    //             zoomToFit: true,
+    //             zoomToFitPadding: ZOOM_TO_FIT_PADDING
+    //         } as any;
+
+    //         // Layers only passed to the Map component once so eventually the
+    //         // mapProps.layers will be an empty array.
+    //         mapProps.layers = this._createMapGLLayers();
+
+    //         // Use the information about layers in state to determine which
+    //         // layer is visible on the map.
+    //         logg.info(() => ["route render - state.activeRoute: %O", this.state.activeRoute]);
+    //         const routeId = this._getActiveRouteId();
+    //         if (routeId !== null) {
+    //             const visibleLayersIds: string[] = [];
+    //             this.state.layers
+    //                 .forEach(item => {
+    //                     if (item.id === routeId) {
+    //                         visibleLayersIds.push(this._routeLayerId(item.id));
+    //                         visibleLayersIds.push(this._stopsLayerId(item.id));
+    //                         visibleLayersIds.push(this._stopsLayerId(item.id, true));
+    //                         visibleLayersIds.push(this._vehiclesLayerId(item.id));
+
+    //                         // The route "trace" layer is used to determine the
+    //                         // bounds to be displayed.
+    //                         mapProps.boundsLayerId = this._routeLayerId(item.id);
+    //                     }
+    //                 });
+
+    //             if (0 < visibleLayersIds.length) {
+    //                 mapProps.visibleLayersIds = visibleLayersIds;
+    //             }
+
+    //             mapProps.zoomToLayerId = this._routeLayerId(routeId);
+    //         }
+
+    //         // It would be nice to use a react router Switch or Redirect here but we
+    //         // need to keep the map component around and not replace it every time
+    //         // the path changes to a new route. For that reason the URL will be
+    //         // parsed here: if it ends with "info" the info page will be displayed
+    //         // otherwise the map will be displayed.
+    //         content = (
+    //             <div className="route-content">
+    //                 <MapboxMap {...mapProps} />
+    //                 <h1 style={{ display: !isShowMap ? "initial" : "none" }}>Info please!</h1>
+    //             </div>
+    //         );
+    //         // content = (<Redirect to={`/route/${props.match.params.id}/map`} />); // For historical purposes.
+    //     } else {
+    //         content = "WORKING";
+    //     }
+
+    //     const linkButtonProps: LinkButtonProps = {
+    //         content: {
+    //             id: !isShowMap ? "MAP" : "INFO"
+    //         },
+    //         to: !isShowMap ? `/route/${this.props.match.params.id}/map` : `/route/${this.props.match.params.id}/info`
+    //     };
+
+    //     return (
+    //         <div className="content">
+    //             <nav className="route-tabs">
+    //                 <LinkButton {...linkButtonProps} />
+    //             </nav>
+    //             {content}
+    //         </div>
+    //     );
+    // }
     public render(): JSX.Element {
-        logg.debug(() => ["route render - props: %O", this.props]);
-        const isShowMap = !this.props.location.pathname.endsWith("info");
-        let content = null;
-        if (this.props.hasOwnProperty("route")) {
-            const mapProps: MapboxProps = {
-                background: {
-                    color: "#FFF",
-                    width: ROUTE_LINE_WIDTH + 6
-                },
-                isVisible: isShowMap,
-                latitude: START_LATITUDE,
-                longitude: START_LONGITUDE,
-                mapIsInitialized: this.mapIsInitializedHandlerBound,
-                zoom: START_ZOOM,
-                zoomToFit: true,
-                zoomToFitPadding: ZOOM_TO_FIT_PADDING
-            } as any;
-
-            // Layers only passed to the Map component once so eventually the
-            // mapProps.layers will be an empty array.
-            mapProps.layers = this._createMapGLLayers();
-
-            // Use the information about layers in state to determine which
-            // layer is visible on the map.
-            logg.info(() => ["route render - state.activeRoute: %O", this.state.activeRoute]);
-            const routeId = this._getActiveRouteId();
-            if (routeId !== null) {
-                const visibleLayersIds: string[] = [];
-                this.state.layers
-                    .forEach(item => {
-                        if (item.id === routeId) {
-                            visibleLayersIds.push(this._routeLayerId(item.id));
-                            visibleLayersIds.push(this._stopsLayerId(item.id));
-                            visibleLayersIds.push(this._stopsLayerId(item.id, true));
-                            visibleLayersIds.push(this._vehiclesLayerId(item.id));
-
-                            // The route "trace" layer is used to determine the
-                            // bounds to be displayed.
-                            mapProps.boundsLayerId = this._routeLayerId(item.id);
-                        }
-                    });
-
-                if (0 < visibleLayersIds.length) {
-                    mapProps.visibleLayersIds = visibleLayersIds;
-                }
-
-                mapProps.zoomToLayerId = this._routeLayerId(routeId);
-            }
-
-            // It would be nice to use a react router Switch or Redirect here but we
-            // need to keep the map component around and not replace it every time
-            // the path changes to a new route. For that reason the URL will be
-            // parsed here: if it ends with "info" the info page will be displayed
-            // otherwise the map will be displayed.
-            content = (
-                <div className="route-content">
-                    <MapboxMap {...mapProps} />
-                    <h1 style={{ display: !isShowMap ? "initial" : "none" }}>Info please!</h1>
-                </div>
-            );
-            // content = (<Redirect to={`/route/${props.match.params.id}/map`} />); // For historical purposes.
-        } else {
-            content = "WORKING";
-        }
-
-        const linkButtonProps: LinkButtonProps = {
-            content: {
-                id: !isShowMap ? "MAP" : "INFO"
-            },
-            to: !isShowMap ? `/route/${this.props.match.params.id}/map` : `/route/${this.props.match.params.id}/info`
-        };
-
-        return (
-            <div className="content">
-                <nav className="route-tabs">
-                    <LinkButton {...linkButtonProps} />
-                </nav>
-                {content}
-            </div>
-        );
+        return this.reactMap;
     }
 
 
+    private get reactMap(): JSX.Element {
+        const layers = this._createMapGLLayers();
+        if (!layers || !layers.length) {
+            return null;
+        }
+
+        if (!this.reactMapValue) {
+            const props: MapProps = {
+                accessToken: "pk.eyJ1IjoicmxtY25lYXJ5MiIsImEiOiJjajgyZjJuMDAyajJrMndzNmJqZDFucTIzIn0.BYE_k7mYhhVCdLckWeTg0g",
+                layers,
+                onLoaded: () => logg.debug(() => "map loaded"),
+                options: {
+                    attributionControl: false,
+                    center: [START_LONGITUDE, START_LATITUDE],
+                    style: "mapbox://styles/mapbox/outdoors-v10",
+                    zoom: START_ZOOM
+                }
+            };
+
+            this.reactMapValue = <ReactMapBoxGL {...props} />;
+        }
+
+        return this.reactMapValue;
+    }
+    private reactMapValue: JSX.Element;
     private mapInitialized = false;
     private mapIsInitializedHandlerBound: () => void;
 
     private _createMapGLLayers(): mapboxgl.Layer[] {
-        if (!this.mapInitialized) {
-            return [];
-        }
+        // if (!this.mapInitialized) {
+        //     return [];
+        // }
 
         const layers: mapboxgl.Layer[] = [];
         if (this.props.routeGeos && this.props.routeGeos.length) {
