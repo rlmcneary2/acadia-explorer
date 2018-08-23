@@ -28,64 +28,42 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
 
     constructor(props: Props, context: any) {
         super(props, context);
+        this.state = {};
         this.id = `${Date.now()}`;
     }
 
     public render(): JSX.Element {
+        ReactMapBoxGL.log();
+        this.updateMap();
         return this.renderedElement;
     }
 
-    public shouldComponentUpdate(nextProps: Props): boolean {
-        // This is where the Map should be updated if the layers or sources have changed.
+    public shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
+        const mapReady =
+            this.state.map ||
+            !this.state.map && nextState.map ?
+            true :
+            false;
 
-        const { layers = [] } = nextProps;
+        ReactMapBoxGL.log(`map ready: '${mapReady}'.`);
+        return mapReady;
+    }
 
-        const changedSources: GeoSource[] = [];
-        const changedLayers = [];
-        for (const item of layers) {
-            ReactMapBoxGL.log(`Layer: ${item.id}`);
-            // Strip the source from the layer.
-            const { source, ...layer } = item;
-            const geoSource = source as mapboxgl.GeoJSONSource;
+    public componentWillUnmount() {
+        ReactMapBoxGL.log();
+    }
 
-            const layerJson = JSON.stringify(layer);
-            if (!this.layers.has(item.id)) {
-                this.layers.set(item.id, layerJson);
-                ReactMapBoxGL.log(`Adding layer: ${item.id}`);
-                changedLayers.push(layer);
-            } else {
-                if (this.layers.get(item.id) !== layerJson) {
-                    ReactMapBoxGL.log(`Updating layer: ${item.id}`);
-                    this.layers.set(item.id, layerJson);
-                    changedLayers.push(layer);
-                }
-            }
+    public componentDidMount() {
+        ReactMapBoxGL.log();
 
-            // Expect sources to change more often than layers.
-            const sourceJson = source ? JSON.stringify(source) : "";
-            if (!this.sources.has(item.id)) {
-                this.sources.set(item.id, sourceJson);
-                ReactMapBoxGL.log(`Adding source: ${item.id}`);
-                changedSources.push({ ...geoSource, id: item.id } as any);
-            } else {
-                if (this.sources.get(item.id) !== sourceJson) {
-                    this.sources.set(item.id, sourceJson);
-                    ReactMapBoxGL.log(`Updating source: ${item.id}`);
-                    changedSources.push({ ...geoSource, id: item.id } as any);
-                }
-            }
-        }
-
-        this.updateMap(changedLayers, changedSources);
-
-        return false;
+        // Let the stack unwind so we can set state in this method.
+        setImmediate(() => this.createMap());
     }
 
 
     private id: string;
-    private layers = new Map<string, string>();
-    private map: mapboxgl.Map;
-    // private ref: HTMLDivElement;
+    private layerIds = new Set<string>();
+    private mapState: "created" | "creating" | null = null;
     private get renderedElement(): JSX.Element {
         if (!this.renderedElementValue) {
             ReactMapBoxGL.log("creating a new map <div> element.");
@@ -93,7 +71,6 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
                 <div
                     className="map"
                     id={this.id}
-                    ref={ref => this.setRef(ref)}
                 />
             );
         }
@@ -101,30 +78,62 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
         return this.renderedElementValue;
     }
     private renderedElementValue: JSX.Element;
-    private sources = new Map<string, string>();
 
 
     private async createMap() {
+        if (this.mapState) {
+            return;
+        }
+
+        this.mapState = "creating";
+
+        ReactMapBoxGL.log("creating a new Map object.");
+
         mapboxgl.accessToken = this.props.accessToken;
 
         const options = {...this.props.options, ...{container: this.id}};
-        ReactMapBoxGL.log("creating a new Map object.");
-        this.map = new mapboxgl.Map(options);
+        const map = new mapboxgl.Map(options);
 
-        await this.waitForMapLoad(this.map);
+        await this.waitForMapLoad(map);
 
-        if (this.props.layers) {
-            for (const layer of this.props.layers) {
-                this.map.addLayer(layer);
-            }
-        }
+        this.mapState = "created";
+        ReactMapBoxGL.log("Map object created.");
+
+        this.setState({ map });
 
         if (this.props.onLoaded) {
             this.props.onLoaded(this.props);
         }
     }
 
-    private static log(message, ...args): void {
+    private getLayerBounds(source): mapboxgl.LngLatBoundsLike {
+        const { data: geoJson } = source;
+        if (!geoJson.features || geoJson.features.length < 1) {
+            return [] as any;
+        }
+
+        let coordinates: number[][];
+        const bounds: mapboxgl.LngLatBounds[] = geoJson.features
+            .map(feature => {
+                ({ coordinates } = feature.geometry);
+                coordinates = Array.isArray(coordinates[0]) ? coordinates : [(coordinates as any)];
+                return this.reduceToBounds(coordinates);
+            });
+
+        const arrBounds: number[][] = [];
+        bounds.forEach(b => b.toArray().forEach(c => arrBounds.push(c)));
+        return this.reduceToBounds(arrBounds).toArray();
+    }
+
+    private getXYValues(coordinate: number[]): number[] {
+        if (coordinate.length < 3) {
+            return [...coordinate];
+        }
+
+        return coordinate.slice(0, 2);
+    }
+
+    private static log(message = null, ...args): void {
         const line = new Error().stack.split("\n").find((item, i, arr) => {
             return (0 <= i - 1) && -1 < arr[i - 1].indexOf("Function.log");
         });
@@ -135,68 +144,134 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
         if (-1 < dot) {
             name = name.substr(dot + 1);
         }
-        console.log(`ReactMapBoxGL ${name} - ${message}`, ...args);
+        console.log(`ReactMapBoxGL ${name}${message ? " - " : ""}${message ? message : ""}`, ...args);
     }
 
-    private setRef(ref: HTMLDivElement) {
-        if (!ref) {
+    private reduceToBounds(coordinates: number[][]): mapboxgl.LngLatBounds {
+        if (coordinates.length < 1) {
             return;
         }
 
-        // this.ref = ref;
+        const initialCoordinate = this.getXYValues(coordinates[0]);
+        const initialBounds = new mapboxgl.LngLatBounds(initialCoordinate, initialCoordinate);
 
-        this.createMap();
+        return coordinates.reduce((bounds, coordinate) => {
+            return bounds.extend(this.getXYValues(coordinate) as any);
+        }, initialBounds);
     }
 
-    private updateMap(layers: mapboxgl.Layer[], sources: GeoSource[]) {
-        if (!this.map || !this.map.isStyleLoaded()) {
+    private updateMap() {
+        const { map } = this.state;
+
+        if (!map || !map.isStyleLoaded()) {
             return;
         }
 
-        for (const layer of layers) {
-            const l = this.map.getLayer(layer.id);
-            if (l) {
-                this.map.removeLayer(layer.id);
+        const { layers } = this.props;
+        let id: string;
+        let layer: MbxLayer;
+        let bounds: mapboxgl.LngLatBoundsLike;
+        for (const kv of layers) {
+            ([id, layer] = kv);
+
+            const mLayer = map.getLayer(id);
+            if (!mLayer) {
+                ReactMapBoxGL.log(`adding layer: '${id}'.`);
+                map.addLayer(layer.layer);
+            } else if (layer.changed) {
+                ReactMapBoxGL.log(`updating layer: '${id}'.`);
+                map.removeLayer(id);
+                map.removeSource(id);
+                map.addLayer(layer.layer);
             }
 
-            this.map.addLayer(layer);
+            if (layer.layoutProperties) {
+                const { layoutProperties: lProps } = layer;
+                Object.keys(lProps).forEach(key => map.setLayoutProperty(id, key , lProps[key]));
+            }
         }
 
-        for (const source of sources) {
-            const s = this.map.getSource(source.id);
-            if (s) {
-                this.map.removeSource(source.id);
+        const sources = this.props.sources;
+        if (sources) {
+            for (const kv of sources) {
+                const [sourceId, source] = kv;
+                const mSource = map.getSource(sourceId);
+                if (!mSource) {
+                    continue;
+                }
+
+                ReactMapBoxGL.log(`updating source: '${sourceId}'.`);
+                map.removeSource(sourceId);
+                map.addSource(sourceId, source);
+            }
+        }
+
+        // Zoom the map to the bounds layer.
+        const boundary = Array.from(layers.values()).find(item => item.bounds);
+        if (boundary) {
+            const source = map.getSource(boundary.layer.id) as any;
+            if (source) {
+                bounds = this.getLayerBounds(source.serialize());
+                const options: mapboxgl.FitBoundsOptions = {};
+                if (this.props.boundsPadding) {
+                    options.padding = this.props.boundsPadding;
+                }
+
+                map.fitBounds(bounds, options);
+            }
+        }
+
+        // Remove layers that weren't passed as props.
+        for (id of this.layerIds) {
+            if (this.props.layers.has(id)) {
+                continue;
             }
 
-            const { id, ...src } = source;
-            this.map.addSource(id, src);
+            ReactMapBoxGL.log(`removing layer: '${id}'.`);
+            map.removeLayer(id);
+            this.layerIds.delete(id);
+        }
+
+        // Now update all the layers in the map.
+        for (id of this.props.layers.keys()) {
+            if (!this.layerIds.has(id)) {
+                this.layerIds.add(id);
+            }
         }
     }
 
     private waitForMapLoad(map: mapboxgl.Map): Promise<void> {
         const pl = new Promise(resolve => {
-            this.map.once("load", () => resolve());
+            map.once("load", () => resolve());
         });
 
         const ps = new Promise(resolve => {
-            this.map.once("styledata", () => resolve());
+            map.once("styledata", () => resolve());
         });
 
-        return Promise.all([pl, ps]).then(() => { /* nada */ });
+        return Promise.all([pl, ps]).then(() => { ReactMapBoxGL.log("Map loaded."); });
     }
 }
 
 
-interface GeoSource extends mapboxgl.GeoJSONSource {
-    id: string;
+export interface MbxLayer {
+    bounds?: true;
+    changed?: boolean;
+    layer: mapboxgl.Layer;
+    layoutProperties?: {
+        visibility?: "visible" | "none";
+    };
 }
 
 export interface Props {
     accessToken?: string;
-    layers?: mapboxgl.Layer[];
+    boundsPadding?: number;
+    layers?: Map<string, MbxLayer>;
     onLoaded?: (props: Props) => void;
     options?: mapboxgl.MapboxOptions;
+    sources?: Map<string, mapboxgl.GeoJSONSource>;
 }
 
 interface State {
+    map?: mapboxgl.Map;
 }

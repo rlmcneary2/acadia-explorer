@@ -32,7 +32,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import * as redux from "redux";
 // import { Map as MapboxMap, Props as MapboxProps } from "./MapBox/map";
-import { ReactMapBoxGL, Props as MapProps } from "./MapBox/mapboxgl";
+import { MbxLayer, Props as MapProps, ReactMapBoxGL } from "./MapBox/mapboxgl";
 
 
 const ROUTE_LINE_WIDTH = 4;
@@ -57,11 +57,6 @@ interface InternalProps extends Props {
     routeVehicles: RouteVehicles[];
 }
 
-interface LayerProps {
-    color?: string;
-    id: number;
-}
-
 /**
  * The props for the presentational Route component.
  * @interface Props
@@ -84,7 +79,6 @@ interface State {
         id: number;
         shortName: string;
     };
-    layers: Map<string, LayerProps>;
 }
 
 
@@ -141,7 +135,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
     constructor(props: InternalProps) {
         super(props);
-        this.state = { layers: new Map<string, LayerProps>() };
+        this.state = {};
     }
 
 
@@ -178,103 +172,17 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         this.props.componentWillUnmount(this.props);
     }
 
-    // public render(): JSX.Element {
-    //     logg.debug(() => ["route render - props: %O", this.props]);
-    //     const isShowMap = !this.props.location.pathname.endsWith("info");
-    //     let content = null;
-    //     if (this.props.hasOwnProperty("route")) {
-    //         const mapProps: MapboxProps = {
-    //             background: {
-    //                 color: "#FFF",
-    //                 width: ROUTE_LINE_WIDTH + 6
-    //             },
-    //             isVisible: isShowMap,
-    //             latitude: START_LATITUDE,
-    //             longitude: START_LONGITUDE,
-    //             mapIsInitialized: this.mapIsInitializedHandlerBound,
-    //             zoom: START_ZOOM,
-    //             zoomToFit: true,
-    //             zoomToFitPadding: ZOOM_TO_FIT_PADDING
-    //         } as any;
-
-    //         // Layers only passed to the Map component once so eventually the
-    //         // mapProps.layers will be an empty array.
-    //         mapProps.layers = this._createMapGLLayers();
-
-    //         // Use the information about layers in state to determine which
-    //         // layer is visible on the map.
-    //         logg.info(() => ["route render - state.activeRoute: %O", this.state.activeRoute]);
-    //         const routeId = this._getActiveRouteId();
-    //         if (routeId !== null) {
-    //             const visibleLayersIds: string[] = [];
-    //             this.state.layers
-    //                 .forEach(item => {
-    //                     if (item.id === routeId) {
-    //                         visibleLayersIds.push(this._routeLayerId(item.id));
-    //                         visibleLayersIds.push(this._stopsLayerId(item.id));
-    //                         visibleLayersIds.push(this._stopsLayerId(item.id, true));
-    //                         visibleLayersIds.push(this._vehiclesLayerId(item.id));
-
-    //                         // The route "trace" layer is used to determine the
-    //                         // bounds to be displayed.
-    //                         mapProps.boundsLayerId = this._routeLayerId(item.id);
-    //                     }
-    //                 });
-
-    //             if (0 < visibleLayersIds.length) {
-    //                 mapProps.visibleLayersIds = visibleLayersIds;
-    //             }
-
-    //             mapProps.zoomToLayerId = this._routeLayerId(routeId);
-    //         }
-
-    //         // It would be nice to use a react router Switch or Redirect here but we
-    //         // need to keep the map component around and not replace it every time
-    //         // the path changes to a new route. For that reason the URL will be
-    //         // parsed here: if it ends with "info" the info page will be displayed
-    //         // otherwise the map will be displayed.
-    //         content = (
-    //             <div className="route-content">
-    //                 <MapboxMap {...mapProps} />
-    //                 <h1 style={{ display: !isShowMap ? "initial" : "none" }}>Info please!</h1>
-    //             </div>
-    //         );
-    //         // content = (<Redirect to={`/route/${props.match.params.id}/map`} />); // For historical purposes.
-    //     } else {
-    //         content = "WORKING";
-    //     }
-
-    //     const linkButtonProps: LinkButtonProps = {
-    //         content: {
-    //             id: !isShowMap ? "MAP" : "INFO"
-    //         },
-    //         to: !isShowMap ? `/route/${this.props.match.params.id}/map` : `/route/${this.props.match.params.id}/info`
-    //     };
-
-    //     return (
-    //         <div className="content">
-    //             <nav className="route-tabs">
-    //                 <LinkButton {...linkButtonProps} />
-    //             </nav>
-    //             {content}
-    //         </div>
-    //     );
-    // }
     public render(): JSX.Element {
-        return this.reactMap;
-    }
+        logg.debug(() => ["route render - props: %O", this.props]);
+        const isShowMap = !this.props.location.pathname.endsWith("info");
+        let content = null;
+        if (this.props.hasOwnProperty("route")) {
+            const layers = this._createMapGLLayers();
+            const sources = this.createSources();
 
-
-    private get reactMap(): JSX.Element {
-        const layers = this._createMapGLLayers();
-        if (!layers || !layers.length) {
-            return null;
-        }
-
-        if (!this.reactMapValue) {
-            const props: MapProps = {
+            const mapProps: MapProps = {
                 accessToken: "pk.eyJ1IjoicmxtY25lYXJ5MiIsImEiOiJjajgyZjJuMDAyajJrMndzNmJqZDFucTIzIn0.BYE_k7mYhhVCdLckWeTg0g",
-                layers,
+                boundsPadding: ZOOM_TO_FIT_PADDING,
                 onLoaded: () => logg.debug(() => "map loaded"),
                 options: {
                     attributionControl: false,
@@ -284,67 +192,137 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 }
             };
 
-            this.reactMapValue = <ReactMapBoxGL {...props} />;
+            // Use the information about layers in state to determine which
+            // layer is visible on the map.
+            logg.info(() => ["route render - state.activeRoute: %O", this.state.activeRoute]);
+            const routeId = this._routeLayerId(this._getActiveRouteId());
+            if (routeId !== null && layers) {
+                const updateLayer = (id: string, visibility: string): MbxLayer => {
+                    const layer = layers.get(id);
+                    if (layer) {
+                        layer.layoutProperties = layer.layoutProperties || {};
+                        layer.layoutProperties.visibility = visibility as any;
+                    }
+
+                    return layer;
+                };
+
+                for (const id of layers.keys()) {
+                    if (id !== routeId) {
+                        continue;
+                    }
+
+                    const visibility = "visible";
+                    updateLayer(id, visibility).bounds = true; // The route "trace" layer is used to determine the bounds to be displayed.
+                    updateLayer(this._stopsLayerId(id), visibility);
+                    updateLayer(this._stopsLayerId(id, true), visibility);
+                    updateLayer(this._vehiclesLayerId(id), visibility);
+                }
+
+            }
+
+            // It would be nice to use a react router Switch or Redirect here but we
+            // need to keep the map component around and not replace it every time
+            // the path changes to a new route. For that reason the URL will be
+            // parsed here: if it ends with "info" the info page will be displayed
+            // otherwise the map will be displayed.
+            content = (
+                <div className="route-content">
+                    <ReactMapBoxGL {...mapProps} layers={layers} sources={sources} />;
+                    <h1 style={{ display: !isShowMap ? "initial" : "none" }}>Info please!</h1>
+                </div>
+            );
+            // content = (<Redirect to={`/route/${props.match.params.id}/map`} />); // For historical purposes.
+        } else {
+            content = "WORKING";
         }
 
-        return this.reactMapValue;
+        const linkButtonProps: LinkButtonProps = {
+            content: {
+                id: !isShowMap ? "MAP" : "INFO"
+            },
+            to: !isShowMap ? `/route/${this.props.match.params.id}/map` : `/route/${this.props.match.params.id}/info`
+        };
+
+        return (
+            <div className="content">
+                <nav className="route-tabs">
+                    <LinkButton {...linkButtonProps} />
+                </nav>
+                {content}
+            </div>
+        );
     }
-    private reactMapValue: JSX.Element;
-    private mapInitialized = false;
-    private mapIsInitializedHandlerBound: () => void;
 
-    private _createMapGLLayers(): mapboxgl.Layer[] {
-        // if (!this.mapInitialized) {
-        //     return [];
-        // }
 
-        const layers: mapboxgl.Layer[] = [];
-        if (this.props.routeGeos && this.props.routeGeos.length) {
-            let layer: mapboxgl.Layer;
-            for (const rg of this.props.routeGeos) {
-                if (!this.state.layers.has(this._routeLayerId(rg.id))) {
-                    layer = this._createMapGLRouteLayer(rg);
-                    layers.push(layer);
-                    this.state.layers.set(this._routeLayerId(rg.id), { color: layer.paint["line-color"], id: rg.id });
+    private createSources(): Map<string, mapboxgl.GeoJSONSource> {
+        const sources = new Map<string, mapboxgl.GeoJSONSource>();
+
+        let layer: mapboxgl.Layer;
+        let source: mapboxgl.GeoJSONSource;
+        if (this.props.routeVehicles && this.props.routeVehicles.length) {
+            const color = "#ff00fa";
+            for (const rv of this.props.routeVehicles) {
+                if (this.state.activeRoute.id !== rv.id) {
+                    continue;
                 }
+
+                if (rv.vehicles && rv.vehicles.length) {
+                    ({ layer } = this._createMapGLVehiclesLayer(rv, color));
+                    ({ source } = layer as any);
+                    sources.set(layer.id, source);
+                }
+            }
+        }
+
+        return sources;
+    }
+
+    private _createMapGLLayers(layers = new Map<string, MbxLayer>()): Map<string, MbxLayer> {
+        if (!this.state.activeRoute) {
+            return null;
+        }
+
+        const colors = new Map<number, any>();
+        let mbxLayer: MbxLayer;
+        if (this.props.routeGeos && this.props.routeGeos.length) {
+            for (const rg of this.props.routeGeos) {
+                if (this.state.activeRoute.id !== rg.id) {
+                    continue;
+                }
+
+                mbxLayer = this._createMapGLRouteLayer(rg);
+                layers.set(mbxLayer.layer.id, mbxLayer);
+                colors.set(rg.id, mbxLayer.layer.paint["line-color"]);
             }
         }
 
         if (this.props.routeStops && this.props.routeStops.length) {
             let color: string;
             for (const rs of this.props.routeStops) {
-                if (!this.state.layers.has(this._routeLayerId(rs.id))) {
+                if (this.state.activeRoute.id !== rs.id) {
                     continue;
                 }
 
-                if (this.state.layers.has(this._stopsLayerId(rs.id))) {
-                    continue;
-                }
+                color = colors.get(rs.id);
+                mbxLayer = this._createMapGLStopsLayer(rs, color);
+                layers.set(mbxLayer.layer.id, mbxLayer);
 
-                color = this.state.layers.get(this._routeLayerId(rs.id)).color;
-                layers.push(this._createMapGLStopsLayer(rs, color));
-                this.state.layers.set(this._stopsLayerId(rs.id), { id: rs.id });
-
-                layers.push(this._createMapGLStopsTextLayer(rs, color));
-                this.state.layers.set(this._stopsLayerId(rs.id, true), { id: rs.id });
+                mbxLayer = this._createMapGLStopsTextLayer(rs, color);
+                layers.set(mbxLayer.layer.id, mbxLayer);
             }
         }
 
         if (this.props.routeVehicles && this.props.routeVehicles.length) {
             const color = "#ff00fa";
             for (const rv of this.props.routeVehicles) {
-                const { id } = rv;
-                if (!this.state.layers.has(this._routeLayerId(id))) {
+                if (this.state.activeRoute.id !== rv.id) {
                     continue;
                 }
 
-                if (this.state.layers.has(this._vehiclesLayerId(id))) {
-                    this.state.layers.delete(this._vehiclesLayerId(id));
-                }
-
                 if (rv.vehicles && rv.vehicles.length) {
-                    layers.push(this._createMapGLVehiclesLayer(rv, color));
-                    this.state.layers.set(this._vehiclesLayerId(id), { id });
+                    mbxLayer = this._createMapGLVehiclesLayer(rv, color);
+                    layers.set(mbxLayer.layer.id, mbxLayer);
                 }
             }
         }
@@ -352,7 +330,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         return layers;
     }
 
-    private _createMapGLRouteLayer(routeGeo: RouteGeo): mapboxgl.Layer {
+    private _createMapGLRouteLayer(routeGeo: RouteGeo): MbxLayer {
         const { geoJson } = routeGeo;
         const feature = geoJson && geoJson.features && 0 < geoJson.features.length ? geoJson.features[0] : null;
         const layer: mapboxgl.Layer = {
@@ -373,10 +351,11 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             type: "line"
         };
 
-        return layer;
+        return { layer };
     }
 
-    private _createMapGLStopsLayer(routeStops: RouteStops, color: string): mapboxgl.Layer {
+    private _createMapGLStopsLayer(routeStops: RouteStops, color: string): MbxLayer {
+        this._stopsLayerId(routeStops.id);
         // Convert route stops to geojson points.
         const data = routeStops.stops.map(item => {
             const { Latitude: lat, Longitude: lng, Name: name } = item;
@@ -414,10 +393,10 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             type: "circle"
         };
 
-        return layer;
+        return { layer };
     }
 
-    private _createMapGLStopsTextLayer(routeStops: RouteStops, color: string): mapboxgl.Layer {
+    private _createMapGLStopsTextLayer(routeStops: RouteStops, color: string): MbxLayer {
         // Convert route stops to geojson points.
         const data = routeStops.stops.map(item => {
             const { Latitude: lat, Longitude: lng, Name: name } = item;
@@ -458,10 +437,10 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             type: "symbol"
         };
 
-        return layer;
+        return { layer };
     }
 
-    private _createMapGLVehiclesLayer(routeVehicles: RouteVehicles, color: string): mapboxgl.Layer {
+    private _createMapGLVehiclesLayer(routeVehicles: RouteVehicles, color: string): MbxLayer {
         // Convert route stops to geojson points.
         const data = routeVehicles.vehicles.map(item => {
             const { Latitude: lat, Longitude: lng, Name: name } = item;
@@ -500,7 +479,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             type: "circle"
         };
 
-        return layer;
+        return { layer };
     }
 
     private _getActiveRouteId(): number {
@@ -514,7 +493,6 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
     }
 
     private _mapIsInitializedHandler() {
-        this.mapInitialized = true;
         this.forceUpdate();
     }
 
@@ -522,11 +500,11 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         return `${id}`;
     }
 
-    private _stopsLayerId(id: number, isLabelLayer = false): string {
+    private _stopsLayerId(id: number | string, isLabelLayer = false): string {
         return `${id}_STOPS${isLabelLayer ? "_LABELS" : ""}`;
     }
 
-    private _vehiclesLayerId(id: number, isLabelLayer = false): string {
+    private _vehiclesLayerId(id: number | string, isLabelLayer = false): string {
         return `${id}_VEHICLES${isLabelLayer ? "_LABELS" : ""}`;
     }
 
