@@ -171,7 +171,7 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
             return;
         }
 
-        const { layers } = this.props;
+        const { layers = new Map<string, MbxLayer>() } = this.props;
         let id: string;
         let layer: MbxLayer;
         let bounds: mapboxgl.LngLatBoundsLike;
@@ -226,7 +226,7 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
 
         // Remove layers that weren't passed as props.
         for (id of this.layerIds) {
-            if (this.props.layers.has(id)) {
+            if (layers.has(id)) {
                 continue;
             }
 
@@ -237,7 +237,7 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
         }
 
         // Now update all the layers in the map.
-        for (id of this.props.layers.keys()) {
+        for (id of layers.keys()) {
             if (!this.layerIds.has(id)) {
                 this.layerIds.add(id);
             }
