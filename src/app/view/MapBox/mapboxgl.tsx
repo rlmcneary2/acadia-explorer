@@ -144,6 +144,7 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
         if (-1 < dot) {
             name = name.substr(dot + 1);
         }
+        // tslint:disable-next-line:no-console
         console.log(`ReactMapBoxGL ${name}${message ? " - " : ""}${message ? message : ""}`, ...args);
     }
 
@@ -194,15 +195,14 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
         const sources = this.props.sources;
         if (sources) {
             for (const kv of sources) {
-                const [sourceId, source] = kv;
-                const mSource = map.getSource(sourceId);
+                const [sourceId, source] = (kv as [string, any]);
+                const mSource = map.getSource(sourceId) as mapboxgl.GeoJSONSource;
                 if (!mSource) {
                     continue;
                 }
 
                 ReactMapBoxGL.log(`updating source: '${sourceId}'.`);
-                map.removeSource(sourceId);
-                map.addSource(sourceId, source);
+                mSource.setData(source.data);
             }
         }
 
@@ -227,8 +227,9 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
                 continue;
             }
 
-            ReactMapBoxGL.log(`removing layer: '${id}'.`);
+            ReactMapBoxGL.log(`removing previous props layer: '${id}'.`);
             map.removeLayer(id);
+            map.removeSource(id);
             this.layerIds.delete(id);
         }
 

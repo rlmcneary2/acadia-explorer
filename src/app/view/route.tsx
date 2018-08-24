@@ -141,10 +141,6 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
     public state: State;
 
-    public componentWillMount() {
-        this.mapIsInitializedHandlerBound = this._mapIsInitializedHandler.bind(this);
-    }
-
     public componentWillReceiveProps(nextProps: InternalProps) {
         logg.debug(() => ["route componentWillReceiveProps - nextProps: %O", nextProps]);
         if (
@@ -168,7 +164,6 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
     }
 
     public componentWillUnmount() {
-        this.mapIsInitializedHandlerBound = null;
         this.props.componentWillUnmount(this.props);
     }
 
@@ -218,7 +213,6 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                     updateLayer(this._stopsLayerId(id, true), visibility);
                     updateLayer(this._vehiclesLayerId(id), visibility);
                 }
-
             }
 
             // It would be nice to use a react router Switch or Redirect here but we
@@ -490,10 +484,6 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         }
 
         return null;
-    }
-
-    private _mapIsInitializedHandler() {
-        this.forceUpdate();
     }
 
     private _routeLayerId(id: number): string {
