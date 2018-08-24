@@ -136,13 +136,16 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
     private static log(message = null, ...args): void {
         const line = new Error().stack.split("\n").find((item, i, arr) => {
             return (0 <= i - 1) && -1 < arr[i - 1].indexOf("Function.log");
-        });
+        }) || "";
         const start = line.indexOf("at") + 3;
         const end = line.indexOf(" ", start);
-        let name = line.substring(start, end);
-        const dot = name.lastIndexOf(".");
-        if (-1 < dot) {
-            name = name.substr(dot + 1);
+        let name = "UNKNOWN";
+        if (start <= end) {
+            name = line.substring(start, end);
+            const dot = name.lastIndexOf(".");
+            if (-1 < dot) {
+                name = name.substr(dot + 1);
+            }
         }
         // tslint:disable-next-line:no-console
         console.log(`ReactMapBoxGL ${name}${message ? " - " : ""}${message ? message : ""}`, ...args);
