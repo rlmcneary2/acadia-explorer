@@ -21,6 +21,8 @@
  */
 
 
+import { FeatureCollection } from "geojson";
+import * as mbx from "mapbox-gl"; // This is the namespace with type definitions, NOT the static object that is set on window; that object as accessible as the "default" property.
 import * as React from "react";
 
 
@@ -62,6 +64,7 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
 
 
     private id: string;
+    /** The IDs of layers passed as props to this map that are currently displayed. The mbx.Map object doesn't have a method to easily list the layers we really care about. */
     private layerIds = new Set<string>();
     private mapState: "created" | "creating" | null = null;
     private get renderedElement(): JSX.Element {
@@ -89,10 +92,14 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
 
         ReactMapBoxGL.log("creating a new Map object.");
 
-        mapboxgl.accessToken = this.props.accessToken;
+        // "mbx" is the namespace with type definitions, to get access to the
+        // global static object (that would normally be accessed as a property
+        // of "window" named "mapboxgl") use the name space's "default" property
+        // which is the object we really need when setting the access token.
+        (mbx as any).default.accessToken = this.props.accessToken;
 
         const options = {...this.props.options, ...{container: this.id}};
-        const map = new mapboxgl.Map(options);
+        const map = new mbx.Map(options);
 
         await this.waitForMapLoad(map);
 
@@ -106,16 +113,16 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
         }
     }
 
-    private getLayerBounds(source): mapboxgl.LngLatBoundsLike {
-        const { data: geoJson } = source;
-        if (!geoJson.features || geoJson.features.length < 1) {
+    private getLayerBounds(source: mbx.GeoJSONSourceRaw): mbx.LngLatBoundsLike {
+        const data = source.data as FeatureCollection<mbx.GeoJSONGeometry, { [name: string]: any; }>;
+        if (!data.features || data.features.length < 1) {
             return [] as any;
         }
 
         let coordinates: number[][];
-        const bounds: mapboxgl.LngLatBounds[] = geoJson.features
+        const bounds: mbx.LngLatBounds[] = data.features
             .map(feature => {
-                ({ coordinates } = feature.geometry);
+                ({ coordinates } = feature.geometry as any);
                 coordinates = Array.isArray(coordinates[0]) ? coordinates : [(coordinates as any)];
                 return this.reduceToBounds(coordinates);
             });
@@ -151,13 +158,13 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
         console.log(`ReactMapBoxGL ${name}${message ? " - " : ""}${message ? message : ""}`, ...args);
     }
 
-    private reduceToBounds(coordinates: number[][]): mapboxgl.LngLatBounds {
+    private reduceToBounds(coordinates: number[][]): mbx.LngLatBounds {
         if (coordinates.length < 1) {
             return;
         }
 
         const initialCoordinate = this.getXYValues(coordinates[0]);
-        const initialBounds = new mapboxgl.LngLatBounds(initialCoordinate, initialCoordinate);
+        const initialBounds = new mbx.LngLatBounds(initialCoordinate, initialCoordinate);
 
         return coordinates.reduce((bounds, coordinate) => {
             return bounds.extend(this.getXYValues(coordinate) as any);
@@ -171,10 +178,10 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
             return;
         }
 
-        const { layers = new Map<string, MbxLayer>() } = this.props;
+        const { layers = new Map<string, RmbxLayer>() } = this.props;
         let id: string;
-        let layer: MbxLayer;
-        let bounds: mapboxgl.LngLatBoundsLike;
+        let layer: RmbxLayer;
+        let bounds: mbx.LngLatBoundsLike;
         for (const kv of layers) {
             ([id, layer] = kv);
 
@@ -199,7 +206,7 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
         if (sources) {
             for (const kv of sources) {
                 const [sourceId, source] = (kv as [string, any]);
-                const mSource = map.getSource(sourceId) as mapboxgl.GeoJSONSource;
+                const mSource = map.getSource(sourceId) as mbx.GeoJSONSource;
                 if (!mSource) {
                     continue;
                 }
@@ -210,12 +217,12 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
         }
 
         // Zoom the map to the bounds layer.
-        const boundary = Array.from(layers.values()).find(item => item.bounds);
-        if (boundary) {
-            const source = map.getSource(boundary.layer.id) as any;
+        const boundaryLayer = Array.from(layers.values()).find(item => item.bounds);
+        if (boundaryLayer) {
+            const source = boundaryLayer.layer.source as mbx.GeoJSONSourceRaw;
             if (source) {
-                bounds = this.getLayerBounds(source.serialize());
-                const options: mapboxgl.FitBoundsOptions = {};
+                bounds = this.getLayerBounds(source);
+                const options: mbx.FitBoundsOptions = {};
                 if (this.props.boundsPadding) {
                     options.padding = this.props.boundsPadding;
                 }
@@ -244,7 +251,7 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
         }
     }
 
-    private waitForMapLoad(map: mapboxgl.Map): Promise<void> {
+    private waitForMapLoad(map: mbx.Map): Promise<void> {
         const pl = new Promise(resolve => {
             map.once("load", () => resolve());
         });
@@ -258,24 +265,34 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
 }
 
 
-export interface MbxLayer {
+export interface RmbxLayer {
+    /** Should this layer be taken into account when determining the map bounds? */
     bounds?: true;
+    /** If true the layer will be updated in the map. */
     changed?: boolean;
-    layer: mapboxgl.Layer;
+    /** The layer object that will be added to the map. */
+    layer: mbx.Layer;
     layoutProperties?: {
+        /** If true the layer will be made visible in the map. */
         visibility?: "visible" | "none";
     };
 }
 
 export interface Props {
+    /** The Mapbox API access token. */
     accessToken?: string;
+    /** AFter the bounds are determined this padding should be added. */
     boundsPadding?: number;
-    layers?: Map<string, MbxLayer>;
+    /** Layers to add to the map. */
+    layers?: Map<string, RmbxLayer>;
+    /** It takes some time for the map to load, this function will be invoked when the map is ready to display layers. */
     onLoaded?: (props: Props) => void;
-    options?: mapboxgl.MapboxOptions;
-    sources?: Map<string, mapboxgl.GeoJSONSource>;
+    /** Options to pass to the Map object when it is created. */
+    options?: mbx.MapboxOptions;
+    /** These sources will be added to the map or if they already exists their data will be updated. */
+    sources?: Map<string, mbx.GeoJSONSource>;
 }
 
 interface State {
-    map?: mapboxgl.Map;
+    map?: mbx.Map;
 }

@@ -32,7 +32,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import * as redux from "redux";
 // import { Map as MapboxMap, Props as MapboxProps } from "./MapBox/map";
-import { MbxLayer, Props as MapProps, ReactMapBoxGL } from "./MapBox/mapboxgl";
+import { RmbxLayer, Props as MapProps, ReactMapBoxGL } from "./MapBox/mapboxgl";
 
 
 const ROUTE_LINE_WIDTH = 4;
@@ -192,7 +192,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             logg.info(() => ["route render - state.activeRoute: %O", this.state.activeRoute]);
             const routeId = this._routeLayerId(this._getActiveRouteId());
             if (routeId !== null && layers) {
-                const updateLayer = (id: string, visibility: string): MbxLayer => {
+                const updateLayer = (id: string, visibility: string): RmbxLayer => {
                     const layer = layers.get(id);
                     if (layer) {
                         layer.layoutProperties = layer.layoutProperties || {};
@@ -272,13 +272,13 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         return sources;
     }
 
-    private _createMapGLLayers(layers = new Map<string, MbxLayer>()): Map<string, MbxLayer> {
+    private _createMapGLLayers(layers = new Map<string, RmbxLayer>()): Map<string, RmbxLayer> {
         if (!this.state.activeRoute) {
             return null;
         }
 
         const colors = new Map<number, any>();
-        let mbxLayer: MbxLayer;
+        let mbxLayer: RmbxLayer;
         if (this.props.routeGeos && this.props.routeGeos.length) {
             for (const rg of this.props.routeGeos) {
                 if (this.state.activeRoute.id !== rg.id) {
@@ -324,7 +324,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         return layers;
     }
 
-    private _createMapGLRouteLayer(routeGeo: RouteGeo): MbxLayer {
+    private _createMapGLRouteLayer(routeGeo: RouteGeo): RmbxLayer {
         const { geoJson } = routeGeo;
         const feature = geoJson && geoJson.features && 0 < geoJson.features.length ? geoJson.features[0] : null;
         const layer: mapboxgl.Layer = {
@@ -348,7 +348,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         return { layer };
     }
 
-    private _createMapGLStopsLayer(routeStops: RouteStops, color: string): MbxLayer {
+    private _createMapGLStopsLayer(routeStops: RouteStops, color: string): RmbxLayer {
         this._stopsLayerId(routeStops.id);
         // Convert route stops to geojson points.
         const data = routeStops.stops.map(item => {
@@ -390,7 +390,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         return { layer };
     }
 
-    private _createMapGLStopsTextLayer(routeStops: RouteStops, color: string): MbxLayer {
+    private _createMapGLStopsTextLayer(routeStops: RouteStops, color: string): RmbxLayer {
         // Convert route stops to geojson points.
         const data = routeStops.stops.map(item => {
             const { Latitude: lat, Longitude: lng, Name: name } = item;
@@ -434,7 +434,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         return { layer };
     }
 
-    private _createMapGLVehiclesLayer(routeVehicles: RouteVehicles, color: string): MbxLayer {
+    private _createMapGLVehiclesLayer(routeVehicles: RouteVehicles, color: string): RmbxLayer {
         // Convert route stops to geojson points.
         const data = routeVehicles.vehicles.map(item => {
             const { Latitude: lat, Longitude: lng, Name: name } = item;
