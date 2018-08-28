@@ -71,7 +71,6 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
     }
     private renderedElementValue: JSX.Element;
 
-
     private async createMap() {
         if (this.mapState) {
             return;
@@ -91,6 +90,8 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
         const map = new mbx.Map(options);
 
         await this.waitForMapLoad(map);
+
+        map.resize();
 
         this.mapState = "created";
         ReactMapBoxGL.log("map object ready.");
