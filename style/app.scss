@@ -90,13 +90,6 @@ $application-max-width: 1000px;
     top: 0;
 }
 
-#routes-menu-transition {
-    display: block;
-    left:0;
-    position: absolute;
-    top: $control-height;
-}
-
 .application {
     display: flex;
     flex-direction: column;

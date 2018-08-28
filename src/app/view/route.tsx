@@ -31,8 +31,7 @@ import * as GeoJSON from "geojson/geojson"; // There is a name collision here, t
 import * as React from "react";
 import { connect } from "react-redux";
 import * as redux from "redux";
-// import { Map as MapboxMap, Props as MapboxProps } from "./MapBox/map";
-import { RmbxLayer, Props as MapProps, ReactMapBoxGL } from "./MapBox/mapboxgl";
+import { Props as MapProps, ReactMapBoxGL, RmbxLayer } from "./MapBox/mapboxgl";
 
 
 const ROUTE_LINE_WIDTH = 4;
@@ -141,34 +140,38 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
     public state: State;
 
-    public componentWillReceiveProps(nextProps: InternalProps) {
-        logg.debug(() => ["route componentWillReceiveProps - nextProps: %O", nextProps]);
-        if (
-            nextProps.hasOwnProperty("route") &&
-            !this.state.activeRoute ||
-            (this.state.activeRoute && nextProps.route.RouteId !== this.state.activeRoute.id)
-        ) {
-            const { Color: color, RouteId: id, ShortName: shortName } = nextProps.route;
-            this.setState({ activeRoute: { color, id, shortName } });
+    public componentWillUnmount() {
+        this.props.componentWillUnmount(this.props);
+    }
 
-            // TODO: kickoff request for the locations of buses on this route. When
-            // does the request for bus locations stop? First when another route is
-            // chosen. Second when the route component is being unmounted.
+    public static getDerivedStateFromProps(props: InternalProps, state: State) {
+        logg.debug(() => ["IslandExplorerRoute getDerivedStateFromProps - props: %O", props]);
+        const { route } = props;
+        if (!route) {
+            return null;
+        }
+
+        const { RouteId: propsRouteId } = route;
+        const stateRouteId = state.activeRoute ? state.activeRoute.id : null;
+        let nextState: State = null;
+        if (
+            propsRouteId !== stateRouteId
+        ) {
+            const { Color: color, RouteId: id, ShortName: shortName } = props.route;
+            nextState = { activeRoute: { color, id, shortName } };
 
             // Invoke action to send the bus location request and stop any existing
             // bus location requests. This action should take: a request ID (string)
             // the route ID (number). The request ID will identify that the route
             // component made the request and can only change its own request.
-            nextProps.routeChanged(nextProps.route.RouteId);
+            props.routeChanged(propsRouteId);
         }
-    }
 
-    public componentWillUnmount() {
-        this.props.componentWillUnmount(this.props);
+        return nextState;
     }
 
     public render(): JSX.Element {
-        logg.debug(() => ["route render - props: %O", this.props]);
+        logg.debug(() => ["IslandExplorerRoute render - props: %O", this.props]);
         const isShowMap = !this.props.location.pathname.endsWith("info");
         let content = null;
         if (this.props.hasOwnProperty("route")) {
@@ -178,7 +181,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             const mapProps: MapProps = {
                 accessToken: "pk.eyJ1IjoicmxtY25lYXJ5MiIsImEiOiJjajgyZjJuMDAyajJrMndzNmJqZDFucTIzIn0.BYE_k7mYhhVCdLckWeTg0g",
                 boundsPadding: ZOOM_TO_FIT_PADDING,
-                onLoaded: () => logg.debug(() => "map loaded"),
+                onLoaded: () => logg.debug(() => "IslandExplorerRoute render - map loaded."),
                 options: {
                     attributionControl: false,
                     center: [START_LONGITUDE, START_LATITUDE],
@@ -189,8 +192,9 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
             // Use the information about layers in state to determine which
             // layer is visible on the map.
-            logg.info(() => ["route render - state.activeRoute: %O", this.state.activeRoute]);
-            const routeId = this._routeLayerId(this._getActiveRouteId());
+            const activeRouteId = this._getActiveRouteId();
+            logg.info(() => ["IslandExplorerRoute render - state.activeRoute: %O", activeRouteId]);
+            const routeId = this._routeLayerId(activeRouteId);
             if (routeId !== null && layers) {
                 const updateLayer = (id: string, visibility: string): RmbxLayer => {
                     const layer = layers.get(id);
@@ -273,7 +277,8 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
     }
 
     private _createMapGLLayers(layers = new Map<string, RmbxLayer>()): Map<string, RmbxLayer> {
-        if (!this.state.activeRoute) {
+        const activeRouteId = this._getActiveRouteId();
+        if (activeRouteId === null) {
             return null;
         }
 
@@ -281,7 +286,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         let mbxLayer: RmbxLayer;
         if (this.props.routeGeos && this.props.routeGeos.length) {
             for (const rg of this.props.routeGeos) {
-                if (this.state.activeRoute.id !== rg.id) {
+                if (activeRouteId !== rg.id) {
                     continue;
                 }
 
@@ -294,7 +299,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         if (this.props.routeStops && this.props.routeStops.length) {
             let color: string;
             for (const rs of this.props.routeStops) {
-                if (this.state.activeRoute.id !== rs.id) {
+                if (activeRouteId !== rs.id) {
                     continue;
                 }
 
@@ -310,7 +315,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         if (this.props.routeVehicles && this.props.routeVehicles.length) {
             const color = "#ff00fa";
             for (const rv of this.props.routeVehicles) {
-                if (this.state.activeRoute.id !== rv.id) {
+                if (activeRouteId !== rv.id) {
                     continue;
                 }
 
@@ -477,9 +482,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
     }
 
     private _getActiveRouteId(): number {
-        if (this.state.activeRoute) {
-            return this.state.activeRoute.id;
-        } else if (this.props.route) {
+        if (this.props.route) {
             return this.props.route.RouteId;
         }
 

@@ -26,7 +26,7 @@ import * as mbx from "mapbox-gl"; // This is the namespace with type definitions
 import * as React from "react";
 
 
-export class ReactMapBoxGL extends React.Component<Props, State> {
+export class ReactMapBoxGL extends React.PureComponent<Props, State> {
 
     constructor(props: Props, context: any) {
         super(props, context);
@@ -34,32 +34,21 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
         this.id = `${Date.now()}`;
     }
 
-    public render(): JSX.Element {
+    public componentDidMount() {
         ReactMapBoxGL.log();
-        this.updateMap();
-        return this.renderedElement;
-    }
 
-    public shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-        const mapReady =
-            this.state.map ||
-            !this.state.map && nextState.map ?
-            true :
-            false;
-
-        ReactMapBoxGL.log(`map ready: '${mapReady}'.`);
-        return mapReady;
+        // Let the stack unwind so we can set state in this method.
+        setImmediate(() => this.createMap());
     }
 
     public componentWillUnmount() {
         ReactMapBoxGL.log();
     }
 
-    public componentDidMount() {
+    public render(): JSX.Element {
         ReactMapBoxGL.log();
-
-        // Let the stack unwind so we can set state in this method.
-        setImmediate(() => this.createMap());
+        this.updateMap();
+        return this.renderedElement;
     }
 
 
@@ -104,7 +93,7 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
         await this.waitForMapLoad(map);
 
         this.mapState = "created";
-        ReactMapBoxGL.log("Map object created.");
+        ReactMapBoxGL.log("map object ready.");
 
         this.setState({ map });
 
@@ -174,11 +163,19 @@ export class ReactMapBoxGL extends React.Component<Props, State> {
     private updateMap() {
         const { map } = this.state;
 
-        if (!map || !map.isStyleLoaded()) {
+        if (!map || this.mapState !== "created") {
+            ReactMapBoxGL.log("no map or map is not loaded.");
             return;
         }
 
-        const { layers = new Map<string, RmbxLayer>() } = this.props;
+        const { layers } = this.props;
+        if (!layers) {
+            ReactMapBoxGL.log("no layers in props to add.");
+            return;
+        }
+
+        ReactMapBoxGL.log ("updating layers and sources in the map.");
+
         let id: string;
         let layer: RmbxLayer;
         let bounds: mbx.LngLatBoundsLike;

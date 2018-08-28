@@ -21,12 +21,11 @@
  */
 
 
-import { ControlLinkContent } from "@controls/interfaces";
-import Menu, { Props as MenuProps } from "@controls/menu";
+import { DropdownList, Props as DropdownProps } from "@controls/dropdownList";
+import { ControlLinkContent, ControlTextContent } from "@controls/interfaces";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Route } from "react-router-dom";
-import { CSSTransitionGroup } from "react-transition-group";
 import { State } from "../reducer/interfaces";
 import IslandExplorerRoute from "./route";
 import Welcome from "./welcome";
@@ -45,58 +44,29 @@ class App extends React.Component<Props> {
     constructor(props: Props) {
         super(props);
         this.state = { showRoutesMenu: false };
-        this.toggleNavigationMenuDisplayBound = toggleNavigationMenuDisplay.bind(this);
     }
 
     public state: ComponentState;
 
     public render() {
-        const routesMenu = this.createRoutesMenu();
-
-        // const anyProps = this.props as any;
-        // if (anyProps.location.pathname && (anyProps.location.pathname as string).indexOf("welcome") < 1) {
-        //     setTimeout(() => {
-        //         anyProps.history.push("/welcome");
-        //     });
-        // }
-
         return (
             <div className="application">
                 <nav className="control-container header">
                     <menu className="header">
                         <li>
-                            <button className="control" onClick={this.toggleNavigationMenuDisplayBound}>
-                                <span>Routes</span>
-                            </button>
+                            {this.createRoutesMenu()}
                         </li>
                     </menu>
                 </nav>
                 <Route component={Welcome} path="/welcome" />
                 <Route component={IslandExplorerRoute} path="/route/:id" />
-                <CSSTransitionGroup component="div" id="routes-menu-transition" transitionEnterTimeout={300} transitionLeaveTimeout={300} transitionName="routes-menu">
-                    {routesMenu}
-                </CSSTransitionGroup>
             </div>
         );
     }
 
-
-    private toggleNavigationMenuDisplayBound: () => void;
-
-    private _onNavigationMenuButtonClick() {
-        this.setState({ showRoutesMenu: false });
-    }
-
     private createRoutesMenu(): JSX.Element {
-        if (!this.state.showRoutesMenu) {
-            return null;
-        }
-
-        if (!this.props.routes) {
-            return (<div>WORKING</div>);
-        }
-
-        let items: ControlLinkContent[] = this.props.routes.map(item => {
+        const { routes = [] } = this.props;
+        let items: ControlLinkContent[] = routes.map(item => {
             return {
                 text: item.LongName,
                 to: `/route/${item.RouteId}`
@@ -108,14 +78,23 @@ class App extends React.Component<Props> {
             to: "/"
         }, ...items];
 
-        const menuProps: MenuProps = {
-            items
+        // Build the current item based on the current URL.
+        let selectedItem: ControlTextContent | ControlLinkContent;
+        const matches = /[^\/]+(?=\/$|$)/.exec((this.props as any).location.pathname);
+        // tslint:disable-next-line:prefer-conditional-expression
+        if (routes.length && matches && matches.length) {
+            selectedItem = items.find(clc => clc.to === `/route/${matches[0]}`);
+        } else {
+            selectedItem = items[0];
+        }
+
+        const dropdownProps: DropdownProps = {
+            items,
+            selectedItem
         };
 
-        (menuProps as any).select = () => this._onNavigationMenuButtonClick();
-
         return (
-            <Menu {...menuProps} />
+            <DropdownList {...dropdownProps} />
         );
     }
 }
@@ -128,8 +107,4 @@ export default connect(mapStateToProps)(props => {
 
 function mapStateToProps(state: State): Props {
     return state.api;
-}
-
-function toggleNavigationMenuDisplay() {
-    this.setState({ showRoutesMenu: !this.state.showRoutesMenu });
 }

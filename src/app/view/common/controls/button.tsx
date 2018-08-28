@@ -30,7 +30,6 @@ interface Props {
     /**
      * Child elements to be displayed in the button. If children are provided
      * then content is ignored.
-     * @type {JSX.Element}
      */
     children?: JSX.Element;
     click?: (props: Props) => void;
