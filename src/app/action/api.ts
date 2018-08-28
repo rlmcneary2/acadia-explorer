@@ -72,12 +72,16 @@ const actionApi = Object.freeze({
     getVehicles(routeIds: number[], tickStartTime: number = null): Dispatch<Promise<void>> {
         return async dispatch => {
             const res = await http.get(`${apiData.domain}/InfoPoint/rest/Vehicles/GetAllVehiclesForRoutes?routeIDs=${routeIds.join(",")}`);
-            const data = new Map<number, object[]>();
-            routeIds.forEach(id => {
-                data.set(id, (res.response as any[]).filter(vehicle => vehicle.RouteId === id));
-            });
 
-            dispatch(actionApi.createUpdateVehiclesAction(data));
+            if (res.response) {
+                const data = new Map<number, object[]>();
+                routeIds.forEach(id => {
+                    data.set(id, (res.response as any[]).filter(vehicle => vehicle.RouteId === id));
+                });
+
+                dispatch(actionApi.createUpdateVehiclesAction(data));
+            }
+
             dispatch(actionTick.add("getVehicles", { actionType: actionApi.types.updateVehicles, interval: INTERVAL_UPDATE_VEHICLES, startTime: tickStartTime }));
         };
     }
