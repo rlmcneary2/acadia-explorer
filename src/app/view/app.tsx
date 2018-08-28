@@ -66,17 +66,12 @@ class App extends React.Component<Props> {
 
     private createRoutesMenu(): JSX.Element {
         const { routes = [] } = this.props;
-        let items: ControlLinkContent[] = routes.map(item => {
+        const items: ControlLinkContent[] = routes.map(item => {
             return {
                 text: item.LongName,
                 to: `/route/${item.RouteId}`
             };
         });
-
-        items = [{
-            text: { id: "NONE" },
-            to: "/"
-        }, ...items];
 
         // Build the current item based on the current URL.
         let selectedItem: ControlTextContent | ControlLinkContent;
@@ -84,12 +79,11 @@ class App extends React.Component<Props> {
         // tslint:disable-next-line:prefer-conditional-expression
         if (routes.length && matches && matches.length) {
             selectedItem = items.find(clc => clc.to === `/route/${matches[0]}`);
-        } else {
-            selectedItem = items[0];
         }
 
         const dropdownProps: DropdownProps = {
             items,
+            placeHolder: { id: "ROUTE-NOT_SELECTED" },
             selectedItem
         };
 

@@ -1,5 +1,5 @@
 {
     "INFO": "Route information",
     "MAP": "Route map",
-    "NONE": "No route"
+    "ROUTE-NOT_SELECTED": "Select a route"
 }

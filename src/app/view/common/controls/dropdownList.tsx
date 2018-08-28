@@ -51,13 +51,15 @@ export class DropdownList extends React.Component<Props, State> {
         }
 
         logg.debug(() => `DropdownList render - this.state.expanded: ${this.state.expanded}`);
-        const selectedItem = this.props.selectedItem;
+        const { placeHolder, select, selectedItem, ...menuProps } = this.props;
+
+        const buttonContent = this.props.items && this.props.items.length && selectedItem ? selectedItem : placeHolder;
         const buttonProps: ButtonProps = {
             click: this.buttonClickBound,
-            content: this.isControlLinkContent(selectedItem) ? selectedItem.text : selectedItem
+            content: this.isControlLinkContent(buttonContent) ? buttonContent.text : buttonContent
         };
 
-        const { select, ...menuProps } = this.props;
+        // const { select, ...menuProps } = this.props;
         (menuProps as any).select = this.selectBound;
 
         let menu: JSX.Element = null;
@@ -102,6 +104,7 @@ export class DropdownList extends React.Component<Props, State> {
 
 
 export interface Props extends MenuProps {
+    placeHolder?: ControlTextContent;
     selectedItem: ControlTextContent | ControlLinkContent;
 }
 
