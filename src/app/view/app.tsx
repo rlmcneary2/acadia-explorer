@@ -82,6 +82,7 @@ class App extends React.Component<Props> {
         }
 
         const dropdownProps: DropdownProps = {
+            display: "modal",
             items,
             placeHolder: { id: "ROUTE-NOT_SELECTED" },
             selectedItem

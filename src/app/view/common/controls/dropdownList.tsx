@@ -23,6 +23,7 @@
 
 import logg from "@util/logg";
 import * as React from "react";
+import { CSSTransition } from "react-transition-group";
 import Button, { Props as ButtonProps } from "./button";
 import { ControlLinkContent, ControlTextContent } from "./interfaces";
 import Menu, { Props as MenuProps } from "./menu";
@@ -59,18 +60,19 @@ export class DropdownList extends React.Component<Props, State> {
             content: this.isControlLinkContent(buttonContent) ? buttonContent.text : buttonContent
         };
 
-        // const { select, ...menuProps } = this.props;
         (menuProps as any).select = this.selectBound;
 
-        let menu: JSX.Element = null;
-        if (this.state.expanded) {
-            menu = (<Menu {...menuProps} />);
+        let divClassName = "dropdown-list";
+        if (this.props.display === "modal") {
+            divClassName += " modal";
         }
 
         return (
-            <div className="dropdown-list">
+            <div className={divClassName}>
                 <Button {...buttonProps} />
-                {menu}
+                <CSSTransition classNames="routes-menu" in={this.state.expanded} timeout={200}>
+                    <Menu {...menuProps} />
+                </CSSTransition>
             </div>
         );
     }
@@ -104,6 +106,7 @@ export class DropdownList extends React.Component<Props, State> {
 
 
 export interface Props extends MenuProps {
+    display?: "modal";
     placeHolder?: ControlTextContent;
     selectedItem: ControlTextContent | ControlLinkContent;
 }

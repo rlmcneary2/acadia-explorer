@@ -28,43 +28,32 @@
     }
 }
 
-.menu-container {
-    background: $color-app-background;
-    position: relative;
-}
-
-// #routes-menu-transition {
-//     display: block;
-//     left:0;
-//     position: absolute;
-//     top: $control-height;
-// }
-
-// .routes-menu-enter {
-//     transform: translateX(-100%);
-// }
-
-// .routes-menu-enter.routes-menu-enter-active {
-//     transform: translateX(0%);
-//     transition: transform 250ms ease-out;
-// }
-
-// .routes-menu-leave {
-//     transform: translateX(0%);
-// }
-
-// .routes-menu-leave.routes-menu-leave-active {
-//     transform: translateX(-100%);
-//     transition: transform 150ms ease-in;
-// }
-
 .dropdown-list {
-    .menu-container {
-        .menu {
-            background: $color-app-background;
+    .menu-location { /* This element+class positions the menu directly below the control that shows the list selection. */
+        .menu-container { /* This element+class allows the list to be positioned, transitioned, and sized somewhere other than below the button. */
+            .menu {
+                background: $color-app-background;
+            }
+            display: none;
+            opacity: 0;
             position: absolute;
+            transition: opacity 200ms;
             z-index: $zindex-dropdown-list;
         }
         position: relative;
+    }
+    .menu-location.routes-menu-enter > .menu-container, .menu-location.routes-menu-enter-active > .menu-container, .menu-location.routes-menu-enter-done > .menu-container {
+        display: initial;
+        opacity: 1;
+    }
+    .menu-location.routes-menu-enter > .menu-container {
+        opacity: 0;
+    }
+    .menu-location.routes-menu-exit > .menu-container, .menu-location.routes-menu-exit-active > .menu-container {
+        display: initial;
+        opacity: 0;
+    }
+    .menu-location.routes-menu-exit-done > .menu-container {
+        display: none;
     }
 }

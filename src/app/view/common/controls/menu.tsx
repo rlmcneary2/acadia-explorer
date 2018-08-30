@@ -42,11 +42,11 @@ class Menu extends React.Component<Props, JSX.Element> {
 
 
     private createList(items: JSX.Element[]): JSX.Element {
-        const list = (<ul className="menu" role="group">{items}</ul>);
+        const list = (<div className="menu-container"><ul className="menu" role="group">{items}</ul></div>);
         if (isNavigationItemArray(this.props.items)) {
-            return (<nav className="menu-container" role="menu">{list}</nav>);
+            return (<nav className="menu-location" role="menu">{list}</nav>);
         } else {
-            return (<div className="menu-container" role="menu">{list}</div>);
+            return (<div className="menu-location" role="menu">{list}</div>);
         }
     }
 
