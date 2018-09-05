@@ -32,7 +32,7 @@ interface Props {
      * then content is ignored.
      */
     children?: JSX.Element;
-    click?: (props: Props) => void;
+    click?: (props: Props, evt: Event) => void;
     content: ControlTextContent | string;
     isLink?: boolean;
     isPrimary?: boolean;
@@ -79,7 +79,7 @@ export default (props: Props): JSX.Element => {
 
 function clickHandler(evt) {
     if (this.click) {
-        this.click(this);
+        this.click(this, evt);
     }
 }
 

@@ -29,7 +29,7 @@ import { ControlLinkContent, ControlTextContent } from "./interfaces";
 
 interface Props {
     items: ControlTextContent[] | ControlLinkContent[];
-    select?: (control: ControlTextContent | ControlLinkContent) => string;
+    select?: (control: ControlTextContent | ControlLinkContent, evt?: Event) => string;
 }
 
 
@@ -78,8 +78,8 @@ class Menu extends React.Component<Props, JSX.Element> {
 
             let clickHandler;
             if (this.props.select) {
-                clickHandler = () => {
-                    this.props.select(item);
+                clickHandler = evt => {
+                    this.props.select(item, evt);
                 };
             }
 

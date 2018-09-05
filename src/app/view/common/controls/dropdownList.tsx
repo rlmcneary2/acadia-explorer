@@ -38,11 +38,13 @@ export class DropdownList extends React.Component<Props, State> {
 
     public componentDidMount() {
         this.buttonClickBound = this.buttonClick.bind(this);
+        this.menuClickBound = this.menuClick.bind(this);
         this.selectBound = this.select.bind(this);
     }
 
     public componentWillUnmount() {
         this.buttonClickBound = null;
+        this.menuClickBound = null;
         this.selectBound = null;
     }
 
@@ -62,13 +64,8 @@ export class DropdownList extends React.Component<Props, State> {
 
         (menuProps as any).select = this.selectBound;
 
-        let divClassName = "dropdown-list";
-        if (this.props.display === "modal") {
-            divClassName += " modal";
-        }
-
         return (
-            <div className={divClassName}>
+            <div className={this.className}  onClick={this.menuClickBound}>
                 <Button {...buttonProps} />
                 <CSSTransition classNames="routes-menu" in={this.state.expanded} timeout={200}>
                     <Menu {...menuProps} />
@@ -78,11 +75,30 @@ export class DropdownList extends React.Component<Props, State> {
     }
 
 
-    private buttonClickBound: (props: ButtonProps) => void;
-    private selectBound: (selected: ControlTextContent | ControlLinkContent) => void;
+    private buttonClickBound: (props: ButtonProps, evt: Event) => void;
+    private get className(): string {
+        const { align, display } = this.props;
+        let name = "dropdown-list";
+        if (display === "modal") {
+            name += " modal";
+        }
 
-    private buttonClick(props: ButtonProps): void {
+        if (display === "modal" || align === "center") {
+            name += " center";
+        } else if (align === "right") {
+            name += " right";
+        } else {
+            name += " left";
+        }
+
+        return name;
+    }
+    private menuClickBound: () => void;
+    private selectBound: (selected: ControlTextContent | ControlLinkContent, evt: Event) => void;
+
+    private buttonClick(props: ButtonProps, evt: Event): void {
         logg.debug(() => "DropdownList buttonClick - enter.");
+        evt.stopPropagation();
         this.setState({ expanded: !this.state.expanded });
     }
 
@@ -94,7 +110,13 @@ export class DropdownList extends React.Component<Props, State> {
         return obj.hasOwnProperty("to");
     }
 
-    private select(selectedItem: ControlTextContent | ControlLinkContent) {
+    private menuClick(): void {
+        logg.debug(() => "DropdownList menuClick - enter.");
+        this.setState({ expanded: false });
+    }
+
+    private select(selectedItem: ControlTextContent | ControlLinkContent, evt: Event) {
+        evt.stopPropagation();
         this.setState({ expanded: false });
 
         if (this.props.select) {
@@ -106,6 +128,7 @@ export class DropdownList extends React.Component<Props, State> {
 
 
 export interface Props extends MenuProps {
+    align?: "center" | "left" | "right";
     display?: "modal";
     placeHolder?: ControlTextContent;
     selectedItem: ControlTextContent | ControlLinkContent;
