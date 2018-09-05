@@ -46,12 +46,12 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
     }
 
     public render(): JSX.Element {
-        ReactMapBoxGL.log();
         this.updateMap();
         return this.renderedElement;
     }
 
 
+    private fitBoundsLayerId: string = null;
     private id: string;
     /** The IDs of layers passed as props to this map that are currently displayed. The mbx.Map object doesn't have a method to easily list the layers we really care about. */
     private layerIds = new Set<string>();
@@ -88,6 +88,13 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
 
         const options = {...this.props.options, ...{container: this.id}};
         const map = new mbx.Map(options);
+        // map
+        //     .on("zoomend", data => {
+        //         ReactMapBoxGL.log("on zoomend. %O", data);
+        //     })
+        //     .on("zoomstart", data => {
+        //         ReactMapBoxGL.log("on zoomstart. %O", data);
+        //     });
 
         await this.waitForMapLoad(map);
 
@@ -169,12 +176,7 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
             return;
         }
 
-        const { layers } = this.props;
-        if (!layers) {
-            ReactMapBoxGL.log("no layers in props to add.");
-            return;
-        }
-
+        const layers = this.props.layers || new Map<string, RmbxLayer>();
         ReactMapBoxGL.log ("updating layers and sources in the map.");
 
         let id: string;
@@ -216,7 +218,7 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
 
         // Zoom the map to the bounds layer.
         const boundaryLayer = Array.from(layers.values()).find(item => item.bounds);
-        if (boundaryLayer) {
+        if (boundaryLayer && boundaryLayer.layer.id !== this.fitBoundsLayerId) {
             const source = boundaryLayer.layer.source as mbx.GeoJSONSourceRaw;
             if (source) {
                 bounds = this.getLayerBounds(source);
@@ -225,6 +227,7 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
                     options.padding = this.props.boundsPadding;
                 }
 
+                this.fitBoundsLayerId = boundaryLayer.layer.id;
                 map.fitBounds(bounds, options);
             }
         }
@@ -293,4 +296,5 @@ export interface Props {
 
 interface State {
     map?: mbx.Map;
+    zoom?: number;
 }
