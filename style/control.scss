@@ -32,6 +32,15 @@ $zindex-dropdown-list: 1000;
     width: 100%;
 }
 
+%modal-element {
+    height: $modal-height;
+    margin-bottom: $modal-margin-bottom;
+    max-height: $modal-max-height;
+    max-width: $modal-max-width;
+    min-width: $modal-min-width;
+    width: $modal-width;
+}
+
 .control {
     &:focus {
         border-color: $color-focus;

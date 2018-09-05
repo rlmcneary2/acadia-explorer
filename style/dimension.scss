@@ -22,11 +22,18 @@
 
 
 $control-height: 32px;
-$control-border-radius-v: ($control-height * 0.8) / 2;
+$control-border-radius-v: $control-height / 2;
 $control-border-radius-h: $control-height / 2;
 $control-height-half: $control-height / 2;
 $control-margin-h: $control-height / 10;
 $control-padding: 3px;
 
-$button-border-width: if($control-height / 25 < 2, 2px, $control-height / 25);
+$button-border-width: 1.5px;
 $button-width: $control-height * 3.5;
+
+$modal-height: 70%;
+$modal-margin-bottom: 10%;
+$modal-max-height: 400px;
+$modal-max-width: 240px;
+$modal-min-width: 170px;
+$modal-width: 75%;

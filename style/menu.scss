@@ -57,3 +57,32 @@
         display: none;
     }
 }
+
+.dropdown-list.modal {
+    .menu-location {
+        .menu-container {
+            .menu-padding {
+                .menu {
+                    @extend %modal-element;
+                    flex: 1;
+                    justify-content: space-between;
+                }
+                align-items: center;
+                display: flex;
+                height: 100%;
+                justify-content: center;
+                width: 100%;
+            }
+            background-color: $color-modal-background;
+            bottom: 0;
+            left: 0;
+            position: fixed;
+            right: 0;
+            top: 0;
+        }
+    }
+}
+
+.modal-element {
+
+}
