@@ -27,7 +27,7 @@ import { Store } from "redux";
 import { State } from "../reducer/interfaces";
 
 
-const LOG_CATEGORY = "tickl";
+const LOG_CATEGORY = "tckl";
 
 
 export default (store: Store<State>) => {

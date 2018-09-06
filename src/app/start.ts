@@ -27,7 +27,7 @@ import * as redux from "redux";
 // import { createLogger } from "redux-logger";
 import reduxThunk from "redux-thunk";
 import { actionApp } from "./action/app";
-import tickListener from "./listener/tick";
+import { storageListener, tickListener } from "./listener";
 import reducers from "./reducer/reducers";
 import Start from "./startView";
 
@@ -63,6 +63,7 @@ export default async () => {
     const store = redux.createStore(reducers, {}, reduxMiddleware);
 
     // Add listeners.
+    store.subscribe(() => storageListener(store));
     store.subscribe(() => tickListener(store));
 
     // Dispatch the initialize action.

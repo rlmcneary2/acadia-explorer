@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Richard L. McNeary II
+ * Copyright (c) 2018 Richard L. McNeary II
  *
  * MIT License
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -21,24 +21,28 @@
  */
 
 
-import { MapData } from "../reducer/ui";
-import { DataAction } from "./interfaces";
+import logg from "@util/logg";
+import { Store } from "redux";
+import { State } from "../reducer/interfaces";
 
 
-const actionUi = Object.freeze({
+const LOGG_CATEGORY = "strl";
+const TIMEOUT = 2000;
+let timeout: number = null;
 
-    types: Object.freeze({
-        setMapData: "setMapData"
-    }),
 
-    setMapData(data: MapData): DataAction<MapData> {
-        return {
-            data,
-            type: actionUi.types.setMapData
-        };
+export default (store: Store<State>) => {
+    if (timeout) {
+        clearTimeout(timeout);
     }
 
-});
+    timeout = setTimeout(() => {
+        storeState(store.getState());
+    }, TIMEOUT) as any;
+};
 
-
-export { actionUi };
+async function storeState(state: State) {
+    logg.debug(() => "storageListener storeState - enter", LOGG_CATEGORY);
+    const json = JSON.stringify(state);
+    localStorage.setItem("state", json);
+}

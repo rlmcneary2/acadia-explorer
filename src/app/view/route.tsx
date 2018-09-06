@@ -22,6 +22,7 @@
 
 
 import { actionApi } from "@action/api";
+import { actionUi } from "@action/ui";
 import LinkButton, { Props as LinkButtonProps } from "@controls/linkButton";
 import { RouteGeo, RouteStops, RouteVehicles } from "@reducer/api";
 import { State as ReduxState } from "@reducer/interfaces";
@@ -49,6 +50,7 @@ const ZOOM_TO_FIT_PADDING = 25;
 
 interface InternalProps extends Props {
     componentWillUnmount: (props: InternalProps) => void;
+    onMapChanged: (data) => void;
     route?: any;
     routeChanged: (routeId: number) => void;
     routeGeos: RouteGeo[];
@@ -117,6 +119,10 @@ function mapDispatchToProps(dispatch: redux.Dispatch<any>): InternalProps {
             logg.debug(() => "TODO: remove bus locations for ACTION_ADD_BUSES_REQUEST.");
         },
 
+        onMapChanged: data => {
+            dispatch(actionUi.setMapData(data));
+        },
+
         routeChanged: (routeId: number) => {
             dispatch(actionApi.getVehicles([routeId]) as any);
         }
@@ -182,6 +188,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 accessToken: "pk.eyJ1IjoicmxtY25lYXJ5MiIsImEiOiJjajgyZjJuMDAyajJrMndzNmJqZDFucTIzIn0.BYE_k7mYhhVCdLckWeTg0g",
                 boundsPadding: ZOOM_TO_FIT_PADDING,
                 onLoaded: () => logg.debug(() => "IslandExplorerRoute render - map loaded."),
+                onMapChanged: data => this.props.onMapChanged(data),
                 options: {
                     attributionControl: false,
                     center: [START_LONGITUDE, START_LATITUDE],

@@ -51,10 +51,12 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
     }
 
 
-    private fitBoundsLayerId: string = null;
+    private fitBoundsActive = false;
+    private fitBoundsCurrentLayerId: string = null;
     private id: string;
     /** The IDs of layers passed as props to this map that are currently displayed. The mbx.Map object doesn't have a method to easily list the layers we really care about. */
     private layerIds = new Set<string>();
+    private mapDataCurrent: MapChanged = null;
     private mapState: "created" | "creating" | null = null;
     private get renderedElement(): JSX.Element {
         if (!this.renderedElementValue) {
@@ -70,6 +72,7 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
         return this.renderedElementValue;
     }
     private renderedElementValue: JSX.Element;
+    private isUserZoomRequest: boolean[] = [];
 
     private async createMap() {
         if (this.mapState) {
@@ -88,13 +91,25 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
 
         const options = {...this.props.options, ...{container: this.id}};
         const map = new mbx.Map(options);
-        // map
-        //     .on("zoomend", data => {
-        //         ReactMapBoxGL.log("on zoomend. %O", data);
-        //     })
-        //     .on("zoomstart", data => {
-        //         ReactMapBoxGL.log("on zoomstart. %O", data);
-        //     });
+        map
+            .on("moveend", data => {
+                ReactMapBoxGL.log("on moveend center.");
+                const { center, zoom }: {center: mbx.LngLat; zoom: number; } = data.target.transform;
+                this.raiseOnMapChanged({ center, zoom });
+            })
+            .on("zoomend", data => {
+                ReactMapBoxGL.log("on zoomend.");
+                const isUser = this.isUserZoomRequest.shift();
+                if (isUser) {
+                    const { center, zoom }: {center: mbx.LngLat; zoom: number; } = data.target.transform;
+                    this.raiseOnMapChanged({ center, zoom });
+                }
+            })
+            .on("zoomstart", () => {
+                ReactMapBoxGL.log("on zoomstart.");
+                this.isUserZoomRequest.push(!this.fitBoundsActive);
+                this.fitBoundsActive = false;
+            });
 
         await this.waitForMapLoad(map);
 
@@ -105,9 +120,7 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
 
         this.setState({ map });
 
-        if (this.props.onLoaded) {
-            this.props.onLoaded(this.props);
-        }
+        this.invokePropsFunction("onLoaded", this.props);
     }
 
     private getLayerBounds(source: mbx.GeoJSONSourceRaw): mbx.LngLatBoundsLike {
@@ -137,6 +150,18 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
         return coordinate.slice(0, 2);
     }
 
+    private invokePropsFunction(name: string, ...args) {
+        try {
+            if (!this.props[name]) {
+                return;
+            }
+
+            this.props[name](...args);
+        } catch (err) {
+            ReactMapBoxGL.log(`error invoking props function '${name}'. %O`, err);
+        }
+    }
+
     private static log(message = null, ...args): void {
         const line = new Error().stack.split("\n").find((item, i, arr) => {
             return (0 <= i - 1) && -1 < arr[i - 1].indexOf("Function.log");
@@ -153,6 +178,28 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
         }
         // tslint:disable-next-line:no-console
         console.log(`ReactMapBoxGL ${name}${message ? " - " : ""}${message ? message : ""}`, ...args);
+    }
+
+    private raiseOnMapChanged(data: MapChanged) {
+        if (this.mapDataCurrent === data || !this.props.onMapChanged) {
+            return;
+        }
+
+        const currentCenter = (this.mapDataCurrent ? this.mapDataCurrent.center : {}) as mbx.LngLat;
+
+        if (
+            (
+                currentCenter !== data.center ||
+                currentCenter.lat !== data.center.lat ||
+                currentCenter.lng !== data.center.lng
+            ) ||
+            (
+                this.mapDataCurrent.zoom !== data.zoom
+            )
+        ) {
+            this.mapDataCurrent = data;
+            this.invokePropsFunction("onMapChanged", data);
+        }
     }
 
     private reduceToBounds(coordinates: number[][]): mbx.LngLatBounds {
@@ -218,7 +265,7 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
 
         // Zoom the map to the bounds layer.
         const boundaryLayer = Array.from(layers.values()).find(item => item.bounds);
-        if (boundaryLayer && boundaryLayer.layer.id !== this.fitBoundsLayerId) {
+        if (boundaryLayer && boundaryLayer.layer.id !== this.fitBoundsCurrentLayerId) {
             const source = boundaryLayer.layer.source as mbx.GeoJSONSourceRaw;
             if (source) {
                 bounds = this.getLayerBounds(source);
@@ -227,8 +274,11 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
                     options.padding = this.props.boundsPadding;
                 }
 
-                this.fitBoundsLayerId = boundaryLayer.layer.id;
+                this.fitBoundsCurrentLayerId = boundaryLayer.layer.id;
+                this.fitBoundsActive = true;
+                ReactMapBoxGL.log("fitBounds before.");
                 map.fitBounds(bounds, options);
+                ReactMapBoxGL.log("fitBounds after.");
             }
         }
 
@@ -266,6 +316,11 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
 }
 
 
+export interface MapChanged {
+    center: mbx.LngLatLike;
+    zoom: number;
+}
+
 export interface RmbxLayer {
     /** Should this layer be taken into account when determining the map bounds? */
     bounds?: true;
@@ -288,6 +343,8 @@ export interface Props {
     layers?: Map<string, RmbxLayer>;
     /** It takes some time for the map to load, this function will be invoked when the map is ready to display layers. */
     onLoaded?: (props: Props) => void;
+    /** Invoked when the user changes the zoom level. */
+    onMapChanged?: (data: MapChanged) => void;
     /** Options to pass to the Map object when it is created. */
     options?: mbx.MapboxOptions;
     /** These sources will be added to the map or if they already exists their data will be updated. */

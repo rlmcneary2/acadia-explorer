@@ -21,8 +21,8 @@
  */
 
 
+import { BaseAction, DataAction } from "../action/interfaces";
 import { actionUi } from "../action/ui";
-import { BaseAction, DataAction, } from "../action/interfaces";
 
 
 export default (state: State = {}, action: BaseAction): State => {
@@ -30,10 +30,10 @@ export default (state: State = {}, action: BaseAction): State => {
 
     switch (action.type) {
 
-        case actionUi.types.setViewData: {
-            const a = action as DataAction<any>;
-            nextState = Object.assign({}, state);
-            nextState.viewData = a.data;
+        case actionUi.types.setMapData: {
+            const a = action as DataAction<MapData>;
+            const { data: mapData } = a;
+            nextState = {...state, mapData};
             break;
         }
 
@@ -44,8 +44,16 @@ export default (state: State = {}, action: BaseAction): State => {
 
 
 interface State {
-    viewData?: any;
+    mapData?: MapData;
+}
+
+interface MapData {
+    center?: {
+        lat: number;
+        lng: number;
+    };
+    zoom?: number;
 }
 
 
-export { State };
+export { State, MapData };

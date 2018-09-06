@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Richard L. McNeary II
+ * Copyright (c) 2018 Richard L. McNeary II
  *
  * MIT License
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -21,24 +21,10 @@
  */
 
 
-import { MapData } from "../reducer/ui";
-import { DataAction } from "./interfaces";
+import storageListener from "./storage";
+import tickListener from "./tick";
 
-
-const actionUi = Object.freeze({
-
-    types: Object.freeze({
-        setMapData: "setMapData"
-    }),
-
-    setMapData(data: MapData): DataAction<MapData> {
-        return {
-            data,
-            type: actionUi.types.setMapData
-        };
-    }
-
-});
-
-
-export { actionUi };
+export {
+    storageListener,
+    tickListener
+};
