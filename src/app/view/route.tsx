@@ -31,7 +31,7 @@ import logg from "@util/logg";
 /* tslint:disable-next-line: no-submodule-imports */
 import * as GeoJSON from "geojson/geojson"; // There is a name collision here, this line must exist to import the geojson package (not an @types package).
 import * as React from "react";
-import { FormattedRelative } from "react-intl";
+import { FormattedMessage, FormattedRelative } from "react-intl";
 import { connect } from "react-redux";
 import * as redux from "redux";
 import { Props as MapProps, ReactMapBoxGL, RmbxLayer } from "./MapBox/mapboxgl";
@@ -252,12 +252,28 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 }
             }
 
-            const countdownProps = {
-                style: "best fit",
-                units: "second",
-                updateInterval: 5 * 1000,
-                value: this.state.nextTick
-            } as any;
+            let countdown = null;
+            if (isShowMap && this.state.nextTick) {
+                const countdownProps = {
+                    style: "best fit",
+                    units: "second",
+                    updateInterval: 5 * 1000,
+                    value: this.state.nextTick
+                } as any;
+
+                const countdownChildren = message => (
+                    <div className="route-countdown" style={{position: "relative"}}>
+                        <span>{message}</span>
+                        <FormattedRelative {...countdownProps} />
+                    </div>
+                );
+
+                // tslint:disable:jsx-no-lambda
+                countdown = (
+                    <FormattedMessage children={message => countdownChildren(message)} id="ROUTE_NEXT_UPDATE_IN" />
+                );
+                // tslint:enable:jsx-no-lambda
+            }
 
             // It would be nice to use a react router Switch or Redirect here but we
             // need to keep the map component around and not replace it every time
@@ -267,7 +283,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             content = (
                 <div className="route-content">
                     <ReactMapBoxGL {...mapProps} layers={layers} sources={sources} />
-                    {isShowMap && this.state.nextTick ? <FormattedRelative className="route-update-countdown" {...countdownProps} /> : null}
+                    {countdown}
                     <h1 style={{ display: !isShowMap ? "initial" : "none" }}>Info please!</h1>
                 </div>
             );
