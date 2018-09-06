@@ -39,6 +39,8 @@ export default async () => {
     // }
 
     // Setup React, Redux, React-Router
+    const json = localStorage.getItem("state");
+    const state = json ? JSON.parse(json) : {};
     const middlewareArgs = [reduxThunk];
 
     // Should not be in production.
@@ -60,7 +62,7 @@ export default async () => {
     // middlewareArgs.push(reduxLog);
 
     const reduxMiddleware = redux.applyMiddleware(...middlewareArgs);
-    const store = redux.createStore(reducers, {}, reduxMiddleware);
+    const store = redux.createStore(reducers, state, reduxMiddleware);
 
     // Add listeners.
     store.subscribe(() => storageListener(store));

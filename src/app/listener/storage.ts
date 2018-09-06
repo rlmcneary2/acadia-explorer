@@ -37,7 +37,10 @@ export default (store: Store<State>) => {
     }
 
     timeout = setTimeout(() => {
-        storeState(store.getState());
+        // Do not store tick data, it doesn't need to be restored when the app
+        // is restarted.
+        const { api, ui } = store.getState();
+        storeState({ api, ui });
     }, TIMEOUT) as any;
 };
 

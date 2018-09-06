@@ -26,6 +26,7 @@ import { actionUi } from "@action/ui";
 import LinkButton, { Props as LinkButtonProps } from "@controls/linkButton";
 import { RouteGeo, RouteStops, RouteVehicles } from "@reducer/api";
 import { State as ReduxState } from "@reducer/interfaces";
+import { MapData } from "@reducer/ui";
 import logg from "@util/logg";
 /* tslint:disable-next-line: no-submodule-imports */
 import * as GeoJSON from "geojson/geojson"; // There is a name collision here, this line must exist to import the geojson package (not an @types package).
@@ -50,6 +51,7 @@ const ZOOM_TO_FIT_PADDING = 25;
 
 interface InternalProps extends Props {
     componentWillUnmount: (props: InternalProps) => void;
+    mapData: MapData;
     onMapChanged: (data) => void;
     route?: any;
     routeChanged: (routeId: number) => void;
@@ -108,22 +110,26 @@ function mapStateToProps(state: ReduxState, ownProps: Props): InternalProps {
         routeVehicles
     };
 
+    if (state.ui.mapData) {
+        props.mapData = state.ui.mapData;
+    }
+
     return props;
 }
 
 function mapDispatchToProps(dispatch: redux.Dispatch<any>): InternalProps {
     const dispatchProps = {
 
-        componentWillUnmount: (props: InternalProps) => {
+        componentWillUnmount(props: InternalProps) {
             // TODO: remove bus locations for ACTION_ADD_BUSES_REQUEST.
             logg.debug(() => "TODO: remove bus locations for ACTION_ADD_BUSES_REQUEST.");
         },
 
-        onMapChanged: data => {
+        onMapChanged(data) {
             dispatch(actionUi.setMapData(data));
         },
 
-        routeChanged: (routeId: number) => {
+        routeChanged(routeId: number) {
             dispatch(actionApi.getVehicles([routeId]) as any);
         }
 
@@ -183,6 +189,8 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         if (this.props.hasOwnProperty("route")) {
             const layers = this._createMapGLLayers();
             const sources = this.createSources();
+            const center = this.props.mapData ? [this.props.mapData.center.lng, this.props.mapData.center.lat] : [START_LONGITUDE, START_LATITUDE];
+            const zoom =  this.props.mapData ? this.props.mapData.zoom : START_ZOOM;
 
             const mapProps: MapProps = {
                 accessToken: "pk.eyJ1IjoicmxtY25lYXJ5MiIsImEiOiJjajgyZjJuMDAyajJrMndzNmJqZDFucTIzIn0.BYE_k7mYhhVCdLckWeTg0g",
@@ -191,9 +199,9 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 onMapChanged: data => this.props.onMapChanged(data),
                 options: {
                     attributionControl: false,
-                    center: [START_LONGITUDE, START_LATITUDE],
+                    center,
                     style: "mapbox://styles/mapbox/outdoors-v10",
-                    zoom: START_ZOOM
+                    zoom
                 }
             };
 
@@ -219,7 +227,13 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                     }
 
                     const visibility = "visible";
-                    updateLayer(id, visibility).bounds = true; // The route "trace" layer is used to determine the bounds to be displayed.
+                    const l = updateLayer(id, visibility);
+                    l.bounds = true; // The route "trace" layer is used to determine the bounds to be displayed.
+                    // This will only happen when the application is first
+                    // started and no mapData is in localStorage.
+                    if (!this.props.mapData) {
+                        l.boundsForce = true;
+                    }
                     updateLayer(this._stopsLayerId(id), visibility);
                     updateLayer(this._stopsLayerId(id, true), visibility);
                     updateLayer(this._vehiclesLayerId(id), visibility);
