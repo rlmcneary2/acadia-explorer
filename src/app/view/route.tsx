@@ -31,6 +31,7 @@ import logg from "@util/logg";
 /* tslint:disable-next-line: no-submodule-imports */
 import * as GeoJSON from "geojson/geojson"; // There is a name collision here, this line must exist to import the geojson package (not an @types package).
 import * as React from "react";
+import { FormattedRelative } from "react-intl";
 import { connect } from "react-redux";
 import * as redux from "redux";
 import { Props as MapProps, ReactMapBoxGL, RmbxLayer } from "./MapBox/mapboxgl";
@@ -52,6 +53,7 @@ const ZOOM_TO_FIT_PADDING = 25;
 interface InternalProps extends Props {
     componentWillUnmount: (props: InternalProps) => void;
     mapData: MapData;
+    nextTick?: number;
     onMapChanged: (data) => void;
     route?: any;
     routeChanged: (routeId: number) => void;
@@ -82,6 +84,7 @@ interface State {
         id: number;
         shortName: string;
     };
+    nextTick?: number;
 }
 
 
@@ -112,6 +115,10 @@ function mapStateToProps(state: ReduxState, ownProps: Props): InternalProps {
 
     if (state.ui.mapData) {
         props.mapData = state.ui.mapData;
+    }
+
+    if (state.tick && state.tick.ticks && state.tick.ticks.length) {
+        props.nextTick = state.tick.ticks[0].startTime + state.tick.ticks[0].interval;
     }
 
     return props;
@@ -179,6 +186,11 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             props.routeChanged(propsRouteId);
         }
 
+        if (props.nextTick) {
+            nextState = nextState || {};
+            nextState.nextTick = props.nextTick;
+        }
+
         return nextState;
     }
 
@@ -240,6 +252,13 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 }
             }
 
+            const countdownProps = {
+                style: "best fit",
+                units: "second",
+                updateInterval: 5 * 1000,
+                value: this.state.nextTick
+            } as any;
+
             // It would be nice to use a react router Switch or Redirect here but we
             // need to keep the map component around and not replace it every time
             // the path changes to a new route. For that reason the URL will be
@@ -247,7 +266,8 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             // otherwise the map will be displayed.
             content = (
                 <div className="route-content">
-                    <ReactMapBoxGL {...mapProps} layers={layers} sources={sources} />;
+                    <ReactMapBoxGL {...mapProps} layers={layers} sources={sources} />
+                    {isShowMap && this.state.nextTick ? <FormattedRelative className="route-update-countdown" {...countdownProps} /> : null}
                     <h1 style={{ display: !isShowMap ? "initial" : "none" }}>Info please!</h1>
                 </div>
             );
