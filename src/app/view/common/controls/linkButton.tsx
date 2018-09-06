@@ -35,10 +35,15 @@ interface Props extends ButtonProps {
 export default (props: Props): JSX.Element => {
     const { to, ...buttonProps } = props;
 
+    let messageProps = buttonProps.content;
+    if (typeof messageProps === "string") {
+        messageProps = { id: messageProps };
+    }
+
     return (
         <Button {...buttonProps} isLink={true}>
             <Link to={to}>
-                <FormattedMessage {...buttonProps.content} />
+                <FormattedMessage  {...messageProps} />
             </Link>
         </Button>
     );

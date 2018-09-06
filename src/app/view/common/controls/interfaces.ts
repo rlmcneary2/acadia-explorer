@@ -23,7 +23,7 @@
 
 interface ControlTextContent {
     id: string;
-    values?: object;
+    values?: { [key: string]: string | number | boolean | JSX.Element | Date; };
 }
 
 interface ControlLinkContent {
