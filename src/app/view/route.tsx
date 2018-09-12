@@ -24,6 +24,7 @@
 import { actionApi } from "@action/api";
 import { actionUi } from "@action/ui";
 import LinkButton, { Props as LinkButtonProps } from "@controls/linkButton";
+import { TimerPie } from "@controls/timerPie";
 import { RouteGeo, RouteStops, RouteVehicles } from "@reducer/api";
 import { State as ReduxState } from "@reducer/interfaces";
 import { MapData } from "@reducer/ui";
@@ -31,7 +32,6 @@ import logg from "@util/logg";
 /* tslint:disable-next-line: no-submodule-imports */
 import * as GeoJSON from "geojson/geojson"; // There is a name collision here, this line must exist to import the geojson package (not an @types package).
 import * as React from "react";
-import { FormattedMessage, FormattedRelative } from "react-intl";
 import { connect } from "react-redux";
 import * as redux from "redux";
 import { Props as MapProps, ReactMapBoxGL, RmbxLayer } from "./MapBox/mapboxgl";
@@ -254,25 +254,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
             let countdown = null;
             if (isShowMap && this.state.nextTick) {
-                const countdownProps = {
-                    style: "best fit",
-                    units: "second",
-                    updateInterval: 5 * 1000,
-                    value: this.state.nextTick
-                } as any;
-
-                const countdownChildren = message => (
-                    <div className="route-countdown" style={{position: "relative"}}>
-                        <span>{message}</span>
-                        <FormattedRelative {...countdownProps} />
-                    </div>
-                );
-
-                // tslint:disable:jsx-no-lambda
-                countdown = (
-                    <FormattedMessage children={message => countdownChildren(message)} id="ROUTE_NEXT_UPDATE_IN" />
-                );
-                // tslint:enable:jsx-no-lambda
+                countdown = (<TimerPie countDown={true} expiresMs={this.state.nextTick} spanMs={15 * 1000} refreshMs={1000} />);
             }
 
             // It would be nice to use a react router Switch or Redirect here but we

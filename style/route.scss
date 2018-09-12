@@ -21,6 +21,21 @@
  */
 
 
+.pie-container {
+    svg {
+        path {
+            fill: $color-control-text-gray;
+            fill-opacity: 0.5;
+        }
+    }
+    background: transparent;
+    bottom: $control-padding;
+    height: $control-height-half;
+    opacity: 50%;
+    right: $control-padding;
+    width: $control-height-half;
+}
+
 .route-tabs {
 /*    flex: 0 0 auto;*/
 }
@@ -32,9 +47,12 @@
 }
 
 .route-content > :nth-child(1n+0) {
+    position: absolute;
+}
+
+.route-content > :first-child {
     bottom: 0;
     left: 0;
-    position: absolute;
     right: 0;
     top: 0;
 }
