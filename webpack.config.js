@@ -27,8 +27,8 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 const webpack = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const convert = require('koa-connect');
-const history = require('connect-history-api-fallback');
+const convert = require("koa-connect");
+const history = require("connect-history-api-fallback");
 
 
 const _OUTPUT_DIR = "dist";
@@ -57,6 +57,13 @@ const config = {
     mode: process.env.WEBPACK_SERVE ? "development" : process.env.NODE_ENV || "development",
     module: {
         rules: [
+            {
+                test: /\.svg$/,
+                use: [{
+                    loader: "url-loader",
+                    options: { limit: 4096 }
+                }]
+            },
             {
                 test: /\.scss$/,
                 use: [

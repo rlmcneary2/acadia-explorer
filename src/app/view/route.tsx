@@ -34,7 +34,7 @@ import * as GeoJSON from "geojson/geojson"; // There is a name collision here, t
 import * as React from "react";
 import { connect } from "react-redux";
 import * as redux from "redux";
-import { Props as MapProps, ReactMapBoxGL, RmbxLayer } from "./MapBox/mapboxgl";
+import { Props as MapProps, ReactMapboxGL, RmbxLayer } from "./MapBox/mapboxgl";
 
 
 const ROUTE_LINE_WIDTH = 4;
@@ -264,7 +264,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             // otherwise the map will be displayed.
             content = (
                 <div className="route-content">
-                    <ReactMapBoxGL {...mapProps} layers={layers} sources={sources} />
+                    <ReactMapboxGL {...mapProps} layers={layers} sources={sources} />
                     {countdown}
                     <h1 style={{ display: !isShowMap ? "initial" : "none" }}>Info please!</h1>
                 </div>

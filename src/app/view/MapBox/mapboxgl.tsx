@@ -24,9 +24,10 @@
 import { FeatureCollection } from "geojson";
 import * as mbx from "mapbox-gl"; // This is the namespace with type definitions, NOT the static object that is set on window; that object as accessible as the "default" property.
 import * as React from "react";
+import { ReactMapboxMarker, Props as MarkerProps } from "./mapboxMarker";
 
 
-export class ReactMapBoxGL extends React.PureComponent<Props, State> {
+export class ReactMapboxGL extends React.PureComponent<Props, State> {
 
     constructor(props: Props, context: any) {
         super(props, context);
@@ -35,19 +36,28 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
     }
 
     public componentDidMount() {
-        ReactMapBoxGL.log();
+        ReactMapboxGL.log();
 
         // Let the stack unwind so we can set state in this method.
         setImmediate(() => this.createMap());
     }
 
     public componentWillUnmount() {
-        ReactMapBoxGL.log();
+        ReactMapboxGL.log();
     }
 
     public render(): JSX.Element {
         this.updateMap();
-        return this.renderedElement;
+
+        // Adding a key prop means the DOM element will never be altered because
+        // it will always be considered by React to be represented by the same
+        // object. You must also set the ID for Mapbox to be able to attach the
+        // map to this element.
+        return (
+            <div className="map" id={this.id} key={this.id}>
+                {this.createMarkers()}
+            </div>
+        );
     }
 
 
@@ -60,20 +70,38 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
     /** A collection of map events that need to be handled asynchronously by invokeMapEvent(). */
     private mapEvents: [(state?: any) => void, any][] = [];
     private mapState: "created" | "creating" | null = null;
-    private get renderedElement(): JSX.Element {
-        if (!this.renderedElementValue) {
-            ReactMapBoxGL.log("creating a new map <div> element.");
-            this.renderedElementValue = (
-                <div
-                    className="map"
-                    id={this.id}
-                />
-            );
+
+    private createMarkers(): JSX.Element[] {
+        if (this.mapState !== "created") {
+            return null;
         }
 
-        return this.renderedElementValue;
+        if (!this.props.sources || !this.props.sources.size) {
+            return null;
+        }
+
+        const markers: JSX.Element[] = [];
+        let count = 0;
+        for (const pair of this.props.sources) {
+            const [id, source] = pair;
+
+            for (const feature of (source as any).data.features) {
+                count++;
+
+                const props: MarkerProps = {
+                    className: "map-vehicle-marker",
+                    coordinates: feature.geometry.coordinates,
+                    direction: 0,
+                    key: `${id}-MARKER-${count}`,
+                    map: this.state.map
+                };
+
+                markers.push((<ReactMapboxMarker {...props} />));
+            }
+        }
+
+        return markers;
     }
-    private renderedElementValue: JSX.Element;
 
     private async createMap() {
         if (this.mapState) {
@@ -82,7 +110,7 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
 
         this.mapState = "creating";
 
-        ReactMapBoxGL.log("creating a new Map object.");
+        ReactMapboxGL.log("creating a new Map object.");
 
         // "mbx" is the namespace with type definitions, to get access to the
         // global static object (that would normally be accessed as a property
@@ -99,20 +127,20 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
         // to allow the render to complete.
         map
             .on("moveend", data => {
-                ReactMapBoxGL.log("on moveend.");
+                ReactMapboxGL.log("on moveend.");
                 const { center, zoom }: {center: mbx.LngLat; zoom: number; } = data.target.transform;
                 this.queueMapEvent(s => this.raiseOnMapChanged(s), { center, zoom });
             })
             .on("movestart", data => {
-                ReactMapBoxGL.log("on movestart.");
+                ReactMapboxGL.log("on movestart.");
             })
             .on("zoomend", data => {
-                ReactMapBoxGL.log("on zoomend.");
+                ReactMapboxGL.log("on zoomend.");
                 const { center, zoom }: {center: mbx.LngLat; zoom: number; } = data.target.transform;
                 this.queueMapEvent(s => this.raiseOnMapChanged(s), { center, zoom });
             })
             .on("zoomstart", () => {
-                ReactMapBoxGL.log("on zoomstart.");
+                ReactMapboxGL.log("on zoomstart.");
             });
 
         await this.waitForMapLoad(map);
@@ -120,7 +148,7 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
         map.resize();
 
         this.mapState = "created";
-        ReactMapBoxGL.log("map object ready.");
+        ReactMapboxGL.log("map object ready.");
 
         this.setState({ map });
 
@@ -162,7 +190,7 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
 
             this.props[name](...args);
         } catch (err) {
-            ReactMapBoxGL.log(`error invoking props function '${name}'. %O`, err);
+            ReactMapboxGL.log(`error invoking props function '${name}'. %O`, err);
         }
     }
 
@@ -227,7 +255,7 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
             )
         ) {
             this.mapDataCurrent = data;
-            ReactMapBoxGL.log("raising onMapChanged.");
+            ReactMapboxGL.log("raising onMapChanged.");
             this.invokePropsFunction("onMapChanged", data);
         }
     }
@@ -249,12 +277,12 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
         const { map } = this.state;
 
         if (!map || this.mapState !== "created") {
-            ReactMapBoxGL.log("no map or map is not loaded.");
+            ReactMapboxGL.log("no map or map is not loaded.");
             return;
         }
 
         const layers = this.props.layers || new Map<string, RmbxLayer>();
-        ReactMapBoxGL.log ("updating layers and sources in the map.");
+        ReactMapboxGL.log ("updating layers and sources in the map.");
 
         let id: string;
         let layer: RmbxLayer;
@@ -263,10 +291,10 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
 
             const mLayer = map.getLayer(id);
             if (!mLayer) {
-                ReactMapBoxGL.log(`adding layer: '${id}'.`);
+                ReactMapboxGL.log(`adding layer: '${id}'.`);
                 map.addLayer(layer.layer);
             } else if (layer.changed) {
-                ReactMapBoxGL.log(`updating layer: '${id}'.`);
+                ReactMapboxGL.log(`updating layer: '${id}'.`);
                 map.removeLayer(id);
                 map.removeSource(id);
                 map.addLayer(layer.layer);
@@ -287,7 +315,7 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
                     continue;
                 }
 
-                ReactMapBoxGL.log(`updating source: '${sourceId}'.`);
+                ReactMapboxGL.log(`updating source: '${sourceId}'.`);
                 mSource.setData(source.data);
             }
         }
@@ -303,7 +331,7 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
                 continue;
             }
 
-            ReactMapBoxGL.log(`removing previous props layer: '${id}'.`);
+            ReactMapboxGL.log(`removing previous props layer: '${id}'.`);
             map.removeLayer(id);
             map.removeSource(id);
             this.layerIds.delete(id);
@@ -331,9 +359,9 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
                 }
 
                 this.fitBoundsCurrentLayerId = boundaryLayer.layer.id;
-                ReactMapBoxGL.log("fitBounds before.");
+                ReactMapboxGL.log("fitBounds before.");
                 map.fitBounds(bounds, options);
-                ReactMapBoxGL.log("fitBounds after.");
+                ReactMapboxGL.log("fitBounds after.");
             }
         }
 
@@ -351,7 +379,7 @@ export class ReactMapBoxGL extends React.PureComponent<Props, State> {
             map.once("styledata", () => resolve());
         });
 
-        return Promise.all([pl, ps]).then(() => { ReactMapBoxGL.log("Map loaded."); });
+        return Promise.all([pl, ps]).then(() => { ReactMapboxGL.log("Map loaded."); });
     }
 }
 
