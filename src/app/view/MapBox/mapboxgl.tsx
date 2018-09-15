@@ -24,7 +24,7 @@
 import { FeatureCollection } from "geojson";
 import * as mbx from "mapbox-gl"; // This is the namespace with type definitions, NOT the static object that is set on window; that object as accessible as the "default" property.
 import * as React from "react";
-import { ReactMapboxMarker, Props as MarkerProps } from "./mapboxMarker";
+// import { Props as MarkerProps, ReactMapboxMarker } from "./mapboxMarker";
 
 
 export class ReactMapboxGL extends React.PureComponent<Props, State> {
@@ -48,15 +48,14 @@ export class ReactMapboxGL extends React.PureComponent<Props, State> {
 
     public render(): JSX.Element {
         this.updateMap();
+        this.updateMarkers();
 
         // Adding a key prop means the DOM element will never be altered because
         // it will always be considered by React to be represented by the same
         // object. You must also set the ID for Mapbox to be able to attach the
         // map to this element.
         return (
-            <div className="map" id={this.id} key={this.id}>
-                {this.createMarkers()}
-            </div>
+            <div className="map" id={this.id} key={this.id} />
         );
     }
 
@@ -70,38 +69,7 @@ export class ReactMapboxGL extends React.PureComponent<Props, State> {
     /** A collection of map events that need to be handled asynchronously by invokeMapEvent(). */
     private mapEvents: [(state?: any) => void, any][] = [];
     private mapState: "created" | "creating" | null = null;
-
-    private createMarkers(): JSX.Element[] {
-        if (this.mapState !== "created") {
-            return null;
-        }
-
-        if (!this.props.sources || !this.props.sources.size) {
-            return null;
-        }
-
-        const markers: JSX.Element[] = [];
-        let count = 0;
-        for (const pair of this.props.sources) {
-            const [id, source] = pair;
-
-            for (const feature of (source as any).data.features) {
-                count++;
-
-                const props: MarkerProps = {
-                    className: "map-vehicle-marker",
-                    coordinates: feature.geometry.coordinates,
-                    direction: 0,
-                    key: `${id}-MARKER-${count}`,
-                    map: this.state.map
-                };
-
-                markers.push((<ReactMapboxMarker {...props} />));
-            }
-        }
-
-        return markers;
-    }
+    private markers = new Map<string, mbx.Marker>();
 
     private async createMap() {
         if (this.mapState) {
@@ -271,6 +239,65 @@ export class ReactMapboxGL extends React.PureComponent<Props, State> {
         return coordinates.reduce((bounds, coordinate) => {
             return bounds.extend(this.getXYValues(coordinate) as any);
         }, initialBounds);
+    }
+
+    private updateMarkers() {
+        if (this.mapState !== "created") {
+            return null;
+        }
+
+        if (!this.props.sources || !this.props.sources.size) {
+            return null;
+        }
+
+        // MapboxGL doesn't keep track of the markers internally (by design to
+        // keep MapboxGL "lightweight") so we have to keep track of the markers
+        // ourselves. Why? Because when it comes time to remove them we have to
+        // use the original instance of the Marker.
+
+        const markersToRemove = new Map<string, mbx.Marker>(this.markers);
+        for (const pair of this.props.sources) {
+            const [id, source] = pair;
+
+            for (const feature of (source as any).data.features) {
+                // We have to create DOM elements here and pass them to the
+                // MapboxGL Map which will take ownership of them. We can't use
+                // a React component (I tried) because the map will move the
+                // elements so that the map itself is their parent element. See
+                // this for details if you really want to know what's going on:
+                // https://github.com/facebook/react/issues/11538
+                const featureId = `${id}-MARKER-${feature.properties.name}`;
+
+                if (markersToRemove.has(featureId)) {
+                    markersToRemove.delete(featureId);
+                }
+
+                let marker = this.markers.has(featureId) ? this.markers.get(featureId) : null;
+                if (marker) {
+                    marker.setLngLat(feature.geometry.coordinates);
+                } else {
+                    const div = document.createElement("div");
+                    div.id = featureId;
+                    div.className = "map-vehicle-marker";
+                    marker = (new (mbx as any).Marker(div) as mbx.Marker)
+                        .setLngLat(feature.geometry.coordinates)
+                        .addTo(this.state.map);
+
+                    this.markers.set(featureId, marker);
+                }
+            }
+        }
+
+        // If any of the current markers in this.markers were not updated here
+        // it's time to remove them from our collection and the map.
+        if (markersToRemove.size) {
+            for (const item of markersToRemove) {
+                const [id, marker] = item;
+                ReactMapboxGL.log (`removing marker '${id}'.`);
+                marker.remove();
+                this.markers.delete(id);
+            }
+        }
     }
 
     private updateMap() {
