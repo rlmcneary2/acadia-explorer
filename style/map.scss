@@ -32,8 +32,15 @@
     flex: 1;
 }
 
+.map-vehicle-marker-direction {
+    background-image: url("./images/icon-direction.svg");
+    height: $icon-size;
+    position: relative;
+    width: $icon-size;
+}
+
 .map-vehicle-marker {
     background-image: url("./images/icon-bus.svg");
-    height: 20px;
-    width: 20px;
+    height: 100%;
+    width: 100%;
 }

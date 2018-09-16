@@ -351,20 +351,6 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             }
         }
 
-        if (this.props.routeVehicles && this.props.routeVehicles.length) {
-            const color = "#ff00fa";
-            for (const rv of this.props.routeVehicles) {
-                if (activeRouteId !== rv.id) {
-                    continue;
-                }
-
-                if (rv.vehicles && rv.vehicles.length) {
-                    mbxLayer = this._createMapGLVehiclesLayer(rv, color);
-                    layers.set(mbxLayer.layer.id, mbxLayer);
-                }
-            }
-        }
-
         return layers;
     }
 
@@ -481,11 +467,14 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
     private _createMapGLVehiclesLayer(routeVehicles: RouteVehicles, color: string): RmbxLayer {
         // Convert route stops to geojson points.
         const data = routeVehicles.vehicles.map(item => {
-            const { Latitude: lat, Longitude: lng, Name: name } = item;
+            const { Heading: heading, LastStop: lastStop, Latitude: lat, Longitude: lng, Name: name, VehicleId: vehicle } = item;
             return {
+                heading,
+                lastStop,
                 lat,
                 lng,
-                name
+                name,
+                vehicle
             };
         });
 

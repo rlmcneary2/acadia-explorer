@@ -150,6 +150,15 @@ export class ReactMapboxGL extends React.PureComponent<Props, State> {
         return coordinate.slice(0, 2);
     }
 
+    private headingToRotateAngle(heading: number): number | void {
+        let angle: number = null;
+        if (!isNaN(heading)) {
+            angle = 180 < heading ? heading - 180 : 180 + heading;
+        }
+
+        return angle;
+    }
+
     private invokePropsFunction(name: string, ...args) {
         try {
             if (!this.props[name]) {
@@ -272,19 +281,59 @@ export class ReactMapboxGL extends React.PureComponent<Props, State> {
                     markersToRemove.delete(featureId);
                 }
 
+                ReactMapboxGL.log(`vehicle id: ${feature.properties.vehicle}, heading: ${feature.properties.heading}, last stop: ${feature.properties.lastStop}.`);
+
                 let marker = this.markers.has(featureId) ? this.markers.get(featureId) : null;
+                let divDirection: HTMLDivElement;
+                let divMarker: HTMLDivElement;
                 if (marker) {
                     marker.setLngLat(feature.geometry.coordinates);
+                    const parent = document.getElementById(featureId);
+                    if (parent) {
+                        divDirection = parent.getElementsByClassName("map-vehicle-marker-direction")[0] as HTMLDivElement;
+                    }
+
+                    if (divDirection) {
+                        divMarker = divDirection.getElementsByClassName("map-vehicle-marker")[0] as HTMLDivElement;
+                    }
                 } else {
-                    const div = document.createElement("div");
-                    div.id = featureId;
-                    div.className = "map-vehicle-marker";
-                    marker = (new (mbx as any).Marker(div) as mbx.Marker)
+                    // This div will be passed to MapboxGL which will set it's
+                    // style.transform property to locate the element correctly
+                    // on the map. Since we want to rotate the directional
+                    // indicator to math the vehicle direction we need this
+                    // wrapper element so we can override its child's style
+                    // element.
+                    const divW = document.createElement("div");
+                    divW.id = featureId;
+
+                    // This directional div exists so we can rotate it to match
+                    // the vehicle direction.
+                    divDirection = document.createElement("div");
+                    divDirection.className = "map-vehicle-marker-direction"; // TODO: a ring without a pointer if angle is not provided.
+
+                    // This holds the bus icon. Must invert the angle of the
+                    // containing dive.
+                    divMarker = document.createElement("div");
+                    divMarker.className = "map-vehicle-marker";
+
+                    divDirection.appendChild(divMarker);
+                    divW.appendChild(divDirection);
+
+                    marker = (new (mbx as any).Marker(divW) as mbx.Marker)
                         .setLngLat(feature.geometry.coordinates)
                         .addTo(this.state.map);
 
                     this.markers.set(featureId, marker);
                 }
+
+                if (divDirection && divMarker) {
+                    // heading: 0 = north (up), 90 = east (right), 180 = south (down), 270 = west (left)
+                    // rotate: 0 = south (down), 90 = west (left), 180 = north (up), 270 = east (right)
+                    const angle: number | void = this.headingToRotateAngle(feature.properties.heading);
+                    divDirection.style.transform = `rotate(${angle || 0}deg)`;
+                    divMarker.style.transform = `rotate(${(angle || 0) * -1}deg)`;
+                }
+
             }
         }
 
@@ -422,12 +471,15 @@ export interface RmbxLayer {
     boundsForce?: true;
     /** If true the layer will be updated in the map. */
     changed?: boolean;
+    heading?: number;
+    lastStop?: string;
     /** The layer object that will be added to the map. */
     layer: mbx.Layer;
     layoutProperties?: {
         /** If true the layer will be made visible in the map. */
         visibility?: "visible" | "none";
     };
+    vehicle?: number;
 }
 
 export interface Props {
