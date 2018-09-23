@@ -29,6 +29,8 @@ const webpack = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const convert = require("koa-connect");
 const history = require("connect-history-api-fallback");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const WriteFilePlugin = require("write-file-webpack-plugin");
 
 
 const _OUTPUT_DIR = "dist";
@@ -121,7 +123,9 @@ const config = {
     plugins: [
         new webpack.BannerPlugin({ banner: fs.readFileSync("./LICENSE", "utf8") }),
         new HtmlWebpackPlugin({ inject: "head", template: "./src/index.template.html", title: "Acadia Island Explorer" }),
-        new MiniCssExtractPlugin({ filename: "[name].css" })
+        new MiniCssExtractPlugin({ filename: "[name].css" }),
+        new CopyWebpackPlugin([{ from: "data" }]),
+        new WriteFilePlugin({ test: /\.json$/, useHashIndex: true })
     ],
     resolve: {
         alias: {

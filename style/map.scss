@@ -32,15 +32,23 @@
     flex: 1;
 }
 
-.map-vehicle-marker-direction {
+.map-vehicle-marker-direction, .map-vehicle-marker-direction-disabled {
     background-image: url("./images/icon-direction.svg");
     height: $icon-size;
     position: relative;
     width: $icon-size;
 }
 
-.map-vehicle-marker {
+.map-vehicle-marker-direction-disabled {
+    background-image: initial;
+}
+
+.map-vehicle-marker, .map-vehicle-marker-disabled {
     background-image: url("./images/icon-bus.svg");
     height: 100%;
     width: 100%;
+}
+
+.map-vehicle-marker-disabled {
+    opacity: 50%;
 }

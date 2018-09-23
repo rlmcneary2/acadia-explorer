@@ -57,6 +57,7 @@ interface InternalProps extends Props {
     onMapChanged: (data) => void;
     route?: any;
     routeChanged: (routeId: number) => void;
+    routeData?: any[];
     routeGeos: RouteGeo[];
     routeStops: RouteStops[];
     routeVehicles: RouteVehicles[];
@@ -96,8 +97,8 @@ export default connect(mapStateToProps, mapDispatchToProps)((props: InternalProp
 function mapStateToProps(state: ReduxState, ownProps: Props): InternalProps {
     const { location, match } = ownProps;
     let route;
-    if (state.api.routes && 0 < state.api.routes.length && match.params.id) {
-        const routeId = parseInt(match.params.id, 10);
+    const routeId = match.params.id ? parseInt(match.params.id, 10) : -1;
+    if (state.api.routes && 0 < state.api.routes.length && -1 < routeId) {
         route = state.api.routes.find(item => item.RouteId === routeId);
     }
 
@@ -119,6 +120,10 @@ function mapStateToProps(state: ReduxState, ownProps: Props): InternalProps {
 
     if (state.tick && state.tick.ticks && state.tick.ticks.length) {
         props.nextTick = state.tick.ticks[0].startTime + state.tick.ticks[0].interval;
+    }
+
+    if (state.app && state.app && -1 < routeId) {
+        props.routeData = state.app.routeData;
     }
 
     return props;
@@ -209,6 +214,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 boundsPadding: ZOOM_TO_FIT_PADDING,
                 onLoaded: () => logg.debug(() => "IslandExplorerRoute render - map loaded."),
                 onMapChanged: data => this.props.onMapChanged(data),
+                onMarkerClicked: properties => alert(JSON.stringify(properties)),
                 options: {
                     attributionControl: false,
                     center,
@@ -467,8 +473,13 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
     private _createMapGLVehiclesLayer(routeVehicles: RouteVehicles, color: string): RmbxLayer {
         // Convert route stops to geojson points.
         const data = routeVehicles.vehicles.map(item => {
-            const { Heading: heading, LastStop: lastStop, Latitude: lat, Longitude: lng, Name: name, VehicleId: vehicle } = item;
+            logg.debug(() => ["IslandExplorerRoute _createMapGLVehiclesLayer - vehicle data. %O", item]);
+            const { CommStatus, Heading: heading, LastStop: lastStop, Latitude: lat, Longitude: lng, Name: name, VehicleId: vehicle } = item;
+
+            // These properties will be returned to the handler when a vehicle
+            // marker is clicked by the user.
             return {
+                communicating: CommStatus === "GOOD",
                 heading,
                 lastStop,
                 lat,

@@ -22,12 +22,14 @@
 
 
 import { State as ApiState } from "./api";
+import { State as AppState } from "./app";
 import { State as TickState } from "./tick";
 import { State as UiState } from "./ui";
 
 
 interface State {
     api?: ApiState;
+    app?: AppState;
     tick?: TickState;
     ui?: UiState;
 }

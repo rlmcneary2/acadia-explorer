@@ -23,12 +23,14 @@
 
 import { combineReducers } from "redux";
 import api from "./api";
+import app from "./app";
 import tick from "./tick";
 import ui from "./ui";
 
 
 export default combineReducers({
     api,
+    app,
     tick,
     ui
 });

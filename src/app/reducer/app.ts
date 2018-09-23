@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Richard L. McNeary II
+ * Copyright (c) 2018 Richard L. McNeary II
  *
  * MIT License
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -21,42 +21,31 @@
  */
 
 
-import { Dispatch } from "redux";
-import { http } from "../network/http";
-import { WorkerResponse } from "../network/httpInterfaces";
-import { actionApi } from "./api";
-import { DataAction } from "./interfaces";
+import { actionApp } from "../action/app";
+import { BaseAction, DataAction } from "../action/interfaces";
 
 
-const actionApp = Object.freeze({
+export default (state: State = { routeData: [] }, action: BaseAction): State => {
+    let nextState: State;
 
-    types: Object.freeze({
-        updateRoutesData: "updateRoutesData"
-    }),
+    switch (action.type) {
 
-    updateRoutesData(data: any): DataAction<any> {
-        return {
-            data,
-            type: actionApp.types.updateRoutesData
-        };
-    },
+        case actionApp.types.updateRoutesData: {
+            const a = action as DataAction<any>;
+            const { data: routeData } = a;
+            nextState = {...state, routeData};
+            break;
+        }
 
-    initialize(): Dispatch<Promise<void>> {
-        return async dispatch => {
-            dispatch(actionApi.getRoutes());
-
-            const response = await getRouteData();
-            const { response: routes = {} }  = response;
-            dispatch(actionApp.updateRoutesData(routes));
-        };
     }
 
-});
+    return nextState || state;
+};
 
 
-export { actionApp };
-
-
-async function getRouteData(): Promise<WorkerResponse> {
-    return http.get("/route.json", null, "json");
+interface State {
+    routeData: any;
 }
+
+
+export { State };

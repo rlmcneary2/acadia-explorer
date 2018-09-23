@@ -24,7 +24,6 @@
 import { FeatureCollection } from "geojson";
 import * as mbx from "mapbox-gl"; // This is the namespace with type definitions, NOT the static object that is set on window; that object as accessible as the "default" property.
 import * as React from "react";
-// import { Props as MarkerProps, ReactMapboxMarker } from "./mapboxMarker";
 
 
 export class ReactMapboxGL extends React.PureComponent<Props, State> {
@@ -44,6 +43,7 @@ export class ReactMapboxGL extends React.PureComponent<Props, State> {
 
     public componentWillUnmount() {
         ReactMapboxGL.log();
+        this.onMarkerClickedBound = null;
     }
 
     public render(): JSX.Element {
@@ -70,6 +70,7 @@ export class ReactMapboxGL extends React.PureComponent<Props, State> {
     private mapEvents: [(state?: any) => void, any][] = [];
     private mapState: "created" | "creating" | null = null;
     private markers = new Map<string, mbx.Marker>();
+    private onMarkerClickedBound = this.onMarkerClicked.bind(this);
 
     private async createMap() {
         if (this.mapState) {
@@ -189,6 +190,55 @@ export class ReactMapboxGL extends React.PureComponent<Props, State> {
         console.log(`ReactMapBoxGL ${name}${message ? " - " : ""}${message ? message : ""}`, ...args);
     }
 
+    private onMarkerClicked(evt: Event) {
+        if (!this.props.onMarkerClicked) {
+            return;
+        }
+
+        const vehicleStr = (evt.currentTarget as HTMLDivElement).getAttribute("data-vehicle");
+        if (!vehicleStr) {
+            return;
+        }
+
+        const vehicle = parseInt(vehicleStr, 10);
+        if (isNaN(vehicle)) {
+            return;
+        }
+
+        let data: MarkerClickedData;
+        for (const pair of this.props.sources) {
+            const [id, source] = pair;
+
+            for (const feature of (source as any).data.features) {
+                const properties = Object.keys(feature.properties);
+
+                for (const property of properties) {
+                    if (property !== "vehicle") {
+                        continue;
+                    }
+
+                    if (vehicle === feature.properties[property]) {
+                        data = {
+                            marker: `${id}-MARKER-${feature.properties.name}`,
+                            properties: { ...feature.properties }
+                        };
+                        break;
+                    }
+                }
+
+                if (data) {
+                    break;
+                }
+            }
+
+            if (data) {
+                break;
+            }
+        }
+
+        this.props.onMarkerClicked(data);
+    }
+
     private async queueMapEvent(callback: (state?: any) => void, state?: any) {
         this.mapEvents.push([callback, state]);
         if ((this.mapEvents as any).active) {
@@ -305,16 +355,18 @@ export class ReactMapboxGL extends React.PureComponent<Props, State> {
                     // element.
                     const divW = document.createElement("div");
                     divW.id = featureId;
+                    divW.setAttribute("data-vehicle", feature.properties.vehicle);
+                    divW.addEventListener("click", this.onMarkerClickedBound);
 
                     // This directional div exists so we can rotate it to match
                     // the vehicle direction.
                     divDirection = document.createElement("div");
-                    divDirection.className = "map-vehicle-marker-direction"; // TODO: a ring without a pointer if angle is not provided.
+                    divDirection.className = feature.properties.communicating ? "map-vehicle-marker-direction" : "map-vehicle-marker-direction-disabled";
 
                     // This holds the bus icon. Must invert the angle of the
                     // containing dive.
                     divMarker = document.createElement("div");
-                    divMarker.className = "map-vehicle-marker";
+                    divMarker.className =  feature.properties.communicating ? "map-vehicle-marker" : "map-vehicle-marker-disabled";
 
                     divDirection.appendChild(divMarker);
                     divW.appendChild(divDirection);
@@ -342,6 +394,12 @@ export class ReactMapboxGL extends React.PureComponent<Props, State> {
         if (markersToRemove.size) {
             for (const item of markersToRemove) {
                 const [id, marker] = item;
+
+                const div = document.getElementById(id);
+                if (div) {
+                    div.removeEventListener("click", this.onMarkerClickedBound);
+                }
+
                 ReactMapboxGL.log (`removing marker '${id}'.`);
                 marker.remove();
                 this.markers.delete(id);
@@ -465,21 +523,25 @@ export interface MapData {
     zoom: number;
 }
 
+interface MarkerClickedData {
+    marker: string;
+    properties: {
+        [ name: string ]: boolean | number | string;
+    };
+}
+
 export interface RmbxLayer {
     /** Should this layer be taken into account when determining the map bounds? */
     bounds?: true;
     boundsForce?: true;
     /** If true the layer will be updated in the map. */
     changed?: boolean;
-    heading?: number;
-    lastStop?: string;
     /** The layer object that will be added to the map. */
     layer: mbx.Layer;
     layoutProperties?: {
         /** If true the layer will be made visible in the map. */
         visibility?: "visible" | "none";
     };
-    vehicle?: number;
 }
 
 export interface Props {
@@ -493,6 +555,7 @@ export interface Props {
     onLoaded?: (props: Props) => void;
     /** Invoked when the user changes the zoom level. */
     onMapChanged?: (data: MapData) => void;
+    onMarkerClicked?: (data: MarkerClickedData) => void;
     /** Options to pass to the Map object when it is created. */
     options?: mbx.MapboxOptions;
     /** These sources will be added to the map or if they already exists their data will be updated. */
