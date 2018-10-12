@@ -47,5 +47,6 @@
             "${commentprefix} ${mit}",
             "${commentend}"
         ]
-    }
+    },
+    "typescript.tsdk": "node_modules\\typescript\\lib"
 }
