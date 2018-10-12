@@ -26,17 +26,21 @@ import { actionUi } from "@action/ui";
 import LinkButton, { Props as LinkButtonProps } from "@controls/linkButton";
 import { TimerPie } from "@controls/timerPie";
 import { RouteGeo, RouteStops, RouteVehicles } from "@reducer/api";
+import { Routes } from "@reducer/app";
 import { State as ReduxState } from "@reducer/interfaces";
 import { MapData } from "@reducer/ui";
+import dateTime from "@util/dateTime";
 import logg from "@util/logg";
 /* tslint:disable-next-line: no-submodule-imports */
 import * as GeoJSON from "geojson/geojson"; // There is a name collision here, this line must exist to import the geojson package (not an @types package).
+import * as momentObj from "moment";
 import * as React from "react";
 import { connect } from "react-redux";
 import * as redux from "redux";
 import { Props as MapProps, ReactMapboxGL, RmbxLayer } from "./MapBox/mapboxgl";
 
 
+const moment = (momentObj as any).default;
 const ROUTE_LINE_WIDTH = 4;
 const START_LATITUDE = 44.3420759;
 const START_LONGITUDE = -68.2654881;
@@ -57,7 +61,8 @@ interface InternalProps extends Props {
     onMapChanged: (data) => void;
     route?: any;
     routeChanged: (routeId: number) => void;
-    routeData?: any[];
+    // routeData?: any[];
+    routeData?: Routes;
     routeGeos: RouteGeo[];
     routeStops: RouteStops[];
     routeVehicles: RouteVehicles[];
@@ -105,14 +110,14 @@ function mapStateToProps(state: ReduxState, ownProps: Props): InternalProps {
     const { routeGeos = [], routeStops = [], routeVehicles = [] } = state.api || {};
 
     // InternalProps - the callback functions are added by mapDispatchToProps.
-    const props: any = {
+    const props: InternalProps = {
         location,
         match,
         route,
         routeGeos,
         routeStops,
         routeVehicles
-    };
+    } as any;
 
     if (state.ui.mapData) {
         props.mapData = state.ui.mapData;
@@ -123,7 +128,7 @@ function mapStateToProps(state: ReduxState, ownProps: Props): InternalProps {
     }
 
     if (state.app && state.app && -1 < routeId) {
-        props.routeData = state.app.routeData;
+        props.routeData = state.app.routes;
     }
 
     return props;
@@ -474,17 +479,67 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         // Convert route stops to geojson points.
         const data = routeVehicles.vehicles.map(item => {
             logg.debug(() => ["IslandExplorerRoute _createMapGLVehiclesLayer - vehicle data. %O", item]);
-            const { CommStatus, Heading: heading, LastStop: lastStop, Latitude: lat, Longitude: lng, Name: name, VehicleId: vehicle } = item;
+            const { CommStatus, DirectionLong: direction, Heading: heading, LastStop: lastStop, Latitude: lat, Longitude: lng, Name: name, RunId: runId, TripId: tripId, VehicleId: vehicle } = item;
+
+            let nextScheduledStop: string;
+            if (this.state.activeRoute && this.props.routeStops && this.props.routeData) {
+                // Find the next scheduled stop.
+                const routeData = this.props.routeData[`${this.state.activeRoute.id}`];
+                const acadiaNow = moment(dateTime.getLocationTime());
+                let currentStopData: { ids: number[]; };
+                for (const stopData of routeData.scheduledStops || []) {
+                    const begin = moment(stopData.dates.begin);
+                    const end = moment(stopData.dates.end);
+                    if (acadiaNow.isBefore(begin) || end.isBefore(acadiaNow)) {
+                        continue;
+                    }
+
+                    const first = moment(stopData.hours.first);
+                    const last = moment(stopData.hours.last);
+                    if (acadiaNow.isBefore(first) || last.isBefore(acadiaNow)) {
+                        continue;
+                    }
+
+                    currentStopData = stopData;
+                    break;
+                }
+
+                // Now have the list of scheduled stops that are currently in effect.
+                if (currentStopData) {
+                    // Get the stops for this route.
+                    const routeStops = this.props.routeStops.find(s => s.id === this.state.activeRoute.id);
+
+                    // TODO: find the next stop that matches an ID in the
+                    // currentStopData. Should at least always match the last
+                    // stop right? 
+                    let nextStopObj: { StopId: number; Name: string; };
+                    if (routeStops) {
+                        let lastStopIndex = routeStops.stops.findIndex(s => s.Name === lastStop) + 1;
+                        for (; lastStopIndex < routeStops.stops.length; lastStopIndex++) {
+                            nextStopObj = routeStops.stops[lastStopIndex];
+                            if (currentStopData.ids.some(s => s === nextStopObj.StopId)) {
+                                break;
+                            }
+                        }
+                    }
+
+                    nextScheduledStop = nextStopObj ? nextStopObj.Name : null;
+                }
+            }
 
             // These properties will be returned to the handler when a vehicle
             // marker is clicked by the user.
             return {
                 communicating: CommStatus === "GOOD",
+                direction,
                 heading,
                 lastStop,
                 lat,
                 lng,
                 name,
+                nextScheduledStop,
+                runId,
+                tripId,
                 vehicle
             };
         });

@@ -21,10 +21,12 @@
  */
 
 
+import route from "./route.listener";
 import storageListener from "./storage";
 import tickListener from "./tick";
 
 export {
+    route,
     storageListener,
     tickListener
 };

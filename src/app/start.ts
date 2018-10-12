@@ -27,7 +27,7 @@ import * as redux from "redux";
 // import { createLogger } from "redux-logger";
 import reduxThunk from "redux-thunk";
 import { actionApp } from "./action/app";
-import { storageListener, tickListener } from "./listener";
+import * as listeners from "./listener";
 import reducers from "./reducer/reducers";
 import Start from "./startView";
 
@@ -39,8 +39,9 @@ export default async () => {
     // }
 
     // Setup React, Redux, React-Router
-    const json = localStorage.getItem("state");
-    const state = json ? JSON.parse(json) : {};
+    // const json = localStorage.getItem("state");
+    // const state = json ? JSON.parse(json) : {};
+
     const middlewareArgs = [reduxThunk];
 
     // Should not be in production.
@@ -62,11 +63,13 @@ export default async () => {
     // middlewareArgs.push(reduxLog);
 
     const reduxMiddleware = redux.applyMiddleware(...middlewareArgs);
-    const store = redux.createStore(reducers, state, reduxMiddleware);
+    // const store = redux.createStore(reducers, state, reduxMiddleware);
+    const store = redux.createStore(reducers, reduxMiddleware);
 
     // Add listeners.
-    store.subscribe(() => storageListener(store));
-    store.subscribe(() => tickListener(store));
+    for (const key of Object.keys(listeners)) {
+        store.subscribe(() => listeners[key](store));
+    }
 
     // Dispatch the initialize action.
     store.dispatch(actionApp.initialize());

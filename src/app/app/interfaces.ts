@@ -21,31 +21,22 @@
  */
 
 
-import logg from "@util/logg";
-import { Store } from "redux";
-import { State } from "../reducer/interfaces";
-
-
-const LOGG_CATEGORY = "strl";
-const TIMEOUT = 2000;
-let timeout: number = null;
-
-
-export default (store: Store<State>) => {
-    if (timeout) {
-        clearTimeout(timeout);
-    }
-
-    timeout = setTimeout(() => {
-        // Do not store tick data, it doesn't need to be restored when the app
-        // is restarted.
-        const { api, app, ui } = store.getState();
-        storeState({ api, app, ui });
-    }, TIMEOUT) as any;
-};
-
-async function storeState(state: State) {
-    logg.debug(() => "storageListener storeState - enter", LOGG_CATEGORY);
-    const json = JSON.stringify(state);
-    localStorage.setItem("state", json);
+export interface Stop {
+    direction: VehicleDirection;
+    /** The stop ID. */
+    id?: number;
+    scheduled: boolean;
+    name: string;
 }
+
+// export interface StopLink extends Stop {
+//     children?: StopLink[];
+//     parent?: StopLink;
+// }
+
+export interface StopSchedule {
+    dates: { begin: string; end: string; };
+    hours: { first: string; last: string; };
+}
+
+export type VehicleDirection = "inbound" | "outbound";

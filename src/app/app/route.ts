@@ -21,31 +21,49 @@
  */
 
 
-import logg from "@util/logg";
-import { Store } from "redux";
-import { State } from "../reducer/interfaces";
+import { Stop, StopSchedule } from "./interfaces";
+import { StopNode } from "./stopNode";
 
 
-const LOGG_CATEGORY = "strl";
-const TIMEOUT = 2000;
-let timeout: number = null;
-
-
-export default (store: Store<State>) => {
-    if (timeout) {
-        clearTimeout(timeout);
-    }
-
-    timeout = setTimeout(() => {
-        // Do not store tick data, it doesn't need to be restored when the app
-        // is restarted.
-        const { api, app, ui } = store.getState();
-        storeState({ api, app, ui });
-    }, TIMEOUT) as any;
+/**
+ * This is a structure of temporary data that is not part of redux state but is
+ * used to build data that will eventually become part of state.
+ */
+const appData: AppData = {
+    routeStopChains: null,
+    routeStops: null,
+    stops: []
 };
 
-async function storeState(state: State) {
-    logg.debug(() => "storageListener storeState - enter", LOGG_CATEGORY);
-    const json = JSON.stringify(state);
-    localStorage.setItem("state", json);
+
+export { appData };
+
+
+interface AppData {
+    /** The key is the route ID. */
+    routeStopChains: { [key: number]: StopChain[]; };
+    /** The key is the route ID. */
+    routeStops: { [key: number]: RouteStops[]; };
+    stops: StopEntry[];
+}
+
+export interface RouteStops extends StopSchedule {
+    stops: Stop[];
+}
+
+/**
+ * Information about a stop that will be used to build up a dynamic list of
+ * stops.
+ */
+export interface StopEntry extends Stop {
+    /** The time when this entry was created (for sorting stops in route order). */
+    created: number;
+    vehicleId: number;
+    routeId: number;
+    runId: number;
+    tripId: number;
+}
+
+export interface StopChain extends StopSchedule {
+    nodes: StopNode[];
 }

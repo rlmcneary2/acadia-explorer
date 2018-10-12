@@ -331,7 +331,8 @@ export class ReactMapboxGL extends React.PureComponent<Props, State> {
                     markersToRemove.delete(featureId);
                 }
 
-                ReactMapboxGL.log(`vehicle id: ${feature.properties.vehicle}, heading: ${feature.properties.heading}, last stop: ${feature.properties.lastStop}.`);
+                // ReactMapboxGL.log(`vehicle id: ${feature.properties.vehicle}, heading: ${feature.properties.heading}, last stop: ${feature.properties.lastStop}, direction: ${feature.properties.direction}.`);
+                ReactMapboxGL.log(`vehicle id: ${feature.properties.vehicle}, trip id: ${feature.properties.tripId}, run id: ${feature.properties.runId}, last stop: ${feature.properties.lastStop}, direction: ${feature.properties.direction}.`);
 
                 let marker = this.markers.has(featureId) ? this.markers.get(featureId) : null;
                 let divDirection: HTMLDivElement;

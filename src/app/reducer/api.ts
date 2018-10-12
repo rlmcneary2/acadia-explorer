@@ -90,9 +90,19 @@ interface RouteGeo {
     geoJson: FeatureCollection;
 }
 
+/** Object returned by GetAllStopsForRoutes. */
 interface RouteStops {
+    /** The route ID. */
     id: number;
-    stops: any[];
+    stops: RouteStopsStop[];
+}
+
+export interface RouteStopsStop {
+    Description: string;
+    Latitude: number;
+    Longitude: number;
+    Name: string;
+    StopId: number;
 }
 
 interface RouteVehicles {

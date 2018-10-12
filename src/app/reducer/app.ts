@@ -22,20 +22,36 @@
 
 
 import { actionApp } from "../action/app";
-import { BaseAction, DataAction } from "../action/interfaces";
+import { BaseAction, DataAction /*, DataActionId*/ } from "../action/interfaces";
+import { StopSchedule /*VehicleDirection*/ } from "../app/interfaces";
 
 
-export default (state: State = { routeData: [] }, action: BaseAction): State => {
+export default (state: State = {}, action: BaseAction): State => {
     let nextState: State;
 
     switch (action.type) {
 
+        // case actionApp.types.updateLastStop: {
+        //     const a = action as DataActionId<string, StateStopData>;
+        //     const { data, id } = a;
+        //     nextState = { ...state };
+        //     nextState.routes[id].lastStopData = [...nextState.routes[id].lastStopData, data];
+        //     break;
+        // }
+
         case actionApp.types.updateRoutesData: {
-            const a = action as DataAction<any>;
-            const { data: routeData } = a;
-            nextState = {...state, routeData};
+            const a = action as DataAction<Routes>;
+            const { data: routes } = a;
+            nextState = {...state, routes};
             break;
         }
+
+        // case actionApp.types.updateStops: {
+        //     const { data, id } = action as DataActionId<string, StateStop[]>;
+        //     nextState = { ...state };
+        //     nextState.routes[id].stops = [...state.routes[id].stops || [], ...data];
+        //     break;
+        // }
 
     }
 
@@ -43,9 +59,21 @@ export default (state: State = { routeData: [] }, action: BaseAction): State => 
 };
 
 
-interface State {
-    routeData: any;
+interface Route { // Some of these interface properties are part of route.json.
+    scheduledStops: ScheduledStop[];
+    // stops?: Stop[]; // Built up from the scheduled stops and stops that are returned as part of the vehicle information.
 }
 
+interface State {
+    routes?: Routes;
+}
 
-export { State };
+interface Routes {
+    [key: string]: Route; // The route ID as a string (e.g. "3").
+}
+
+interface ScheduledStop extends StopSchedule {
+    ids: number[];
+}
+
+export { Route, State, Routes };

@@ -24,22 +24,21 @@
 import { Dispatch } from "redux";
 import { http } from "../network/http";
 import { WorkerResponse } from "../network/httpInterfaces";
+import { Routes /*, StateStop, StateStopData*/ } from "../reducer/app";
 import { actionApi } from "./api";
-import { DataAction } from "./interfaces";
+import { DataAction /*, DataActionId*/ } from "./interfaces";
+
+
+const LOCATION = "acadia";
 
 
 const actionApp = Object.freeze({
 
     types: Object.freeze({
-        updateRoutesData: "updateRoutesData"
+        // updateLastStop: "appUpdateLastStop",
+        updateRoutesData: "appUpdateRoutesData"
+        // updateStops: "appUpdateStops"
     }),
-
-    updateRoutesData(data: any): DataAction<any> {
-        return {
-            data,
-            type: actionApp.types.updateRoutesData
-        };
-    },
 
     initialize(): Dispatch<Promise<void>> {
         return async dispatch => {
@@ -49,7 +48,35 @@ const actionApp = Object.freeze({
             const { response: routes = {} }  = response;
             dispatch(actionApp.updateRoutesData(routes));
         };
+    },
+
+    /**
+     * Add last stop information by route ID.
+     * @param id The route ID.
+     * @param data The data to add to the route's lastStopData array.
+     */
+    // updateLastStop(id: string, data: StateStopData): DataActionId<string, StateStopData> {
+    //     return {
+    //         data,
+    //         id,
+    //         type: actionApp.types.updateStops
+    //     };
+    // },
+
+    updateRoutesData(data: Routes): DataAction<Routes> {
+        return {
+            data,
+            type: actionApp.types.updateRoutesData
+        };
     }
+
+    // updateStops(id: string, data: StateStop[]): DataActionId<string, StateStop[]> {
+    //     return {
+    //         data,
+    //         id,
+    //         type: actionApp.types.updateStops
+    //     };
+    // }
 
 });
 
@@ -58,5 +85,5 @@ export { actionApp };
 
 
 async function getRouteData(): Promise<WorkerResponse> {
-    return http.get("/route.json", null, "json");
+    return http.get(`/${LOCATION}/route.json`, null, "json");
 }
