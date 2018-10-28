@@ -37,18 +37,43 @@ export class StopNode implements Stop {
     public downstream: StopNode = null;
     public readonly id: number;
     public get isFirst(): boolean {
-        return this.upstream === null;
+        return this.scheduled && this.upstream === null && this.direction === "outbound";
     }
     public get isLast(): boolean {
-        return this.downstream === null;
+        return this.scheduled && this.downstream === null && this.direction === "inbound";
     }
     public readonly name: string;
     public get nodeName(): string {
-        return `${this.name}-${this.direction || "?"}`;
+        return StopNode.createNodeName(this.name, this.direction);
     }
     public readonly scheduled: boolean;
     public upstream: StopNode = null;
 
+
+    public static createNodeName(name: string, direction: VehicleDirection): string {
+        return `${name}-${direction || "?"}`;
+    }
+
+    public getUpstreamCount(): number {
+        let count = 0;
+        let node: StopNode = this; // tslint:disable-line
+        while (node && !node.isFirst) {
+            node = node.upstream;
+            count++;
+        }
+
+        return count;
+    }
+
+    public setDownstream(downstream: StopNode = null, replaceUpstream = false): StopNode {
+        this.downstream = downstream || null;
+
+        if (downstream && replaceUpstream) {
+            downstream.upstream = this;
+        }
+
+        return this;
+    }
 
     /**
      * Set this node's upstream property.
@@ -59,12 +84,28 @@ export class StopNode implements Stop {
      * @returns This StopNode for function chaining.
      */
     public setUpstream(upstream: StopNode = null, replaceDownstream = false): StopNode {
-        this.upstream = upstream;
+        this.upstream = upstream || null;
 
         if (upstream && replaceDownstream) {
             upstream.downstream = this;
         }
 
         return this;
+    }
+
+    public stringifiable(): string {
+        const node: any = {};
+        for (const key of Object.keys(this)) {
+            // Replace connections with other nodes with their node names,
+            // otherwise attempts to stringify a node will recurse infinitely.
+            if (key === "downstream" || key === "upstream") {
+                node[key] = this[key] ? this[key].nodeName : null;
+                continue;
+            }
+
+            node[key] = this[key];
+        }
+
+        return node;
     }
 }
