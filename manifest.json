@@ -1,0 +1,15 @@
+{
+    "display": "standalone",
+    "icons": [{
+        "sizes": "192x192",
+        "src": "/style/images/icon-192.png",
+        "type": "image/png"
+    }, {
+        "sizes": "512x512",
+        "src": "/style/images/icon-512.png",
+        "type": "image/png"
+    }],
+    "name": "Island Explorer",
+    "short_name": "Island Explorer",
+    "start_url": "/"
+}
