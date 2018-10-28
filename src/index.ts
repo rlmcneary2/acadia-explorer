@@ -27,6 +27,10 @@ import start from "./app/start";
 
 window.addEventListener("load", () => {
 
+    if (navigator.serviceWorker) {
+        navigator.serviceWorker.register("/sw.js");
+    }
+
     start();
 
 });

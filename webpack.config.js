@@ -31,6 +31,8 @@ const convert = require("koa-connect");
 const history = require("connect-history-api-fallback");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const WriteFilePlugin = require("write-file-webpack-plugin");
+const { GenerateSW } = require("workbox-webpack-plugin");
+
 
 
 const _OUTPUT_DIR = "dist";
@@ -46,6 +48,51 @@ const babelOptions = {
     presets: ["es2015", "es2016", "es2017", "react"],
     retainLines: true,
 };
+
+const serviceWorkerOptions = {
+    importWorkboxFrom: "local",
+    navigateFallback: "/index.html", // this is an SPA so all app URLs can be resolved to this item in the cache
+    runtimeCaching: [{
+        handler: "cacheFirst",
+        options: {
+            cacheName: "tracker",
+            expiration: {
+                maxAgeSeconds: 7 * 24 * 60 * 60 // seconds in a week
+            }
+        },
+        urlPattern: /^https:\/\/islandexplorertracker\.availtec\.com\/InfoPoint\/rest\/(Routes|Stops)\//
+    }, {
+        handler: "cacheFirst",
+        options: {
+            cacheName: "tracker",
+            expiration: {
+                maxAgeSeconds: 7 * 24 * 60 * 60 // seconds in a week
+            }
+        },
+        urlPattern: /^https:\/\/islandexplorertracker\.availtec\.com\/InfoPoint\/Resources\/Traces\//
+    }, {
+        handler: "cacheFirst",
+        options: {
+            cacheName: "mapbox",
+            expiration: {
+                maxAgeSeconds: 7 * 24 * 60 * 60 // seconds in a week
+            }
+        },
+        urlPattern: /^https:\/\/api\.mapbox\.com\//
+    }, {
+        handler: "cacheFirst",
+        options: {
+            cacheName: "mapbox",
+            expiration: {
+                maxAgeSeconds: 7 * 24 * 60 * 60, // seconds in a week
+                maxEntries: 80
+            }
+        },
+        urlPattern: /^https:\/\/[\w]\.tiles\.mapbox\.com\//
+    }],
+    swDest: "sw.js" // name of the output file with the service worker
+};
+
 
 /**
  * @module
@@ -76,7 +123,9 @@ const config = {
             },
             {
                 test: /\.tsx?$/,
-                exclude: /(node_modules|bower_components)/,
+                exclude: [
+                    /(node_modules|bower_components)/
+                ],
                 use: [
                     {
                         loader: "babel-loader",
@@ -123,9 +172,10 @@ const config = {
     plugins: [
         new webpack.BannerPlugin({ banner: fs.readFileSync("./LICENSE", "utf8") }),
         new HtmlWebpackPlugin({ inject: "head", template: "./src/index.template.html", title: "Acadia Island Explorer" }),
-        new MiniCssExtractPlugin({ filename: "[name].css" }),
-        new CopyWebpackPlugin([{ from: "data" }]),
-        new WriteFilePlugin({ test: /\.json$/, useHashIndex: true })
+        new MiniCssExtractPlugin({ filename: "[name].css" }), // create css files from the css.import
+        new CopyWebpackPlugin([{ from: "data" }]), // copy json data files
+        new WriteFilePlugin({ test: /\.json$/, useHashIndex: true }),
+        new GenerateSW(serviceWorkerOptions) // create the service worker
     ],
     resolve: {
         alias: {

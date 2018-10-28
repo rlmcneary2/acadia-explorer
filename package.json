@@ -73,6 +73,7 @@
     "mapbox-gl": "^0.48.0",
     "moment-timezone": "^0.5.21",
     "react-transition-group": "^2.4.0",
-    "redux-logger": "^3.0.6"
+    "redux-logger": "^3.0.6",
+    "workbox-webpack-plugin": "^3.6.3"
   }
 }
