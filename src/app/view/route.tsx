@@ -482,7 +482,12 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             const { CommStatus, DirectionLong: direction, Heading: heading, LastStop: lastStop, Latitude: lat, Longitude: lng, Name: name, RunId: runId, TripId: tripId, VehicleId: vehicle } = item;
 
             let nextScheduledStop: string;
-            if (this.state.activeRoute && this.props.routeStops && this.props.routeData) {
+            if (
+                this.state.activeRoute &&
+                this.props.routeStops &&
+                this.props.routeData &&
+                this.props.routeData[`${this.state.activeRoute.id}`]
+            ) {
                 // Find the next scheduled stop.
                 const routeData = this.props.routeData[`${this.state.activeRoute.id}`];
                 const acadiaNow = moment(dateTime.getLocationTime());

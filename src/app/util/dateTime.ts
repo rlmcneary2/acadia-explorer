@@ -64,5 +64,5 @@ export default {
 
 function getLocationTime(): Moment {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    return moment().tz(timezone).tz(LOCATION_TIME_ZONE);
+    return timezone ? moment().tz(timezone).tz(LOCATION_TIME_ZONE) : moment().tz(LOCATION_TIME_ZONE);
 }

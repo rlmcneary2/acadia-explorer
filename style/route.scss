@@ -37,7 +37,8 @@
 }
 
 .route-tabs {
-/*    flex: 0 0 auto;*/
+    @extend .control-container;
+    padding-top: 0;
 }
 
 .route-content {
