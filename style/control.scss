@@ -86,9 +86,13 @@ button, .button { /* Add ".button" for things that look like buttons (LinkButton
 
 button.control, .control.button { /* Add ".control.button" for things that look like buttons (LinkButton). */
     a {
+        &:active {
+            background: none; // Prevent Android and Chrome from highlighting the link tap with blue.
+        }
         &:focus {
             outline-style: none;
         }
+        -webkit-tap-highlight-color: transparent; // Prevent Android and Chrome from highlighting the link tap with blue.
     }
     align-items: center;
     border: {
