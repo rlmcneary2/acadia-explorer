@@ -93,6 +93,8 @@ button.control, .control.button { /* Add ".control.button" for things that look 
             outline-style: none;
         }
         -webkit-tap-highlight-color: transparent; // Prevent Android and Chrome from highlighting the link tap with blue.
+        display: flex; // Center the contents of the link.
+        height: 100%; // Make the link fill the control.
     }
     align-items: center;
     border: {
