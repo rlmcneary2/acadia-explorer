@@ -34,7 +34,6 @@ interface Props {
     children?: JSX.Element;
     click?: (props: Props, evt: Event) => void;
     content: ControlTextContent | string;
-    isLink?: boolean;
     isPrimary?: boolean;
 }
 
@@ -55,10 +54,6 @@ export default (props: Props): JSX.Element => {
     const classNames = ["control"];
     if (props.hasOwnProperty("isPrimary") && props.isPrimary) {
         classNames.push("btn-primary");
-    }
-
-    if (props.hasOwnProperty("isLink") && props.isLink) {
-        classNames.push("btn-link");
     }
 
     const buttonProps: any = {

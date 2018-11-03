@@ -21,9 +21,6 @@
  */
 
 
-$zindex-dropdown-list: 1000;
-
-
 %button-text {
     color: $color-control-text-dark;
     overflow: hidden;
@@ -51,8 +48,7 @@ $zindex-dropdown-list: 1000;
     }
     a {
         @extend %button-text;
-        display: block;
-        height: 100%;
+        text-align: center;
         text-decoration: none;
     }
     border: {
@@ -68,7 +64,6 @@ $zindex-dropdown-list: 1000;
     span {
         @extend %button-text;
         align-self: center;
-        flex: 1;
         font: {
             size: $text-control;
         }
@@ -83,22 +78,22 @@ $zindex-dropdown-list: 1000;
     padding: $control-padding;
 }
 
-button {
+button, .button { /* Add ".button" for things that look like buttons (LinkButton). */
     background-color: $color-app-background;
     margin-right: $control-margin-h;
     width: $button-width;
 }
 
-button.control {
+button.control, .control.button { /* Add ".control.button" for things that look like buttons (LinkButton). */
     a {
         &:focus {
             outline-style: none;
         }
     }
+    align-items: center;
     border: {
         style: solid;
         width: $button-border-width;
     }
     display: flex;
-    justify-content: center;
 }

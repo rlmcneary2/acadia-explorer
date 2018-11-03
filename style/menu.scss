@@ -21,6 +21,9 @@
  */
 
 
+$zindex-dropdown-list: 1000;
+
+
 .menu-item {
     @extend .control;
     span {
@@ -95,5 +98,6 @@
 }
 
 .dropdown-list.center .menu-item {
+    align-self: center;
     justify-content: center;
 }

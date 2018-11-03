@@ -21,7 +21,7 @@
  */
 
 
-import Button, { Props as ButtonProps } from "@controls/button";
+import { Props as ButtonProps } from "@controls/button";
 import * as React from "react";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
@@ -33,19 +33,24 @@ interface Props extends ButtonProps {
 
 
 export default (props: Props): JSX.Element => {
-    const { to, ...buttonProps } = props;
+    const { click, to, ...buttonProps } = props;
 
     let messageProps = buttonProps.content;
     if (typeof messageProps === "string") {
         messageProps = { id: messageProps };
     }
 
+    const classNames = ["control", "button"];
+    if (props.hasOwnProperty("isPrimary") && props.isPrimary) {
+        classNames.push("btn-primary");
+    }
+
     return (
-        <Button {...buttonProps} isLink={true}>
+        <div className={classNames.join(" ")}>
             <Link to={to}>
                 <FormattedMessage  {...messageProps} />
             </Link>
-        </Button>
+        </div>
     );
 };
 
