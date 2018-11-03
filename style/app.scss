@@ -115,7 +115,7 @@ $application-max-width: 1000px;
 /* START select route menu ***************************************************/
 
 nav.header {
-    height: 32px;
+    height: $control-height;
 }
 
 menu.header {
