@@ -69,16 +69,16 @@ class App extends React.Component<Props> {
         const items: ControlLinkContent[] = routes.map(item => {
             return {
                 text: item.LongName,
-                to: `/route/${item.RouteId}`
+                to: `/route/${item.RouteId}/map`
             };
         });
 
         // Build the current item based on the current URL.
         let selectedItem: ControlTextContent | ControlLinkContent;
-        const matches = /[^\/]+(?=\/$|$)/.exec((this.props as any).location.pathname);
-        // tslint:disable-next-line:prefer-conditional-expression
+        const matches = /^\/route\/(\d+)\/?(?:([\w\-]+))?$/.exec((this.props as any).location.pathname);
+
         if (routes.length && matches && matches.length) {
-            selectedItem = items.find(clc => clc.to === `/route/${matches[0]}`);
+            selectedItem = items.find(clc => clc.to.startsWith(`/route/${matches[1]}`));
         }
 
         const dropdownProps: DropdownProps = {

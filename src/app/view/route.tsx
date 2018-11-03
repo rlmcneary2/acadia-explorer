@@ -275,9 +275,13 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             // otherwise the map will be displayed.
             content = (
                 <div className="route-content">
-                    <ReactMapboxGL {...mapProps} layers={layers} sources={sources} />
+                    <ReactMapboxGL
+                        {...mapProps}
+                        layers={layers}
+                        sources={sources}
+                    />
                     {countdown}
-                    <h1 style={{ display: !isShowMap ? "initial" : "none" }}>Info please!</h1>
+                    <div className="route-info" style={{ display: !isShowMap ? "initial" : "none" }}>Info please!</div>
                 </div>
             );
             // content = (<Redirect to={`/route/${props.match.params.id}/map`} />); // For historical purposes.
