@@ -78,11 +78,7 @@ async function messageHandler(evt: MessageEvent) {
     };
 
     if (ok && !error) {
-        if (request.responseFunction) {
-            workerResponse.response = await res[request.responseFunction]();
-        } else {
-            workerResponse.response = await res.json();
-        }
+        workerResponse.response = request.responseFunction ? await res[request.responseFunction]() : await res.json();
     } else {
         if (!error) {
             workerResponse.error = await res.text();
@@ -96,7 +92,7 @@ async function messageHandler(evt: MessageEvent) {
 
 async function fetchResponse(request: WorkerRequest): Promise<Response> {
     const { method, url } = request;
-    let options;
+    let options: { method?: string; headers?: Headers; };
     if (method) {
         options = options || {};
         options.method = method;

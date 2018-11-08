@@ -32,7 +32,7 @@ interface Props {
      * then content is ignored.
      */
     children?: JSX.Element;
-    click?: (props: Props, evt: Event) => void;
+    click?: (props: Props, evt: React.MouseEvent) => void;
     content: ControlTextContent | string;
     isPrimary?: boolean;
 }
@@ -72,7 +72,7 @@ export default (props: Props): JSX.Element => {
 };
 
 
-function clickHandler(evt) {
+function clickHandler(evt: React.MouseEvent) {
     if (this.click) {
         this.click(this, evt);
     }

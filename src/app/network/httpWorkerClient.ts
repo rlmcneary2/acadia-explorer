@@ -39,7 +39,7 @@ const http = {
 
             const h: WorkerHeader[] = [];
             if (headers) {
-                headers.forEach((value, name) => {
+                headers.forEach((value: any, name: any) => {
                     h.push({ name, value });
                 });
             }
@@ -75,6 +75,7 @@ worker.addEventListener("message", evt => {
         const resolve = requests.get(res.uid);
         resolve(res);
     } else {
+        // tslint:disable-next-line:no-console
         console.error(`No resolve function for uid ${res.uid}`);
     }
 });

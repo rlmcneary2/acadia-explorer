@@ -21,6 +21,7 @@
  */
 
 
+import { State } from "@reducer/interfaces";
 import { Dispatch } from "redux";
 import { http } from "../network/http";
 import { WorkerResponse } from "../network/httpInterfaces";
@@ -41,7 +42,7 @@ const actionApp = Object.freeze({
     }),
 
     initialize(): Dispatch<Promise<void>> {
-        return async dispatch => {
+        return async (dispatch: Dispatch<State>) => {
             dispatch(actionApi.getRoutes());
 
             const response = await getRouteData();

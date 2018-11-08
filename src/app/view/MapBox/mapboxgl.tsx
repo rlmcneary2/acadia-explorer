@@ -95,15 +95,15 @@ export class ReactMapboxGL extends React.PureComponent<Props, State> {
         // requested. Handle these events asynchronously using queueMapEvent()
         // to allow the render to complete.
         map
-            .on("moveend", data => {
+            .on("moveend", (data: any) => {
                 ReactMapboxGL.log("on moveend.");
                 const { center, zoom }: {center: mbx.LngLat; zoom: number; } = data.target.transform;
                 this.queueMapEvent(s => this.raiseOnMapChanged(s), { center, zoom });
             })
-            .on("movestart", data => {
+            .on("movestart", (data: any) => {
                 ReactMapboxGL.log("on movestart.");
             })
-            .on("zoomend", data => {
+            .on("zoomend", (data: any) => {
                 ReactMapboxGL.log("on zoomend.");
                 const { center, zoom }: {center: mbx.LngLat; zoom: number; } = data.target.transform;
                 this.queueMapEvent(s => this.raiseOnMapChanged(s), { center, zoom });
@@ -160,7 +160,7 @@ export class ReactMapboxGL extends React.PureComponent<Props, State> {
         return angle;
     }
 
-    private invokePropsFunction(name: string, ...args) {
+    private invokePropsFunction(name: string, ...args: any[]) {
         try {
             if (!this.props[name]) {
                 return;
@@ -172,7 +172,7 @@ export class ReactMapboxGL extends React.PureComponent<Props, State> {
         }
     }
 
-    private static log(message = null, ...args): void {
+    private static log(message: string = null, ...args: any[]): void {
         const line = new Error().stack.split("\n").find((item, i, arr) => {
             return (0 <= i - 1) && -1 < arr[i - 1].indexOf("Function.log");
         }) || "";
@@ -300,7 +300,7 @@ export class ReactMapboxGL extends React.PureComponent<Props, State> {
         }, initialBounds);
     }
 
-    private updateMarkers() {
+    private updateMarkers(): void {
         if (this.mapState !== "created") {
             return null;
         }

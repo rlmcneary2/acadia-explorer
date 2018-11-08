@@ -58,7 +58,7 @@ interface InternalProps extends Props {
     componentWillUnmount: (props: InternalProps) => void;
     mapData: MapData;
     nextTick?: number;
-    onMapChanged: (data) => void;
+    onMapChanged: (data: MapData) => void;
     route?: any;
     routeChanged: (routeId: number) => void;
     // routeData?: any[];
@@ -142,7 +142,7 @@ function mapDispatchToProps(dispatch: redux.Dispatch<any>): InternalProps {
             logg.debug(() => "TODO: remove bus locations for ACTION_ADD_BUSES_REQUEST.");
         },
 
-        onMapChanged(data) {
+        onMapChanged(data: MapData) {
             dispatch(actionUi.setMapData(data));
         },
 
@@ -218,7 +218,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 accessToken: "pk.eyJ1IjoicmxtY25lYXJ5MiIsImEiOiJjajgyZjJuMDAyajJrMndzNmJqZDFucTIzIn0.BYE_k7mYhhVCdLckWeTg0g",
                 boundsPadding: ZOOM_TO_FIT_PADDING,
                 onLoaded: () => logg.debug(() => "IslandExplorerRoute render - map loaded."),
-                onMapChanged: data => this.props.onMapChanged(data),
+                onMapChanged: data => this.props.onMapChanged(data as any),
                 onMarkerClicked: properties => alert(JSON.stringify(properties)),
                 options: {
                     attributionControl: false,

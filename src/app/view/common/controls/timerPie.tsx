@@ -27,7 +27,7 @@ import * as React from "react";
 
 export class TimerPie extends React.PureComponent<Props, State> {
 
-    constructor(props, context) {
+    constructor(props: Props, context: any) {
         super(props, context);
         this.state = {};
     }

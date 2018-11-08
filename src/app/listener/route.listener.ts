@@ -190,7 +190,7 @@ function updateRouteLastStopData(routeId: number, route: Route, state: State, di
         return;
     }
 
-    // Are there vehicle for this route? If not exit.
+    // Are there vehicles for this route? If not exit.
     const vehicles = getRouteVehicles(routeId, routeVehicles);
     if (!vehicles || !vehicles.length) {
         return;

@@ -27,7 +27,8 @@ import * as redux from "redux";
 // import { createLogger } from "redux-logger";
 import reduxThunk from "redux-thunk";
 import { actionApp } from "./action/app";
-import * as listeners from "./listener";
+import { modules } from "./listener";
+import { State } from "./reducer/interfaces";
 import reducers from "./reducer/reducers";
 import Start from "./startView";
 
@@ -64,11 +65,11 @@ export default async () => {
 
     const reduxMiddleware = redux.applyMiddleware(...middlewareArgs);
     // const store = redux.createStore(reducers, state, reduxMiddleware);
-    const store = redux.createStore(reducers, reduxMiddleware);
+    const store = redux.createStore<State>(reducers, reduxMiddleware);
 
     // Add listeners.
-    for (const key of Object.keys(listeners)) {
-        store.subscribe(() => listeners[key](store));
+    for (const key of Object.keys(modules)) {
+        store.subscribe(() => modules[key](store));
     }
 
     // Dispatch the initialize action.

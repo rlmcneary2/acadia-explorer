@@ -75,7 +75,7 @@ export class DropdownList extends React.Component<Props, State> {
     }
 
 
-    private buttonClickBound: (props: ButtonProps, evt: Event) => void;
+    private buttonClickBound: (props: ButtonProps, evt: React.MouseEvent) => void;
     private get className(): string {
         const { align, display } = this.props;
         let name = "dropdown-list";

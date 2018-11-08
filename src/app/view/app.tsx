@@ -58,8 +58,8 @@ class App extends React.Component<Props> {
                         </li>
                     </menu>
                 </nav>
-                <Route component={Welcome} path="/welcome" />
                 <Route component={IslandExplorerRoute} path="/route/:id" />
+                <Route component={Welcome} path="/welcome" />
             </div>
         );
     }

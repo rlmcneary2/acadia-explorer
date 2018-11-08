@@ -26,7 +26,7 @@ import { Stop, VehicleDirection } from "./interfaces";
 
 export class StopNode implements Stop {
 
-    constructor(name: string, scheduled = false, id = null, direction: VehicleDirection = null) {
+    constructor(name: string, scheduled = false, id: number = null, direction: VehicleDirection = null) {
         this.name = name;
         this.scheduled = scheduled;
         this.id = id;

@@ -31,6 +31,7 @@ export default {
             return;
         }
 
+        // tslint:disable:no-console
         logMessage(
             console.log,
             "[D]",
@@ -38,6 +39,7 @@ export default {
             callback(),
             category
         );
+        // tslint:enable:no-console
     },
 
     /**
@@ -51,7 +53,7 @@ export default {
         }
 
         logMessage(
-            console.error,
+            console.error, // tslint:disable-line:no-console
             "[E]",
             null,
             callback(),
@@ -68,7 +70,7 @@ export default {
         }
 
         logMessage(
-            console.log,
+            console.log, // tslint:disable-line:no-console
             "[I]",
             null,
             callback(),
@@ -85,7 +87,7 @@ export default {
         }
 
         logMessage(
-            console.warn,
+            console.warn, // tslint:disable-line:no-console
             "[W]",
             null,
             callback(),
@@ -114,7 +116,7 @@ function isLoggingEnabled(): boolean {
     return query.has("logg");
 }
 
-function logMessage(logFunc: (...args) => void, prefix: string, format: string, message: CreateErrorMessageResult, category: string) {
+function logMessage(logFunc: (...args: any[]) => void, prefix: string, format: string, message: CreateErrorMessageResult, category: string) {
     let args = [];
     const cat = createCategory(category);
     if (typeof message === "string") {
@@ -128,7 +130,7 @@ function logMessage(logFunc: (...args) => void, prefix: string, format: string, 
 
     args.splice(1, 0, format || "");
 
-    (logFunc || console.log)(...args);
+    (logFunc || console.log)(...args); // tslint:disable-line:no-console
 }
 
 function createCategory(category: string): string {

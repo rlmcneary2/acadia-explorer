@@ -21,9 +21,7 @@
  */
 
 
-interface RequestSignature {
-    (url: string, headers?: Headers, responseType?: string): Promise<WorkerResponse>;
-}
+type RequestSignature = (url: string, headers?: Headers, responseType?: string) => Promise<WorkerResponse>;
 
 interface WorkerHeader {
     name: string;

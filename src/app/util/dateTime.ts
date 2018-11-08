@@ -27,7 +27,7 @@ import { StopSchedule } from "../app/interfaces";
 
 
 const LOCATION_TIME_ZONE = "America/New_York";
-const moment = momentObj.default;
+const moment = (momentObj as any).default;
 
 
 export default {

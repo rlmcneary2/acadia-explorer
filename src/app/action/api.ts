@@ -29,6 +29,8 @@ import { Dispatch } from "redux";
 import apiData from "../api/data";
 import { http } from "../network/http";
 import { WorkerResponse } from "../network/httpInterfaces";
+import { State } from "../reducer/interfaces";
+import logg from "../util/logg";
 import { DataAction, DataActionId } from "./interfaces";
 
 
@@ -55,7 +57,7 @@ const actionApi = Object.freeze({
     },
 
     getRoutes(): Dispatch<Promise<void>> {
-        return async dispatch => {
+        return async (dispatch: Dispatch<State>) => {
             const res = await allRoutes();
             const { response, ok } = res;
             if (!ok) {
@@ -70,9 +72,9 @@ const actionApi = Object.freeze({
     },
 
     getVehicles(routeIds: number[], tickStartTime: number = null): Dispatch<Promise<void>> {
-        return async dispatch => {
+        return async (dispatch: Dispatch<State>) => {
             // const res = await http.get(`${apiData.domain}/InfoPoint/rest/Vehicles/GetAllVehiclesForRoutes?routeIDs=${routeIds.join(",")}`);
-            console.log("Getting vehicles from the dev server.");
+            logg.warn(() => "Getting vehicles from the dev server.");
             const res = await http.get(`http://localhost/InfoPoint/rest/Vehicles/GetAllVehiclesForRoutes?routeIDs=${routeIds.join(",")}`);
 
             if (res.response) {
@@ -118,7 +120,7 @@ function createUpdateRoutesAction(data: any): DataAction<any> {
  * @param id The route ID.
  * @param data Response stop information.
  */
-function createUpdateStopsAction(id: number, data): DataActionId<number, any> {
+function createUpdateStopsAction(id: number, data: any): DataActionId<number, any> {
     return {
         data,
         id,
