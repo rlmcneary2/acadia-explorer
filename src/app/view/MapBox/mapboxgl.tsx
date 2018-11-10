@@ -483,7 +483,7 @@ export class ReactMapboxGL extends React.PureComponent<Props, State> {
     private updateMapPosition(map: mbx.Map, layers: Map<string, RmbxLayer>) {
         const boundaryLayer = Array.from(layers.values()).find(item => item.bounds);
         const boundaryLayerChanged = boundaryLayer && boundaryLayer.layer.id !== this.fitBoundsCurrentLayerId;
-        const resetLayerBounds = (this.fitBoundsCurrentLayerId && boundaryLayerChanged) || boundaryLayer.boundsForce;
+        const resetLayerBounds = (this.fitBoundsCurrentLayerId && boundaryLayerChanged) || (boundaryLayer && boundaryLayer.boundsForce);
         if (resetLayerBounds) {
             const source = boundaryLayer.layer.source as mbx.GeoJSONSourceRaw;
             if (source) {

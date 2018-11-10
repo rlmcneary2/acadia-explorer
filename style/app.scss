@@ -131,7 +131,7 @@ menu.header {
         max-width: 400px;
         width: 100%;
     }
-    div {
+    & > div {
         display: flex;
         justify-content: center;
     }

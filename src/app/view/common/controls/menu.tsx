@@ -81,19 +81,13 @@ class Menu extends React.PureComponent<Props, JSX.Element> {
                 content = (<Link to={item.to}>{content}</Link>);
             }
 
-            // let clickHandler = null;
-            // if (this.props.select) {
-            //     clickHandler = (evt: React.MouseEvent) => {
-            //         logg.debug(() => `createListItems - clicked: ${item.text}(${(item.text as any).id ? (item.text as any).id : item.text}).`, "menu");
-            //         this.props.select(item, evt);
-            //     };
-            // }
-
-            const onClick = this.props.select ? this.createListItemClickHandler(item) : null;
-
-            // logg.debug(() => `createListItems - created: ${item.text}(${key}).`, "menu");
-
-            // return (<li className="menu-item" key={key} onClick={clickHandler} role="menuitem">{content}</li>);
+            let onClick = null;
+            if (this.props.select) {
+                onClick = (evt: React.MouseEvent) => {
+                    logg.debug(() => `createListItems - clicked: ${item.text}(${(item.text as any).id ? (item.text as any).id : item.text}).`, "menu");
+                    this.props.select(item, evt);
+                };
+            }
 
             const liProps = {
                 className: "menu-item",
@@ -105,15 +99,6 @@ class Menu extends React.PureComponent<Props, JSX.Element> {
                 <li key={key} {...liProps}>{content}</li>
             );
         });
-    }
-
-    private createListItemClickHandler(item: ControlTextContent | ControlLinkContent): (evt: React.MouseEvent) => void {
-        const nextItem = { ...item };
-        logg.debug(() => `createListItemClickHandler - creating click handler for: ${(nextItem as any).text}.`, "menu");
-        return (evt: React.MouseEvent) => {
-            logg.debug(() => ["createListItemClickHandler - clicked: %O", nextItem], "menu");
-            this.props.select(nextItem, evt);
-        };
     }
 
 }
