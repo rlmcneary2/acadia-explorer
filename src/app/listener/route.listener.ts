@@ -198,7 +198,7 @@ function updateRouteLastStopData(routeId: number, route: Route, state: State, di
 
     logg.debug(() => `listener/route updateRouteLastStopData - routeId: ${routeId}`);
 
-    const stopChain = util.getCurrentStops<StopChain>(appData.routeStopChains[routeId]);
+    const stopChain = util.getCurrentStops<StopChain>(appData.routeStopChains[routeId], true);
     logg.debug(() => `listener/route updateRouteLastStopData - chain:\r\n${JSON.stringify(stopChain.nodes.map(item => item.stringifiable()))}`);
 
     let changed = false;

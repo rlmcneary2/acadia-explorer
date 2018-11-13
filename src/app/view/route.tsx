@@ -35,6 +35,7 @@ import logg from "@util/logg";
 import * as GeoJSON from "geojson/geojson"; // There is a name collision here, this line must exist to import the geojson package (not an @types package).
 import * as momentObj from "moment";
 import * as React from "react";
+import { FormattedMessage, FormattedDate } from "react-intl";
 import { connect } from "react-redux";
 import * as redux from "redux";
 import { Props as MapProps, ReactMapboxGL, RmbxLayer } from "./MapBox/mapboxgl";
@@ -61,7 +62,7 @@ interface InternalProps extends Props {
     onMapChanged: (data: MapData) => void;
     route?: any;
     routeChanged: (routeId: number) => void;
-    // routeData?: any[];
+    /** This is supplemental data provided via a JSON file found in the "data" directory. */
     routeData?: Routes;
     routeGeos: RouteGeo[];
     routeStops: RouteStops[];
@@ -268,6 +269,8 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 countdown = (<TimerPie countDown={true} expiresMs={this.state.nextTick} spanMs={15 * 1000} refreshMs={1000} />);
             }
 
+            const vehicleStatus = this.vehicleStatus(activeRouteId);
+
             // It would be nice to use a react router Switch or Redirect here but we
             // need to keep the map component around and not replace it every time
             // the path changes to a new route. For that reason the URL will be
@@ -280,6 +283,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                         layers={layers}
                         sources={sources}
                     />
+                    {vehicleStatus}
                     {countdown}
                     <div className="route-info" style={{ display: !isShowMap ? "initial" : "none" }}>Info please!</div>
                 </div>
@@ -602,6 +606,46 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
     private _vehiclesLayerId(id: number | string, isLabelLayer = false): string {
         return `${id}_VEHICLES${isLabelLayer ? "_LABELS" : ""}`;
+    }
+
+    private vehicleStatus(routeId: number): JSX.Element {
+        const { routeVehicles: routesVehicles = [] } = this.props;
+        const routeVehicles: RouteVehicles = routesVehicles.find(item => item.id === routeId) || { id: routeId , vehicles: [] };
+        const count = routeVehicles.vehicles.length;
+
+        if (count) {
+            return null;
+        }
+
+        // Is the schedule for this route finished? routeData is the
+        // supplemental data provided in a JSON file.
+        const { routeData = {} } = this.props;
+        const route = routeData[routeId];
+
+        let status: JSX.Element = null;
+        if (route) {
+            const stops = dateTime.getCurrentStops(route ? route.scheduledStops : []);
+            if (stops) {
+                // Vehicles are scheduled for this time but there are none for some reason...
+                status = (<FormattedMessage id="ROUTE-NO_VEHICLES" />);
+            } else {
+                // No vehicles are scheduled for this route at this time.
+                const resumes = dateTime.serviceResumes(route.scheduledStops);
+                const year = moment(resumes.schedule.dates.begin).add(1, "year").year();
+                status =
+                    resumes.isNextYear ?
+                        (<FormattedMessage id="ROUTE-RESUMES_NEXT_YEAR" values={{ year }} />) :
+                        (<React.Fragment><FormattedMessage id="ROUTE-RESUMES_ON" /><FormattedDate value={resumes.date.toDate()} /></React.Fragment>);
+            }
+        } else {
+            status = (<FormattedMessage id="ROUTE-NO_VEHICLES" />);
+        }
+
+        if (status) {
+            status = (<div className="vehicle-status">{status}</div>);
+        }
+
+        return status;
     }
 
 }

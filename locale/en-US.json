@@ -1,5 +1,7 @@
 {
     "INFO": "Information",
     "MAP": "Map",
-    "ROUTE-NOT_SELECTED": "Select a route"
+    "ROUTE-NO_VEHICLES": "No buses are available on this route.",
+    "ROUTE-NOT_SELECTED": "Select a route",
+    "ROUTE-RESUMES_NEXT_YEAR": "The Island Explorer resumes service in {year}."
 }

@@ -22,6 +22,7 @@
 
 
 %button-text {
+    @include user-select;
     color: $color-control-text-dark;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -67,7 +68,6 @@
         font: {
             size: $text-control;
         }
-        @include user-select;
     }
 }
 

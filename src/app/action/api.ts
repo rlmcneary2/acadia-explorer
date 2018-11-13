@@ -73,9 +73,9 @@ const actionApi = Object.freeze({
 
     getVehicles(routeIds: number[], tickStartTime: number = null): Dispatch<Promise<void>> {
         return async (dispatch: Dispatch<State>) => {
-            // const res = await http.get(`${apiData.domain}/InfoPoint/rest/Vehicles/GetAllVehiclesForRoutes?routeIDs=${routeIds.join(",")}`);
-            logg.warn(() => "Getting vehicles from the dev server.");
-            const res = await http.get(`http://localhost/InfoPoint/rest/Vehicles/GetAllVehiclesForRoutes?routeIDs=${routeIds.join(",")}`);
+            const res = await http.get(`${apiData.domain}/InfoPoint/rest/Vehicles/GetAllVehiclesForRoutes?routeIDs=${routeIds.join(",")}`);
+            // logg.warn(() => "Getting vehicles from the dev server.");
+            // const res = await http.get(`http://localhost/InfoPoint/rest/Vehicles/GetAllVehiclesForRoutes?routeIDs=${routeIds.join(",")}`);
 
             if (res.response) {
                 const data = new Map<number, object[]>();

@@ -22,11 +22,13 @@
 
 
 $control-height: 37px;
+$control-height-2: $control-height * 1.2;
+$control-height-half: $control-height / 2;
 $control-border-radius-v: $control-height / 2;
 $control-border-radius-h: $control-height / 2;
-$control-height-half: $control-height / 2;
 $control-margin-h: $control-height / 10;
 $control-padding: 3px;
+$control-padding-large: $control-padding * 4;
 
 $button-border-width: 1.5px;
 $button-width: $control-height * 3.5;
