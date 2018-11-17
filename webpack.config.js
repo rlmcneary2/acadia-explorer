@@ -32,6 +32,7 @@ const history = require("connect-history-api-fallback");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const WriteFilePlugin = require("write-file-webpack-plugin");
 const { GenerateSW } = require("workbox-webpack-plugin");
+const babelOptions = require("./babel.config");
 
 
 
@@ -39,15 +40,6 @@ const _OUTPUT_DIR = "dist";
 const _SOURCE_DIR = "src";
 const _STYLE_DIR = "style";
 
-
-const babelOptions = {
-    plugins: [
-        "syntax-dynamic-import",
-        "transform-runtime", // Requires two packages: babel-plugin-transform-runtime (in dev) and babel-runtime (in deps).
-    ],
-    presets: ["es2015", "es2016", "es2017", "react"],
-    retainLines: true,
-};
 
 const serviceWorkerOptions = {
     importWorkboxFrom: "local",
@@ -128,12 +120,9 @@ const config = {
                 ],
                 use: [
                     {
-                        loader: "babel-loader",
-                        options: babelOptions
-                    },
-                    {
                         loader: "awesome-typescript-loader",
                         options: {
+                            babelCore: "@babel/core",
                             useBabel: true,
                             useCache: true,
                             babelOptions
@@ -148,16 +137,6 @@ const config = {
                 use: [
                     {
                         loader: "source-map-loader"
-                    }
-                ]
-            },
-            {
-                test: /\.jsx?$/,
-                exclude: /(node_modules|bower_components)/,
-                use: [
-                    {
-                        loader: "babel-loader",
-                        options: babelOptions
                     }
                 ]
             }
