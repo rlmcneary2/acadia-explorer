@@ -39,6 +39,13 @@
     width: $modal-width;
 }
 
+%raised-element {
+    border: {
+        radius: #{$control-rounded-border-radius-h}/#{$control-rounded-border-radius-v};
+    }
+    box-shadow: 0 4px 10px 2px rgba(0, 0, 0, 0.5);
+}
+
 .control {
     &:focus {
         border-color: $color-focus;

@@ -37,7 +37,17 @@
 }
 
 .route-content {
-    & > .vehicle-status {
+    & > :nth-child(1n+0) {
+        position: absolute;
+    }
+    & > :first-child {
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+    }
+    .vehicle-status {
+        @extend %raised-element;
         span {
             @extend %button-text;
             align-self: center;
@@ -50,10 +60,6 @@
         }
         align-items: center;
         background-color: rgba($color-app-background, 0.85);
-        border: {
-            radius: #{$control-rounded-border-radius-h}/#{$control-rounded-border-radius-v};
-        }
-        box-shadow: 0 4px 10px 2px rgba(0, 0, 0, 0.5);
         display: flex;
         height: $control-height-2;
         left: $control-padding-large;
@@ -63,17 +69,6 @@
     flex: auto;
     height: 100%;
     position: relative;
-}
-
-.route-content > :nth-child(1n+0) {
-    position: absolute;
-}
-
-.route-content > :first-child {
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: 0;
 }
 
 .route-info {

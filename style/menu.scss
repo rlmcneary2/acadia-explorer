@@ -80,6 +80,7 @@ $zindex-dropdown-list: 1000;
             .menu-padding {
                 .menu {
                     @extend %modal-element;
+                    @extend %raised-element;
                 }
                 align-items: center;
                 display: flex;
