@@ -78,6 +78,10 @@
     padding: $control-padding;
 }
 
+.control-container .button:last-child {
+    margin-right: 0;
+}
+
 button, .button { /* Add ".button" for things that look like buttons (LinkButton). */
     background-color: $color-app-background;
     margin-right: $control-margin-h;

@@ -36,17 +36,11 @@
     width: $control-height-half;
 }
 
-.route-tabs {
-    @extend .control-container;
-    padding-top: 0;
-}
-
 .route-content {
     & > .vehicle-status {
         span {
             @extend %button-text;
             align-self: center;
-            color: $color-control-text-light;
             font: {
                 size: $text-headline;
             }
@@ -55,8 +49,11 @@
             white-space: initial;
         }
         align-items: center;
-        background-color: rgba($color-secondary-1-3, 0.9);
-        box-shadow: 0 6px 10px 3px rgba(0, 0, 0, 0.7);
+        background-color: rgba($color-app-background, 0.85);
+        border: {
+            radius: #{$control-rounded-border-radius-h}/#{$control-rounded-border-radius-v};
+        }
+        box-shadow: 0 4px 10px 2px rgba(0, 0, 0, 0.5);
         display: flex;
         height: $control-height-2;
         left: $control-padding-large;

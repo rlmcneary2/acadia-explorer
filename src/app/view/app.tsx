@@ -23,9 +23,11 @@
 
 import { DropdownList, Props as DropdownProps } from "@controls/dropdownList";
 import { ControlLinkContent, ControlTextContent } from "@controls/interfaces";
+import LinkButton, { Props as LinkButtonProps } from "@controls/linkButton";
 import * as React from "react";
 import { connect } from "react-redux";
-import { Route } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
+import { isNumber } from "util";
 import { State } from "../reducer/interfaces";
 import IslandExplorerRoute from "./route";
 import Welcome from "./welcome";
@@ -48,14 +50,57 @@ class App extends React.Component<Props> {
 
     public state: ComponentState;
 
+    private get routeId(): number | null {
+        const matches = /^\/route\/(\d+)\/?(?:([\w\-]+))?$/.exec((this.props as any).location.pathname);
+        if (!matches || matches.length < 2) {
+            return null;
+        }
+
+        const [, id] = matches;
+        const routeId = parseInt(id, 10);
+        if (!isNumber(routeId)) {
+            return null;
+        }
+
+        return routeId;
+    }
+
     public render() {
+        const routeId = this.routeId;
+
+        // If the path to a route is corrupted redirect back to the main page.
+        if (!this.validRoute(routeId)) {
+            return (<Redirect to="/" />);
+        }
+
+        // Only show the toggle button if a route has been chosen. routeId will
+        // be null - but valid - if the current path is to the root ("/"). So if
+        // routeId is null the user has not yet chosen a route.
+        let toggle: JSX.Element = null;
+        if (routeId !== null) {
+            const isShowMap = !(this.props as any).location.pathname.endsWith("info");
+            const linkButtonProps: LinkButtonProps = {
+                content: {
+                    id: !isShowMap ? "MAP" : "INFO"
+                },
+                to: !isShowMap ? `/route/${routeId}/map` : `/route/${routeId}/info`
+            };
+
+            toggle = (
+                <li className="menu-item info-toggle">
+                    <LinkButton {...linkButtonProps} />
+                </li>
+            );
+        }
+
         return (
             <div className="application">
                 <nav className="control-container header">
                     <menu className="header">
-                        <li>
+                        <li className="menu-item routes">
                             {this.createRoutesMenu()}
                         </li>
+                        {toggle}
                     </menu>
                 </nav>
                 <Route component={IslandExplorerRoute} path="/route/:id" />
@@ -75,10 +120,11 @@ class App extends React.Component<Props> {
 
         // Build the current item based on the current URL.
         let selectedItem: ControlTextContent | ControlLinkContent;
-        const matches = /^\/route\/(\d+)\/?(?:([\w\-]+))?$/.exec((this.props as any).location.pathname);
 
-        if (routes.length && matches && matches.length) {
-            selectedItem = items.find(clc => clc.to.startsWith(`/route/${matches[1]}`));
+        const routeId = this.routeId;
+
+        if (routes.length && routeId !== null) {
+            selectedItem = items.find(clc => clc.to.startsWith(`/route/${routeId}`));
         }
 
         const dropdownProps: DropdownProps = {
@@ -91,6 +137,29 @@ class App extends React.Component<Props> {
         return (
             <DropdownList {...dropdownProps} />
         );
+    }
+
+    private validRoute(id: number): boolean {
+        if (id === null) {
+            // id will be null when navigating to the root path; in this case a
+            // null id is valid.
+            if ((this.props as any).location.pathname === "/") {
+                return true;
+            }
+
+            return false;
+        }
+
+        if (id < 1) {
+            return false;
+        }
+
+        const { routes } = this.props;
+        if (routes && 0 < routes.length && !routes.some(item => item.RouteId === id)) {
+            return false;
+        }
+
+        return true;
     }
 }
 

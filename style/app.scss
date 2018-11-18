@@ -123,6 +123,11 @@ menu.header {
 }
 
 menu.header {
+    .menu-item {
+        &.routes {
+            flex: 1;
+        }
+    }
     button {
         span {
             color: $color-control-text-light
@@ -135,6 +140,10 @@ menu.header {
         display: flex;
         justify-content: center;
     }
+    & > li {
+        margin-right: $control-margin-v;
+    }
+    display: flex;
 }
 
 /* END select route menu *****************************************************/

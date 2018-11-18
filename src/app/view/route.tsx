@@ -23,7 +23,6 @@
 
 import { actionApi } from "@action/api";
 import { actionUi } from "@action/ui";
-import LinkButton, { Props as LinkButtonProps } from "@controls/linkButton";
 import { TimerPie } from "@controls/timerPie";
 import { RouteGeo, RouteStops, RouteVehicles } from "@reducer/api";
 import { Routes } from "@reducer/app";
@@ -35,7 +34,7 @@ import logg from "@util/logg";
 import * as GeoJSON from "geojson/geojson"; // There is a name collision here, this line must exist to import the geojson package (not an @types package).
 import * as momentObj from "moment";
 import * as React from "react";
-import { FormattedMessage, FormattedDate } from "react-intl";
+import { FormattedDate, FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import * as redux from "redux";
 import { Props as MapProps, ReactMapboxGL, RmbxLayer } from "./MapBox/mapboxgl";
@@ -288,23 +287,12 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                     <div className="route-info" style={{ display: !isShowMap ? "initial" : "none" }}>Info please!</div>
                 </div>
             );
-            // content = (<Redirect to={`/route/${props.match.params.id}/map`} />); // For historical purposes.
         } else {
             content = "WORKING";
         }
 
-        const linkButtonProps: LinkButtonProps = {
-            content: {
-                id: !isShowMap ? "MAP" : "INFO"
-            },
-            to: !isShowMap ? `/route/${this.props.match.params.id}/map` : `/route/${this.props.match.params.id}/info`
-        };
-
         return (
             <div className="content">
-                <nav className="route-tabs">
-                    <LinkButton {...linkButtonProps} />
-                </nav>
                 {content}
             </div>
         );
