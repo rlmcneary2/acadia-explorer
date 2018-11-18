@@ -91,6 +91,7 @@ interface State {
         shortName: string;
     };
     nextTick?: number;
+    routeChanged: boolean;
 }
 
 
@@ -163,18 +164,27 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
     constructor(props: InternalProps) {
         super(props);
-        this.state = {};
+        this.state = { routeChanged: false };
     }
 
 
     public state: State;
 
+
+    public componentDidMount() {
+        this.onMapLoadedBound = this.onMapLoaded.bind(this);
+    }
+
     public componentWillUnmount() {
+        if (this.onMapLoadedBound !== null) {
+            this.onMapLoadedBound = null;
+        }
+
         this.props.componentWillUnmount(this.props);
     }
 
     public static getDerivedStateFromProps(props: InternalProps, state: State) {
-        logg.debug(() => ["IslandExplorerRoute getDerivedStateFromProps - props: %O", props]);
+        logg.debug(() => ["IslandExplorerRoute getDerivedStateFromProps - props: %O", props], IslandExplorerRoute.loggCategory);
         const { route } = props;
         if (!route) {
             return null;
@@ -182,12 +192,17 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
         const { RouteId: propsRouteId } = route;
         const stateRouteId = state.activeRoute ? state.activeRoute.id : null;
-        let nextState: State = null;
+
+        // routeChanged will be updated only in this function.
+        let nextState: State = { routeChanged: false };
         if (
             propsRouteId !== stateRouteId
         ) {
             const { Color: color, RouteId: id, ShortName: shortName } = props.route;
-            nextState = { activeRoute: { color, id, shortName } };
+
+            // The route is changing so notify ourselves - once - that the route
+            // has changed.
+            nextState = { activeRoute: { color, id, shortName }, routeChanged: true };
 
             // Invoke action to send the bus location request and stop any existing
             // bus location requests. This action should take: a request ID (string)
@@ -197,7 +212,6 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         }
 
         if (props.nextTick) {
-            nextState = nextState || {};
             nextState.nextTick = props.nextTick;
         }
 
@@ -205,7 +219,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
     }
 
     public render(): JSX.Element {
-        logg.debug(() => ["IslandExplorerRoute render - props: %O", this.props]);
+        logg.debug(() => ["IslandExplorerRoute render - props: %O", this.props], IslandExplorerRoute.loggCategory);
         const isShowMap = !this.props.location.pathname.endsWith("info");
         let content = null;
         if (this.props.hasOwnProperty("route")) {
@@ -217,7 +231,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             const mapProps: MapProps = {
                 accessToken: "pk.eyJ1IjoicmxtY25lYXJ5MiIsImEiOiJjajgyZjJuMDAyajJrMndzNmJqZDFucTIzIn0.BYE_k7mYhhVCdLckWeTg0g",
                 boundsPadding: ZOOM_TO_FIT_PADDING,
-                onLoaded: () => logg.debug(() => "IslandExplorerRoute render - map loaded."),
+                onLoaded: this.onMapLoadedBound,
                 onMapChanged: data => this.props.onMapChanged(data as any),
                 onMarkerClicked: properties => alert(JSON.stringify(properties)),
                 options: {
@@ -231,7 +245,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             // Use the information about layers in state to determine which
             // layer is visible on the map.
             const activeRouteId = this._getActiveRouteId();
-            logg.info(() => ["IslandExplorerRoute render - state.activeRoute: %O", activeRouteId]);
+            logg.debug(() => ["IslandExplorerRoute render - state.activeRoute: %O", activeRouteId], IslandExplorerRoute.loggCategory);
             const routeId = this._routeLayerId(activeRouteId);
             if (routeId !== null && layers) {
                 const updateLayer = (id: string, visibility: string): RmbxLayer => {
@@ -297,6 +311,11 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             </div>
         );
     }
+
+
+    private static readonly loggCategory = "iert";
+    private mapLoaded = false;
+    private onMapLoadedBound: () => void = null;
 
 
     private createSources(): Map<string, mapboxgl.GeoJSONSource> {
@@ -474,7 +493,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
     private _createMapGLVehiclesLayer(routeVehicles: RouteVehicles, color: string): RmbxLayer {
         // Convert route stops to geojson points.
         const data = routeVehicles.vehicles.map(item => {
-            logg.debug(() => ["IslandExplorerRoute _createMapGLVehiclesLayer - vehicle data. %O", item]);
+            logg.debug(() => ["IslandExplorerRoute _createMapGLVehiclesLayer - vehicle data. %O", item], IslandExplorerRoute.loggCategory);
             const { CommStatus, DirectionLong: direction, Heading: heading, LastStop: lastStop, Latitude: lat, Longitude: lng, Name: name, RunId: runId, TripId: tripId, VehicleId: vehicle } = item;
 
             let nextScheduledStop: string;
@@ -596,7 +615,22 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
         return `${id}_VEHICLES${isLabelLayer ? "_LABELS" : ""}`;
     }
 
+    private onMapLoaded() {
+        logg.info(() => "IslandExplorerRoute onMapLoaded - map loaded.", IslandExplorerRoute.loggCategory);
+        this.mapLoaded = true;
+    }
+
     private vehicleStatus(routeId: number): JSX.Element {
+        if (!this.mapLoaded) {
+            return null;
+        }
+
+        // When the route changes don't even try and create the vehicle status
+        // because it will probably be wrong.
+        if (this.state.routeChanged) {
+            return null;
+        }
+
         const { routeVehicles: routesVehicles = [] } = this.props;
         const routeVehicles: RouteVehicles = routesVehicles.find(item => item.id === routeId) || { id: routeId , vehicles: [] };
         const count = routeVehicles.vehicles.length;
