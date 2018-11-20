@@ -30,7 +30,7 @@ import apiData from "../api/data";
 import { http } from "../network/http";
 import { WorkerResponse } from "../network/httpInterfaces";
 import { State } from "../reducer/interfaces";
-// import logg from "../util/logg";
+import logg from "../util/logg";
 import { DataAction, DataActionId } from "./interfaces";
 
 
@@ -73,9 +73,9 @@ const actionApi = Object.freeze({
 
     getVehicles(routeIds: number[], tickStartTime: number = null): Dispatch<Promise<void>> {
         return async (dispatch: Dispatch<State>) => {
-            const res = await http.get(`${apiData.domain}/InfoPoint/rest/Vehicles/GetAllVehiclesForRoutes?routeIDs=${routeIds.join(",")}`);
-            // logg.warn(() => "Getting vehicles from the dev server.");
-            // const res = await http.get(`http://localhost/InfoPoint/rest/Vehicles/GetAllVehiclesForRoutes?routeIDs=${routeIds.join(",")}`);
+            // const res = await http.get(`${apiData.domain}/InfoPoint/rest/Vehicles/GetAllVehiclesForRoutes?routeIDs=${routeIds.join(",")}`);
+            logg.warn(() => "Getting vehicles from the dev server.");
+            const res = await http.get(`http://localhost/InfoPoint/rest/Vehicles/GetAllVehiclesForRoutes?routeIDs=${routeIds.join(",")}`);
 
             if (res.response) {
                 const data = new Map<number, object[]>();

@@ -1,0 +1,85 @@
+{
+    "$id": "http://limnous.com/landmarks.schema.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "description": "Geographic landmarks on a map.",
+    "title": "Landmarks",
+
+    "definitions": {
+        "coordinate": {
+            "description": "An array that defines a geographic point with two numbers: the first is longitude, the second is latitude.",
+            "items": { "type": "number" },
+            "maxItems": 2,
+            "minItems": 2,
+            "type": "array"
+        }
+    },
+
+    "minItems": 0,
+    "type": "array",
+    "uniqueItems": true,
+    "items": {
+        "description": "A geographic landmark on a map.",
+        "title": "Landmark",
+
+        "allOf": [{
+            "if": { "properties": { "type": { "enum": ["carriageroad", "trail"] } } },
+            "then": {
+                "properties": {
+                    "connects": {
+                        "description": "Features along the trail.",
+                        "items": { "type": "string" },
+                        "minItems": 2,
+                        "type": "array"
+                    },
+                    "coordinates": {
+                        "description": "A series of coordinates that define a geojson polyline.",
+                        "items": { "$ref": "#/definitions/coordinate"},
+                        "minItems": 1,
+                        "type": "array"
+                    }
+                },
+                "required": ["coordinates"]
+            }
+        }, {
+            "if": { "properties": { "type": { "enum": ["trail"] } } },
+            "then": { "required": ["connects"] }
+        }, {
+            "if": { "properties": { "type": { "enum": ["feature", "trailhead", "visitorcenter"] } } },
+            "then": {
+                "properties": {
+                    "location": { "$ref": "#/definitions/coordinate" }
+                },
+                "required": ["location"]
+            }
+        }],
+
+        "properties": {
+            "description": {
+                "description": "A description for this landmark in its primary language.",
+                "type": "string"
+            },
+            "name": {
+                "description": "The name of the landmark in its primary language.",
+                "type": "string"
+            },
+            "type": {
+                "description": "The type of landmark.",
+                "enum": [
+                    "bridge",
+                    "carriageroad",
+                    "feature",
+                    "trail",
+                    "trailhead",
+                    "visitorcenter",
+                    "waterfall"
+                ]
+            },
+            "uid": {
+                "description": "A unique identifier for this landmark.",
+                "type": "string"
+            }
+        },
+
+        "required": ["name", "type", "uid"]
+    }
+}
