@@ -22,11 +22,12 @@
 
 
 import { FeatureCollection } from "geojson";
+import { Action } from "redux";
 import { actionApi } from "../action/api";
-import { BaseAction, DataAction, DataActionId } from "../action/interfaces";
+import { DataAction, DataActionId } from "../action/interfaces";
 
 
-export default (state: State = { routeGeos: [], routes: [], routeStops: [], routeVehicles: [] }, action: BaseAction): State => {
+export default (state: State = { routeGeos: [], routes: [], routeStops: [], routeVehicles: [] }, action: Action): State => {
     let nextState: State;
 
     switch (action.type) {

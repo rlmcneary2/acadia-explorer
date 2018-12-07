@@ -36,7 +36,7 @@ import * as momentObj from "moment";
 import * as React from "react";
 import { FormattedDate, FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
-import * as redux from "redux";
+import { ThunkDispatch } from "redux-thunk";
 import { Props as MapProps, ReactMapboxGL, RmbxLayer } from "./MapBox/mapboxgl";
 
 
@@ -135,7 +135,7 @@ function mapStateToProps(state: ReduxState, ownProps: Props): InternalProps {
     return props;
 }
 
-function mapDispatchToProps(dispatch: redux.Dispatch<any>): InternalProps {
+function mapDispatchToProps(dispatch: ThunkDispatch<State, null, any>): InternalProps {
     const dispatchProps = {
 
         componentWillUnmount(props: InternalProps) {

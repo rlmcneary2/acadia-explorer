@@ -64,8 +64,8 @@ export default async () => {
     // middlewareArgs.push(reduxLog);
 
     const reduxMiddleware = redux.applyMiddleware(...middlewareArgs);
-    // const store = redux.createStore(reducers, state, reduxMiddleware);
-    const store = redux.createStore<State>(reducers, reduxMiddleware);
+    // const store = redux.createStore<State, any, any, any>(reducers, state, reduxMiddleware);
+    const store = redux.createStore<State, any, any, any>(reducers, reduxMiddleware);
 
     // Add listeners.
     for (const key of Object.keys(modules)) {

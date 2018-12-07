@@ -24,7 +24,8 @@
 import util from "@util/dateTime";
 import logg from "@util/logg";
 import { Queue, Task } from "asqueue";
-import { Dispatch, Store } from "redux";
+import { Store } from "redux";
+import { ThunkDispatch } from "redux-thunk";
 import { appData, StopChain, StopEntry } from "../app/route";
 import { StopNode } from "../app/stopNode";
 import { RouteStopsStop, RouteVehicles } from "../reducer/api";
@@ -181,7 +182,7 @@ function isScheduledStopId(route: Route, stopId: number): boolean {
     return false;
 }
 
-function updateRouteLastStopData(routeId: number, route: Route, state: State, dispatch: Dispatch<State>) {
+function updateRouteLastStopData(routeId: number, route: Route, state: State, dispatch: ThunkDispatch<State, null, any>) {
     const { routeStops, routeVehicles } = state.api;
 
     // Must have the routeStops for this routeId and its stop information before

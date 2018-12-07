@@ -51,6 +51,10 @@ class App extends React.Component<Props> {
     public state: ComponentState;
 
     private get routeId(): number | null {
+        if (!(this.props as any).location || !(this.props as any).location.pathname) {
+            return null;
+        }
+
         const matches = /^\/route\/(\d+)\/?(?:([\w\-]+))?$/.exec((this.props as any).location.pathname);
         if (!matches || matches.length < 2) {
             return null;
@@ -78,7 +82,7 @@ class App extends React.Component<Props> {
         // routeId is null the user has not yet chosen a route.
         let toggle: JSX.Element = null;
         if (routeId !== null) {
-            const isShowMap = !(this.props as any).location.pathname.endsWith("info");
+            const isShowMap = !(this.props as any).location || !(this.props as any).location.pathname || !(this.props as any).location.pathname.endsWith("info");
             const linkButtonProps: LinkButtonProps = {
                 content: {
                     id: !isShowMap ? "MAP" : "INFO"
@@ -140,6 +144,11 @@ class App extends React.Component<Props> {
     }
 
     private validRoute(id: number): boolean {
+        // If the location information isn't available yet this IS a valid route.
+        if (!(this.props as any).location || !(this.props as any).location.pathname) {
+            return true;
+        }
+
         if (id === null) {
             // id will be null when navigating to the root path; in this case a
             // null id is valid.

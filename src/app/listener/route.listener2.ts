@@ -24,7 +24,8 @@
 import logg from "@util/logg";
 import { storage } from "@util/storage";
 import { Queue, Task } from "asqueue";
-import { Dispatch, Store } from "redux";
+import { Store } from "redux";
+import { ThunkDispatch } from "redux-thunk";
 import { StopEntry } from "../app/route";
 import { RouteStopsStop, RouteVehicles } from "../reducer/api";
 import { Route } from "../reducer/app";
@@ -254,7 +255,7 @@ async function processVehicle(routeId: number, route: Route, state: State, vehic
     await storage.set(`route-${routeId}-stops`, stops);
 }
 
-async function updateRouteLastStopData(routeId: number, route: Route, state: State, dispatch: Dispatch<State>) {
+async function updateRouteLastStopData(routeId: number, route: Route, state: State, dispatch: ThunkDispatch<State, null, any>) {
     const { routeStops, routeVehicles } = state.api;
     const { routes = null } = (state.app || {});
 

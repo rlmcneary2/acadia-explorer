@@ -22,14 +22,15 @@
 
 
 import logg from "@util/logg";
-import { BaseAction, BaseActionId, DataActionId, TickStartActionData } from "../action/interfaces";
+import { Action } from "redux";
+import { BaseActionId, DataActionId, TickStartActionData } from "../action/interfaces";
 import { actionTick } from "../action/tick";
 
 
 const LOG_CATEGORY = "tickr";
 
 
-export default (state: State = { ticks: [] }, action: BaseAction): State => {
+export default (state: State = { ticks: [] }, action: Action): State => {
     let nextState: State;
 
     switch (action.type) {

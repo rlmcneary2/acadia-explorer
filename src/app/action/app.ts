@@ -22,7 +22,7 @@
 
 
 import { State } from "@reducer/interfaces";
-import { Dispatch } from "redux";
+import { ThunkAction } from "redux-thunk";
 import { http } from "../network/http";
 import { WorkerResponse } from "../network/httpInterfaces";
 import { Routes /*, StateStop, StateStopData*/ } from "../reducer/app";
@@ -41,8 +41,8 @@ const actionApp = Object.freeze({
         // updateStops: "appUpdateStops"
     }),
 
-    initialize(): Dispatch<Promise<void>> {
-        return async (dispatch: Dispatch<State>) => {
+    initialize(): ThunkAction<Promise<void>, State, null, any> {
+        return async dispatch => {
             dispatch(actionApi.getRoutes());
 
             const response = await getRouteData();

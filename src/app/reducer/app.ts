@@ -21,12 +21,13 @@
  */
 
 
+import { Action } from "redux";
 import { actionApp } from "../action/app";
-import { BaseAction, DataAction /*, DataActionId*/ } from "../action/interfaces";
+import { DataAction /*, DataActionId*/ } from "../action/interfaces";
 import { StopSchedule /*VehicleDirection*/ } from "../app/interfaces";
 
 
-export default (state: State = {}, action: BaseAction): State => {
+export default (state: State = {}, action: Action): State => {
     let nextState: State;
 
     switch (action.type) {

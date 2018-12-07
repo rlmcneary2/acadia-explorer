@@ -21,11 +21,10 @@
  */
 
 
-interface BaseAction {
-    type: string;
-}
+import { Action } from "redux";
 
-interface BaseActionId<T> extends BaseAction {
+
+interface BaseActionId<T> extends Action {
     id: T;
 }
 
@@ -35,7 +34,7 @@ interface BaseActionId<T> extends BaseAction {
  * @extends {BaseAction}
  * @template T The type of the data.
  */
-interface DataAction<T> extends BaseAction {
+interface DataAction<T> extends Action {
     data: T;
 }
 
@@ -77,7 +76,6 @@ enum HttpRequestDefinedUids {
 }
 
 export {
-    BaseAction,
     BaseActionId,
     DataAction,
     DataActionId,

@@ -26,6 +26,8 @@ module.exports = api => {
     api.cache.forever();
 
     const plugins = [
+        "@babel/plugin-proposal-optional-chaining", // Unfortunately TS doesn't support this yet...
+        "@babel/plugin-syntax-dynamic-import" // For React.lazy() support.
     ];
 
     const presets = [

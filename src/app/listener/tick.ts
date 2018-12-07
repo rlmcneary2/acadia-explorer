@@ -60,7 +60,7 @@ function endedTicksHandler(store: Store<State>, startTime: number, endedTicks: S
 
                 let routes = store.getState().api.routes;
                 routes = routes.map(r => r.RouteId);
-                store.dispatch(actionApi.getVehicles(routes, startTime));
+                store.dispatch(actionApi.getVehicles(routes, startTime) as any);
                 break;
             }
 

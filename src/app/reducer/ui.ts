@@ -21,11 +21,12 @@
  */
 
 
-import { BaseAction, DataAction } from "../action/interfaces";
+import { Action } from "redux";
+import { DataAction } from "../action/interfaces";
 import { actionUi } from "../action/ui";
 
 
-export default (state: State = {}, action: BaseAction): State => {
+export default (state: State = {}, action: Action): State => {
     let nextState: State;
 
     switch (action.type) {

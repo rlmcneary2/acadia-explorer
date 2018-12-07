@@ -25,7 +25,7 @@ import { actionTick } from "@action/tick";
 import * as toGeoJSON from "@mapbox/togeojson";
 import { RouteGeo } from "@reducer/api";
 import { FeatureCollection } from "geojson";
-import { Dispatch } from "redux";
+import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import apiData from "../api/data";
 import { http } from "../network/http";
 import { WorkerResponse } from "../network/httpInterfaces";
@@ -56,8 +56,8 @@ const actionApi = Object.freeze({
         };
     },
 
-    getRoutes(): Dispatch<Promise<void>> {
-        return async (dispatch: Dispatch<State>) => {
+    getRoutes(): ThunkAction<Promise<void>, State, null, any> {
+        return async dispatch => {
             const res = await allRoutes();
             const { response, ok } = res;
             if (!ok) {
@@ -71,8 +71,8 @@ const actionApi = Object.freeze({
         };
     },
 
-    getVehicles(routeIds: number[], tickStartTime: number = null): Dispatch<Promise<void>> {
-        return async (dispatch: Dispatch<State>) => {
+    getVehicles(routeIds: number[], tickStartTime: number = null): ThunkAction<Promise<void>, State, null, any> {
+        return async dispatch => {
             // const res = await http.get(`${apiData.domain}/InfoPoint/rest/Vehicles/GetAllVehiclesForRoutes?routeIDs=${routeIds.join(",")}`);
             logg.warn(() => "Getting vehicles from the dev server.");
             const res = await http.get(`http://localhost/InfoPoint/rest/Vehicles/GetAllVehiclesForRoutes?routeIDs=${routeIds.join(",")}`);
@@ -136,7 +136,7 @@ async function allRoutes(): Promise<WorkerResponse> {
  * @param dispatch 
  * @param routes Response route infromation.
  */
-async function traces(dispatch: Dispatch<void>, routes: any[]): Promise<void> {
+async function traces(dispatch: ThunkDispatch<State, null, DataAction<RouteGeo>>, routes: any[]): Promise<void> {
     routes.forEach(async route => {
         const res = await http.get(`${apiData.domain}/InfoPoint/Resources/Traces/${route.RouteTraceFilename}`, null, "text");
 
@@ -152,7 +152,7 @@ async function traces(dispatch: Dispatch<void>, routes: any[]): Promise<void> {
  * @param dispatch 
  * @param routes Response route infromation.
  */
-async function stops(dispatch: Dispatch<void>, routes: any[]) {
+async function stops(dispatch: ThunkDispatch<State, null, DataActionId<number, any>>, routes: any[]) {
     routes.forEach(async route => {
         const res = await http.get(`${apiData.domain}/InfoPoint/rest/Stops/GetAllStopsForRoutes?routeIDs=${route.RouteId}`);
         dispatch(createUpdateStopsAction(route.RouteId, res.response));

@@ -23,11 +23,15 @@
 
 import * as React from "react";
 import { IntlProvider } from "react-intl";
-import { Provider, Store } from "react-redux";
+import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Store } from "redux";
 import * as messages from "../../locale/en-US.json";
 import { State } from "./reducer/interfaces";
-import App from "./view/app";
+
+
+// tslint:disable-next-line:variable-name
+const App = React.lazy(() => import("./view/app"));
 
 
 export default ({ store }: { store: Store<State>; }) => {
@@ -38,13 +42,17 @@ export default ({ store }: { store: Store<State>; }) => {
         messages
     };
 
+    // tslint:disable:jsx-no-lambda
     return (
         <Provider store={store}>
             <IntlProvider {...intlProps}>
                 <Router>
-                    <Route path="/" component={App} />
+                    <React.Suspense fallback={<p>Loading Acadia Explorer...</p>}>
+                        <Route path="/" render={props => <App {...props} />} />
+                    </React.Suspense>
                 </Router>
             </IntlProvider>
         </Provider>
     );
+    // tslint:enable:jsx-no-lambda
 };
