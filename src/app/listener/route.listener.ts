@@ -90,15 +90,15 @@ function createDefaultRouteChain(id: number, state: State): boolean {
         return false;
     }
 
-    const route = routes[id];
+    const route = routes.find(x => x.id === id);
     for (const scheduledStop of route.scheduledStops) {
-        const { dates, hours, ids } = scheduledStop;
+        const { dates, hours, stops } = scheduledStop;
 
         const stopChain: StopChain = { dates, hours, nodes: [] };
         stopChains.push(stopChain);
 
-        for (let i = 0; i < ids.length; i++) {
-            const stop = routeStop.stops.find(item => item.StopId ===  ids[i]);
+        for (let i = 0; i < stops.length; i++) {
+            const stop = routeStop.stops.find(item => item.StopId ===  stops[i].id);
             const stopNode = new StopNode(stop.Name, true, stop.StopId);
 
             const previousStop = 0 < i ? stopChain.nodes[i - 1] : null;
@@ -171,8 +171,8 @@ function isScheduledStopId(route: Route, stopId: number): boolean {
     // If the stop ID is in any of the scheduled stops for the route it will be
     // considered a scheduled stop, regardless of the CURRENT time or date.
     for (const scheduledStops of route.scheduledStops) {
-        for (const scheduledStopId of scheduledStops.ids) {
-            if (scheduledStopId === stopId) {
+        for (const stop of scheduledStops.stops) {
+            if (stop.id === stopId) {
                 return true;
             }
         }

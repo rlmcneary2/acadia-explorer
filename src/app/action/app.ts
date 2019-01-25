@@ -25,7 +25,7 @@ import { State } from "@reducer/interfaces";
 import { ThunkAction } from "redux-thunk";
 import { http } from "../network/http";
 import { WorkerResponse } from "../network/httpInterfaces";
-import { Routes /*, StateStop, StateStopData*/ } from "../reducer/app";
+import { Route /*, StateStop, StateStopData*/ } from "../reducer/app";
 import { actionApi } from "./api";
 import { DataAction /*, DataActionId*/ } from "./interfaces";
 
@@ -45,8 +45,9 @@ const actionApp = Object.freeze({
         return async dispatch => {
             dispatch(actionApi.getRoutes());
 
-            const response = await getRouteData();
-            const { response: routes = {} }  = response;
+            const response = await getAppData();
+            const { response: data = {} }  = response;
+            const { routes } = data;
             dispatch(actionApp.updateRoutesData(routes));
         };
     },
@@ -64,7 +65,7 @@ const actionApp = Object.freeze({
     //     };
     // },
 
-    updateRoutesData(data: Routes): DataAction<Routes> {
+    updateRoutesData(data: Route[]): DataAction<Route[]> {
         return {
             data,
             type: actionApp.types.updateRoutesData
@@ -85,6 +86,6 @@ const actionApp = Object.freeze({
 export { actionApp };
 
 
-async function getRouteData(): Promise<WorkerResponse> {
-    return http.get(`/${LOCATION}/route.json`, null, "json");
+async function getAppData(): Promise<WorkerResponse> {
+    return http.get(`/${LOCATION}/app.json`, null, "json");
 }

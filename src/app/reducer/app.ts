@@ -41,7 +41,7 @@ export default (state: State = {}, action: Action): State => {
         // }
 
         case actionApp.types.updateRoutesData: {
-            const a = action as DataAction<Routes>;
+            const a = action as DataAction<Route[]>;
             const { data: routes } = a;
             nextState = {...state, routes};
             break;
@@ -60,21 +60,24 @@ export default (state: State = {}, action: Action): State => {
 };
 
 
-interface Route { // Some of these interface properties are part of route.json.
+interface Route { // Some of these interface properties are part of app.json.
+    description: string;
+    id: number;
+    landmarks: any[];
+    name: string;
     scheduledStops: ScheduledStop[];
-    // stops?: Stop[]; // Built up from the scheduled stops and stops that are returned as part of the vehicle information.
 }
 
 interface State {
-    routes?: Routes;
+    routes?: Route[];
 }
 
-interface Routes {
-    [key: string]: Route; // The route ID as a string (e.g. "3").
-}
+// interface Routes {
+//     [key: string]: Route; // The route ID as a string (e.g. "3").
+// }
 
 interface ScheduledStop extends StopSchedule {
-    ids: number[];
+    stops: { description: string; id: number; name: string; }[];
 }
 
-export { Route, State, Routes };
+export { Route, State/*, Routes*/ };

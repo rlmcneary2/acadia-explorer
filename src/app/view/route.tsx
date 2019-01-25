@@ -25,7 +25,7 @@ import { actionApi } from "@action/api";
 import { actionUi } from "@action/ui";
 import { TimerPie } from "@controls/timerPie";
 import { RouteGeo, RouteStops, RouteVehicles } from "@reducer/api";
-import { Routes } from "@reducer/app";
+import { Route } from "@reducer/app";
 import { State as ReduxState } from "@reducer/interfaces";
 import { MapData } from "@reducer/ui";
 import dateTime from "@util/dateTime";
@@ -38,6 +38,7 @@ import { FormattedDate, FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { Props as MapProps, ReactMapboxGL, RmbxLayer } from "./MapBox/mapboxgl";
+import RouteInfo from "./routeInfo";
 
 
 const moment = (momentObj as any).default;
@@ -62,7 +63,7 @@ interface InternalProps extends Props {
     route?: any;
     routeChanged: (routeId: number) => void;
     /** This is supplemental data provided via a JSON file found in the "data" directory. */
-    routeData?: Routes;
+    routeData?: Route[];
     routeGeos: RouteGeo[];
     routeStops: RouteStops[];
     routeVehicles: RouteVehicles[];
@@ -296,9 +297,9 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                         layers={layers}
                         sources={sources}
                     />
-                    {vehicleStatus}
+                    {isShowMap ? vehicleStatus : null}
                     {countdown}
-                    <div className="route-info" style={{ display: !isShowMap ? "initial" : "none" }}>Info please!</div>
+                    {isShowMap ? null : <RouteInfo routeId={this.props.route ? this.props.route.RouteId : null} />}
                 </div>
             );
         } else {

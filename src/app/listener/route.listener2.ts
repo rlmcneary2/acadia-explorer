@@ -164,8 +164,8 @@ function isScheduledStopId(route: Route, stopId: number): boolean {
     // If the stop ID is in any of the scheduled stops for the route it will be
     // considered a scheduled stop, regardless of the CURRENT time or date.
     for (const scheduledStops of route.scheduledStops) {
-        for (const scheduledStopId of scheduledStops.ids) {
-            if (scheduledStopId === stopId) {
+        for (const stop of scheduledStops.stops) {
+            if (stop.id === stopId) {
                 return true;
             }
         }
@@ -277,13 +277,13 @@ async function updateRouteLastStopData(routeId: number, route: Route, state: Sta
     if (!runStops) {
         const routeStop = routeStops.find(item => item.id === routeId);
         const r = routes[routeId].scheduledStops[0];
-        runStops = r.ids.map<StopEntry>(item => {
-            const stop = routeStop.stops.find(s => s.StopId ===  item);
+        runStops = r.stops.map<StopEntry>(item => {
+            const stop = routeStop.stops.find(s => s.StopId === item.id);
 
             return {
                 created: Date.now(),
                 direction: "outbound",
-                id: item,
+                id: item.id,
                 name: stop ? stop.Name : null,
                 routeId,
                 runId: -1,
