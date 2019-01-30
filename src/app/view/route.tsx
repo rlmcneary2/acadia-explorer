@@ -240,7 +240,8 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                     center,
                     style: "mapbox://styles/mapbox/outdoors-v10",
                     zoom
-                }
+                },
+                visible: isShowMap
             };
 
             // Use the information about layers in state to determine which
@@ -283,7 +284,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 countdown = (<TimerPie countDown={true} expiresMs={this.state.nextTick} spanMs={15 * 1000} refreshMs={1000} />);
             }
 
-            const vehicleStatus = this.vehicleStatus(activeRouteId);
+            const vehicleStatus = isShowMap ? this.vehicleStatus(activeRouteId) : null;
 
 
             let routeInfoProps: RouteInfoProps = null;
@@ -307,7 +308,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                         layers={layers}
                         sources={sources}
                     />
-                    {isShowMap ? vehicleStatus : null}
+                    {vehicleStatus}
                     {countdown}
                     {routeInfoProps !== null ? <RouteInfo {...routeInfoProps} /> : null}
                 </div>

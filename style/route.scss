@@ -40,6 +40,9 @@
     & > :nth-child(1n+0) {
         position: absolute;
     }
+    & > .route-info {
+        position: static;
+    }
     & > :first-child {
         bottom: 0;
         left: 0;
@@ -72,7 +75,33 @@
 }
 
 .route-info {
+    & > *:nth-child(1) {
+        margin-top: 0;
+    }
+    & h1 {
+        @extend %headline-1;
+    }
+    & h2 {
+        @extend %headline-2;
+    }
+    & p {
+        @extend %para;
+    }
+    & ul {
+        @extend %para;
+        li {
+            &::before {
+                content: "\2022";
+                padding: 0 $text-custom-bullet-padding 0 0; // The space between the right side of the bullet and item text.
+            }
+            @extend %para;
+            margin-top: $text-li-margin;
+        }
+        list-style: none; // Lists will not automatically create bullet images.
+        margin-top: $text-li-margin;
+        padding-inline-start: $text-custom-bullet-padding; // Position the left side of the bullet (the indent).
+    }
     background-color: white;
     height: 100%;
-    width: 100%;
+    padding: $control-padding-large;
 }

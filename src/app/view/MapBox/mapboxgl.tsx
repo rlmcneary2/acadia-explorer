@@ -50,12 +50,15 @@ export class ReactMapboxGL extends React.PureComponent<Props, State> {
         this.updateMap();
         this.updateMarkers();
 
+        let classNames: string[] = ["map"];
+        classNames = this.props.visible ? classNames : [...classNames, "invisible"];
+
         // Adding a key prop means the DOM element will never be altered because
         // it will always be considered by React to be represented by the same
         // object. You must also set the ID for Mapbox to be able to attach the
         // map to this element.
         return (
-            <div className="map" id={this.id} key={this.id} />
+            <div className={classNames.join(" ")} id={this.id} key={this.id} />
         );
     }
 
@@ -561,6 +564,7 @@ export interface Props {
     options?: mbx.MapboxOptions;
     /** These sources will be added to the map or if they already exists their data will be updated. */
     sources?: Map<string, mbx.GeoJSONSource>;
+    visible: boolean;
 }
 
 interface State {

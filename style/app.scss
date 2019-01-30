@@ -27,6 +27,34 @@
 @import "prefixed";
 @import "color";
 @import "font";
+@import "dimension";
+
+
+/*
+    Common macros
+*/
+%headline-1 {
+    & %headline-1 {
+        font-size: 1em; /* Prevents recursive headline-1 from increasing the font size. */
+    }
+    @extend %title-1;
+    margin: $text-heading-margin 0 0 0;
+}
+
+%headline-2 {
+    & %headline-2 {
+        font-size: 1em; /* Prevents recursive headline-1 from increasing the font size. */
+    }
+    @extend %headline-1;
+}
+
+%para {
+    & %para {
+        font-size: 1em; /* Prevents recursive paras from increasing the font size. */
+    }
+    @extend %body;
+    margin: $text-para-margin 0 0 0;
+}
 
 
 /*
@@ -56,16 +84,6 @@ button {
     padding: 0;
 }
 
-menu, ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-
-li {
-    display: block; // Default is "list-item" which changes the size of the text.
-}
-
 
 /*
     Application constants (SASS variables).
@@ -76,7 +94,6 @@ $application-max-width: 1000px;
 /*
     Import app specific files...
 */
-@import "dimension";
 @import "control";
 @import "menu";
 @import "route";
@@ -114,8 +131,18 @@ $application-max-width: 1000px;
 
 /* START select route menu ***************************************************/
 
+nav li {
+    display: block; // Default is "list-item" which changes the size of the text.
+}
+
 nav.header {
     height: $control-height;
+}
+
+ul.menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
 
 menu.header {
@@ -144,6 +171,8 @@ menu.header {
         margin-right: $control-margin-v;
     }
     display: flex;
+    margin: 0;
+    padding: 0;
 }
 
 /* END select route menu *****************************************************/

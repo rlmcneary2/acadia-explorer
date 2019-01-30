@@ -29,6 +29,9 @@
 }
 
 .map {
+    &.invisible {
+        visibility: hidden;
+    }
     flex: 1;
 }
 

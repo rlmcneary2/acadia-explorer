@@ -21,6 +21,34 @@
  */
 
 
-$text-body: 1em;
-$text-control: $text-body * 1.8;
-$text-headline: $text-body * 1.6;
+$text-default: 1em;
+$text-body: $text-default * 1.3;
+$text-control: $text-default * 1.8;
+$text-headline: $text-default * 1.6;
+
+
+%body {
+    font: {
+        size: $text-body;
+    }
+}
+
+%title {
+    font: {
+        weight: bold;
+    }
+}
+
+%title-1 {
+    @extend %title;
+    font: {
+        size: $text-headline;
+    }
+}
+
+%title-2 {
+    @extend %title;
+    font: {
+        size: $text-headline - 0.2;
+    }
+}
