@@ -32,8 +32,10 @@ export default (props: Props): JSX.Element => {
 
     return (
         <div className="route-info">
-            <h1>{route.name}</h1>
-            {info}
+            <div className="route-info-container">
+                <h1>{route.name}</h1>
+                {info}
+            </div>
         </div>
     );
 };

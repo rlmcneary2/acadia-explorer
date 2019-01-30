@@ -137,13 +137,11 @@ $application-max-width: 1000px;
 
 .application > .header {
     display: flex;
-    flex: 0 0 auto;
 }
 
 .application > .content {
-    display: flex;
     flex: 1;
-    flex-direction: column;
+    position: relative;
 }
 
 /* START select route menu ***************************************************/

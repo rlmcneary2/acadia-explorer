@@ -38,14 +38,9 @@
 
 .route-content {
     & > :nth-child(1n+0) {
-        position: absolute;
-    }
-    & > .route-info {
-        position: static;
-    }
-    & > :first-child {
         bottom: 0;
         left: 0;
+        position: absolute;
         right: 0;
         top: 0;
     }
@@ -55,7 +50,7 @@
             @extend %button-text;
             align-self: center;
             font: {
-                size: $text-headline;
+                size: $text-status;
             }
             overflow: initial;
             text-align: center;
@@ -69,35 +64,32 @@
         right: $control-padding-large;
         top: $control-padding-large;
     }
-    flex: auto;
     height: 100%;
     position: relative;
 }
 
 .route-info {
-    & > *:nth-child(1) {
-        margin-top: 0;
-    }
-    & h1 {
-        @extend %headline-1;
-    }
-    & h2 {
-        @extend %headline-2;
-    }
-    & p {
-        @extend %para;
-    }
-    & ul {
-        @extend %ulist;
-        li {
-            @extend %list-item;
-            margin-top: $text-li-margin;
+    .route-info-container {
+        & > *:nth-child(1) {
+            margin-top: 0;
         }
-        // list-style: none; // Lists will not automatically create bullet images.
-        // margin-top: $text-li-margin;
-        // padding-inline-start: $text-custom-bullet-padding; // Position the left side of the bullet (the indent).
+        & h1 {
+            @extend %headline-1;
+        }
+        & h2 {
+            @extend %headline-2;
+        }
+        & p {
+            @extend %para;
+        }
+        & ul {
+            @extend %ulist;
+            li {
+                @extend %list-item;
+                margin-top: $text-li-margin;
+            }
+        }
+        padding: $control-padding-large;
     }
-    background-color: white;
-    height: 100%;
-    padding: $control-padding-large;
+    overflow: auto;
 }

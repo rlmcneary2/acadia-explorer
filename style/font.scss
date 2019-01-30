@@ -22,9 +22,10 @@
 
 
 $text-default: 1em;
-$text-body: $text-default * 1.6;
+$text-body: $text-default * 1.8;
 $text-control: $text-default * 1.8;
-$text-headline: $text-default * 1.8;
+$text-headline: $text-default * 2.0;
+$text-status: $text-default * 1.6;
 
 
 %body {
