@@ -38,7 +38,7 @@ import { FormattedDate, FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { Props as MapProps, ReactMapboxGL, RmbxLayer } from "./MapBox/mapboxgl";
-import RouteInfo from "./routeInfo";
+import RouteInfo, { Props as RouteInfoProps } from "./routeInfo";
 
 
 const moment = (momentObj as any).default;
@@ -285,6 +285,16 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
             const vehicleStatus = this.vehicleStatus(activeRouteId);
 
+
+            let routeInfoProps: RouteInfoProps = null;
+            if (!isShowMap && this.props.route && this.props.routeData) {
+                const route = this.props.routeData.find(x => x.id === this.props.route.RouteId);
+                if (route) {
+                    routeInfoProps = { route };
+                }
+            }
+
+
             // It would be nice to use a react router Switch or Redirect here but we
             // need to keep the map component around and not replace it every time
             // the path changes to a new route. For that reason the URL will be
@@ -299,7 +309,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                     />
                     {isShowMap ? vehicleStatus : null}
                     {countdown}
-                    {isShowMap ? null : <RouteInfo routeId={this.props.route ? this.props.route.RouteId : null} />}
+                    {routeInfoProps !== null ? <RouteInfo {...routeInfoProps} /> : null}
                 </div>
             );
         } else {

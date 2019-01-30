@@ -1,9 +1,8 @@
 {
   "landmarks": [
     {
-      "description": "LMK_ACADIA_INN_STOP",
       "landmarkType": "lodging",
-      "name": "LMK_ACADIA_INN_STOP",
+      "name": "Acadia Inn",
       "location": {
         "latitutde": 44.39526749,
         "longitude": -68.22457123
@@ -12,106 +11,95 @@
     {
       "description": "LMK_ACADIA_GATEWAY_CENTER_DESC",
       "landmarkType": "ground-transport",
-      "name": "LMK_ACADIA_GATEWAY_CENTER_STOP",
+      "name": "Acadia Gateway Center",
       "location": {
         "latitutde": 44.470624,
         "longitude": -68.371438
       }
     },
     {
-      "description": "LMK_ATLANTIC_EYRIE_LODGE_STOP",
       "landmarkType": "lodging",
-      "name": "LMK_ATLANTIC_EYRIE_LODGE_STOP",
+      "name": "Atlantic Eyrie Lodge",
       "location": {
         "latitutde": 44.39187622,
         "longitude": -68.22277832
       }
     },
     {
-      "description": "LMK_ATLANTIC_OCEANSIDE_HOTEL_STOP",
       "landmarkType": "lodging",
-      "name": "LMK_ATLANTIC_OCEANSIDE_HOTEL_STOP",
+      "name": "Atlantic Oceanside Hotel",
       "location": {
         "latitutde": 44.3971138,
         "longitude": -68.22524261
       }
     },
     {
-      "description": "LMK_BAR_HARBOR_AIRPORT_DESC",
       "landmarkType": "airport",
-      "name": "LMK_BAR_HARBOR_AIRPORT_STOP",
+      "name": "Bar Harbor Airport",
       "location": {
         "latitutde": 44.44600296,
         "longitude": -68.3615036
       }
     },
     {
-      "description": "LMK_BAR_HARBOR_CAMPGROUND_STOP",
       "landmarkType": "campground",
-      "name": "LMK_BAR_HARBOR_CAMPGROUND_STOP",
+      "name": "Bar Harbor Campground",
       "location": {
         "latitutde": 44.43102264,
         "longitude": -68.27126312
       }
     },
     {
-      "description": "LMK_BAR_HARBOR_KOA_CAMPGROUND_STOP",
       "landmarkType": "campground",
-      "name": "LMK_BAR_HARBOR_KOA_CAMPGROUND_STOP",
+      "name": "Bar Harbor KOA Campground",
       "location": {
         "latitutde": 44.42137909,
         "longitude": -68.36430359
       }
     },
     {
-      "description": "LMK_BAR_HARBOR_REGENCY_STOP",
       "landmarkType": "lodging",
-      "name": "LMK_BAR_HARBOR_REGENCY_STOP",
+      "name": "Bar Harbor Regency",
       "location": {
         "latitutde": 44.39929581,
         "longitude": -68.22899628
       }
     },
     {
-      "description": "LMK_BASS_HARBOR_CAMPGROUND_STOP",
       "landmarkType": "campground",
-      "name": "LMK_BASS_HARBOR_CAMPGROUND_STOP",
+      "name": "Bass Harbor Campground",
       "location": {
         "latitutde": 44.23036194,
         "longitude": -68.33906555
       }
     },
     {
-      "description": "LMK_BASS_HARBOR_FERRY_TERMINAL_STOP",
       "landmarkType": "ferry-transport",
-      "name": "LMK_BASS_HARBOR_FERRY_TERMINAL_STOP",
+      "name": "Bass Harbor Ferry Terminal",
       "location": {
         "latitutde": 44.23500061,
         "longitude": 34738159
       }
     },
     {
-      "description": "LMK_BERNARD_STOP",
       "landmarkType": "point-of-interest",
-      "name": "LMK_BERNARD_STOP",
+      "name": "Bernard",
       "location": {
         "latitutde": 44.23987198,
         "longitude": -68.35358429
       }
     },
     {
-      "description": "LMK_BLACKWOODS_CAMPGROUND_STOP",
       "landmarkType": "campground",
-      "name": "LMK_BLACKWOODS_CAMPGROUND_STOP",
+      "name": "Blackwoods Campground",
       "location": {
         "latitutde": 44.30889511,
         "longitude": -68.20349121
       }
     },
     {
-      "description": "LMK_BIRCH_HARBOR_STOP",
       "landmarkType": "point-of-interest",
-      "name": "LMK_BIRCH_HARBOR_STOP",
+      "name": "Birch Harbor",
       "location": {
         "latitutde": 44.38780212,
         "longitude": -68.03931427
@@ -120,7 +108,7 @@
     {
       "description": "LMK_BROWN_MOUNTAIN_GATEHOUSE_DESC",
       "landmarkType": "point-of-interest",
-      "name": "LMK_BROWN_MOUNTAIN_GATEHOUSE_STOP",
+      "name": "Brown Mountain Gatehouse",
       "location": {
         "latitutde": 44.31218338,
         "longitude": -68.28541565
@@ -129,34 +117,31 @@
     {
       "description": "LMK_BUBBLE_POND_DESC",
       "landmarkType": "route-stop",
-      "name": "LMK_BUBBLE_POND_STOP",
+      "name": "Bubble Pond",
       "location": {
         "latitutde": 44.35030746,
         "longitude": -68.24166107
       }
     },
     {
-      "description": "LMK_CADILLAC_NORTH_RIDGE_STOP",
       "landmarkType": "trailhead",
-      "name": "LMK_CADILLAC_NORTH_RIDGE_STOP",
+      "name": "Cadillac North Ridge",
       "location": {
         "latitutde": 44.3786,
         "longitude": -68.2292
       }
     },
     {
-      "description": "LMK_CADILLAC_NORTH_RIDGE_STOP",
       "landmarkType": "trailhead",
-      "name": "LMK_CADILLAC_NORTH_RIDGE_STOP",
+      "name": "Cadillac North Ridge",
       "location": {
         "latitutde": 44.3786,
         "longitude": -68.2292
       }
     },
     {
-      "description": "LMK_CLARK_POINT_STOP",
       "landmarkType": "route-stop",
-      "name": "LMK_CLARK_POINT_STOP",
+      "name": "Clark Point",
       "location": {
         "latitutde": 44.26898575,
         "longitude": -68.31143188
@@ -165,7 +150,7 @@
     {
       "description": "LMK_EAGLE_LAKE_DESC",
       "landmarkType": "route-stop",
-      "name": "LMK_EAGLE_LAKE_STOP",
+      "name": "Eagle Lake",
       "location": {
         "latitutde": 44.37762833,
         "longitude": -68.24991608
@@ -174,7 +159,7 @@
     {
       "description": "LMK_ECHO_LAKE_DESC",
       "landmarkType": "point-of-interest",
-      "name": "LMK_ECHO_LAKE_STOP",
+      "name": "Echo Lake",
       "location": {
         "latitutde": 44.31499481,
         "longitude": -68.33670044
@@ -183,25 +168,23 @@
     {
       "description": "LMK_WH_FERRY_TERMINAL_DESC",
       "landmarkType": "ferry-transport",
-      "name": "LMK_WH_FERRY_TERMINAL_STOP",
+      "name": "Winter Harbor Ferry Terminal",
       "location": {
         "latitutde": 44.39276123,
         "longitude": -68.07952881
       }
     },
     {
-      "description": "LMK_HADLEY_POINT_STOP",
       "landmarkType": "route-stop",
-      "name": "LMK_HADLEY_POINT_STOP",
+      "name": "Hadley Point",
       "location": {
         "latitutde": 44.43872833,
         "longitude": -68.31433105
       }
     },
     {
-      "description": "LMK_HAMPTON_INN_BAR_HARBOR_STOP",
       "landmarkType": "lodging",
-      "name": "LMK_HAMPTON_INN_BAR_HARBOR_STOP",
+      "name": "Hampton Inn Bar Harbor",
       "location": {
         "latitutde": 44.390103,
         "longitude": -68.22244
@@ -210,7 +193,7 @@
     {
       "description": "LMK_HULLS_COVE_VISITOR_CENTER_DESC",
       "landmarkType": "visitor-center",
-      "name": "LMK_HULLS_COVE_VISITOR_CENTER_STOP",
+      "name": "Hulls Cove Vistor Center",
       "location": {
         "latitutde": 44.40903854,
         "longitude": -68.24743652
@@ -219,16 +202,15 @@
     {
       "description": "LMK_JORDAN_POND_DESC",
       "landmarkType": "point-of-interest",
-      "name": "LMK_JORDAN_POND_STOP",
+      "name": "Jordan Pond",
       "location": {
         "latitutde": 44.32016754,
         "longitude": -68.25358582
       }
     },
     {
-      "description": "LMK_MANSET_DOCK_STOP",
       "landmarkType": "route-stop",
-      "name": "LMK_MANSET_DOCK_STOP",
+      "name": "Manset Dock",
       "location": {
         "latitutde": 44.268904,
         "longitude": -68.309941
@@ -237,43 +219,39 @@
     {
       "description": "LMK_MID_HIGH_SCHOOL_DESC",
       "landmarkType": "route-stop",
-      "name": "LMK_MID_HIGH_SCHOOL_STOP",
+      "name": "MDI High School",
       "location": {
         "latitutde": 44.37173843,
         "longitude": -68.30102539
       }
     },
     {
-      "description": "LMK_MT_DESERT_CAMPGROUND_STOP",
       "landmarkType": "campground",
-      "name": "LMK_MT_DESERT_CAMPGROUND_STOP",
+      "name": "Mount Desert Campground",
       "location": {
         "latitutde": 44.36645889,
         "longitude": -68.31780243
       }
     },
     {
-      "description": "LMK_MT_DESERT_NARROWS_CAMPGROUND_STOP",
       "landmarkType": "campground",
-      "name": "LMK_MT_DESERT_NARROWS_CAMPGROUND_STOP",
+      "name": "Mount Desert Narrows Campground",
       "location": {
         "latitutde": 44.4199295,
         "longitude": -68.33718109
       }
     },
     {
-      "description": "LMK_NARROWS_TOO_CAMPGROUND_STOP",
       "landmarkType": "campground",
-      "name": "LMK_NARROWS_TOO_CAMPGROUND_STOP",
+      "name": "Narrows Too Campground",
       "location": {
         "latitutde": 44.43856812,
         "longitude": -68.36693573
       }
     },
     {
-      "description": "LMK_NORTHEAST_HARBOR_STOP",
       "landmarkType": "route-stop",
-      "name": "LMK_NORTHEAST_HARBOR_STOP",
+      "name": "Northeast Harbor Main Street",
       "location": {
         "latitutde": 44.29478073,
         "longitude": -68.28958893
@@ -282,25 +260,23 @@
     {
       "description": "LMK_NORTHEAST_HARBOR_PIER_DESC",
       "landmarkType": "ferry-transport",
-      "name": "LMK_NORTHEAST_HARBOR_PIER_STOP",
+      "name": "Northeast Harbor Pier",
       "location": {
         "latitutde": 44.29471588,
         "longitude": -68.284935
       }
     },
     {
-      "description": "LMK_OCEANARIUM_STOP",
       "landmarkType": "attraction",
-      "name": "LMK_OCEANARIUM_STOP",
+      "name": "Oceanarium",
       "location": {
         "latitutde": 44.419361,
         "longitude": -68.349579
       }
     },
     {
-      "description": "LMK_OTTER_CLIFFS_STOP",
       "landmarkType": "point-of-interest",
-      "name": "LMK_OTTER_CLIFFS_STOP",
+      "name": "Otter Cliffs",
       "location": {
         "latitutde": 44.31101227,
         "longitude": -68.18968201
@@ -309,16 +285,15 @@
     {
       "description": "LMK_PARKMAN_MOUNTAIN_DESC",
       "landmarkType": "route-stop",
-      "name": "LMK_PARKMAN_MOUNTAIN_STOP",
+      "name": "Parkman Mountain",
       "location": {
         "latitutde": 44.329011,
         "longitude": -68.293192
       }
     },
     {
-      "description": "LMK_PROSPECT_HARBOR_STOP",
       "landmarkType": "route-stop",
-      "name": "LMK_PROSPECT_HARBOR_STOP",
+      "name": "Prospect Harbor",
       "location": {
         "latitutde": 44.40686798,
         "longitude": -68.02690125
@@ -327,7 +302,7 @@
     {
       "description": "LMK_SAND_BEACH_DESC",
       "landmarkType": "point-of-interest",
-      "name": "LMK_SAND_BEACH_STOP",
+      "name": "Sand Beach",
       "location": {
         "latitutde": 44.32995987,
         "longitude": -68.184021
@@ -336,34 +311,31 @@
     {
       "description": "LMK_SCHOODIC_POINT_DESC",
       "landmarkType": "route-stop",
-      "name": "LMK_SCHOODIC_POINT_STOP",
+      "name": "Schoodic Point",
       "location": {
         "latitutde": 44.33314896,
         "longitude": -68.06096649
       }
     },
     {
-      "description": "LMK_SCHOODIC_WOODS_CAMPROUND_STOP",
       "landmarkType": "campground",
-      "name": "LMK_SCHOODIC_WOODS_CAMPROUND_STOP",
+      "name": "Schoodic Woods Campground",
       "location": {
         "latitutde": 44.380588,
         "longitude": -68.067864
       }
     },
     {
-      "description": "LMK_SEAL_HARBOR_STOP",
       "landmarkType": "route-stop",
-      "name": "LMK_SEAL_HARBOR_STOP",
+      "name": "Seal Harbor",
       "location": {
         "latitutde": 44.29630661,
         "longitude": -68.2411499
       }
     },
     {
-      "description": "LMK_SEAWALL_CAMPGROUND_STOP",
       "landmarkType": "campground",
-      "name": "LMK_SEAWALL_CAMPGROUND_STOP",
+      "name": "Seawall Campground",
       "location": {
         "latitutde": 44.23894882,
         "longitude": -68.30301666
@@ -372,16 +344,15 @@
     {
       "description": "LMK_SIEUR_DE_MONTS_DESC",
       "landmarkType": "visitor-center",
-      "name": "LMK_SIEUR_DE_MONTS_STOP",
+      "name": "Sieur De Monts",
       "location": {
         "latitutde": 44.36243439,
         "longitude": -68.20748138
       }
     },
     {
-      "description": "LMK_SMUGGLERS_DEN_CAMPGROUND_STOP",
       "landmarkType": "campground",
-      "name": "LMK_SMUGGLERS_DEN_CAMPGROUND_STOP",
+      "name": "Smugglers' Den Campground",
       "location": {
         "latitutde": 44.30040359,
         "longitude": -68.33153534
@@ -390,43 +361,39 @@
     {
       "description": "LMK_SOMESVILLE_DESC",
       "landmarkType": "route-stop",
-      "name": "LMK_SOMESVILLE_STOP",
+      "name": "Somesville",
       "location": {
         "latitutde": 44.3613205,
         "longitude": -68.33518219
       }
     },
     {
-      "description": "LMK_SOUTHWEST_HARBOR_STOP",
       "landmarkType": "route-stop",
-      "name": "LMK_SOUTHWEST_HARBOR_STOP",
+      "name": "Southwest Harbor",
       "location": {
         "latitutde": 44.2801857,
         "longitude": -68.32499695
       }
     },
     {
-      "description": "LMK_THUNDER_HOLE_STOP",
       "landmarkType": "point-of-interest",
-      "name": "LMK_THUNDER_HOLE_STOP",
+      "name": "Thunder Hole",
       "location": {
         "latitutde": 44.32134247,
         "longitude": -68.18928528
       }
     },
     {
-      "description": "LMK_TREMONT_SCHOOL_STOP",
       "landmarkType": "route-stop",
-      "name": "LMK_TREMONT_SCHOOL_STOP",
+      "name": "Tremont School",
       "location": {
         "latitutde": 44.25374985,
         "longitude": -68.35064697
       }
     },
     {
-      "description": "LMK_TOWN_HILL_STOP",
       "landmarkType": "route-stop",
-      "name": "LMK_TOWN_HILL_STOP",
+      "name": "Town Hill",
       "location": {
         "latitutde": 44.39901733,
         "longitude": -68.33446503
@@ -435,50 +402,47 @@
     {
       "description": "LMK_VILLAGE_GREEN_DESC",
       "landmarkType": "point-of-interest",
-      "name": "LMK_VILLAGE_GREEN_STOP",
+      "name": "Village Green",
       "location": {
         "latitutde": 44.38788986,
         "longitude": -68.20548248
       }
     },
     {
-      "description": "LMK_WILDWOOD_STABLES_STOP",
       "landmarkType": "route-stop",
-      "name": "LMK_WILDWOOD_STABLES_STOP",
+      "name": "Wildwood Stables",
       "location": {
         "latitutde": 44.31375122,
         "longitude": -68.24717712
       }
     },
     {
-      "description": "LMK_WINTER_HARBOR_STOP",
       "landmarkType": "route-stop",
-      "name": "LMK_WINTER_HARBOR_STOP",
+      "name": "Winter Harbor",
       "location": {
         "latitutde": 44.39128876,
         "longitude": -68.08921051
       }
     },
     {
-      "description": "LMK_WONDER_VIEW_INN_STOP",
       "landmarkType": "lodging",
-      "name": "LMK_WONDER_VIEW_INN_STOP",
+      "name": "Wonder View Inn",
       "location": {
         "latitutde": 44.39022446,
         "longitude": -68.21959686
       }
     },
     {
-      "description": "LMK_WOODLANDS_KOA_CAMPGROUND_STOP",
       "landmarkType": "campground",
-      "name": "LMK_WOODLANDS_KOA_CAMPGROUND_STOP",
+      "name": "Woodlands KOA Campground",
       "location": {
         "latitutde": 44.4050827,
         "longitude": -68.34212494
       }
     },
     {
-      "description": "The roadside trailhead for Champlain Mountain's north trail.",
+      "description": "N.R.T. description.",
+      "descriptionShort": "N.R.T. short desc.",
       "landmarkType": "trailhead",
       "name": "Champlain North Ridge Trailhead",
       "location": {
@@ -487,7 +451,6 @@
       }
     },
     {
-      "description": "This is the desc.",
       "landmarkType": "point-of-interest",
       "name": "Sand Beach",
       "location": {
@@ -496,7 +459,6 @@
       }
     },
     {
-      "description": "This is the desc. for thunder hole",
       "landmarkType": "point-of-interest",
       "name": "Thunder Hole",
       "location": {
@@ -523,58 +485,50 @@
           "stops": [
             {
               "id": 7,
-              "description": "LMK_OCEANARIUM_STOP",
-              "name": "LMK_OCEANARIUM_STOP"
+              "name": "Oceanarium"
             },
             {
               "id": 6,
-              "description": "LMK_MT_DESERT_NARROWS_CAMPGROUND_STOP",
-              "name": "LMK_MT_DESERT_NARROWS_CAMPGROUND_STOP"
+              "name": "Mount Desert Narrows Campground"
             },
             {
               "id": 5,
-              "description": "LMK_HADLEY_POINT_STOP",
-              "name": "LMK_HADLEY_POINT_STOP"
+              "name": "Hadley Point"
             },
             {
               "id": 4,
-              "description": "LMK_BAR_HARBOR_CAMPGROUND_STOP",
-              "name": "LMK_BAR_HARBOR_CAMPGROUND_STOP"
+              "name": "Bar Harbor Campground"
             },
             {
               "id": 3,
               "description": "LMK_HULLS_COVE_VISITOR_CENTER_DESC",
-              "name": "LMK_HULLS_COVE_VISITOR_CENTER_STOP"
+              "name": "Hulls Cove Vistor Center"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 3,
               "description": "LMK_HULLS_COVE_VISITOR_CENTER_DESC",
-              "name": "LMK_HULLS_COVE_VISITOR_CENTER_STOP"
+              "name": "Hulls Cove Vistor Center"
             },
             {
               "id": 4,
-              "description": "LMK_BAR_HARBOR_CAMPGROUND_STOP",
-              "name": "LMK_BAR_HARBOR_CAMPGROUND_STOP"
+              "name": "Bar Harbor Campground"
             },
             {
               "id": 5,
-              "description": "LMK_HADLEY_POINT_STOP",
-              "name": "LMK_HADLEY_POINT_STOP"
+              "name": "Hadley Point"
             },
             {
               "id": 6,
-              "description": "LMK_MT_DESERT_NARROWS_CAMPGROUND_STOP",
-              "name": "LMK_MT_DESERT_NARROWS_CAMPGROUND_STOP"
+              "name": "Mount Desert Narrows Campground"
             },
             {
               "id": 7,
-              "description": "LMK_OCEANARIUM_STOP",
-              "name": "LMK_OCEANARIUM_STOP"
+              "name": "Oceanarium"
             }
           ]
         },
@@ -590,58 +544,50 @@
           "stops": [
             {
               "id": 7,
-              "description": "LMK_OCEANARIUM_STOP",
-              "name": "LMK_OCEANARIUM_STOP"
+              "name": "Oceanarium"
             },
             {
               "id": 6,
-              "description": "LMK_MT_DESERT_NARROWS_CAMPGROUND_STOP",
-              "name": "LMK_MT_DESERT_NARROWS_CAMPGROUND_STOP"
+              "name": "Mount Desert Narrows Campground"
             },
             {
               "id": 5,
-              "description": "LMK_HADLEY_POINT_STOP",
-              "name": "LMK_HADLEY_POINT_STOP"
+              "name": "Hadley Point"
             },
             {
               "id": 4,
-              "description": "LMK_BAR_HARBOR_CAMPGROUND_STOP",
-              "name": "LMK_BAR_HARBOR_CAMPGROUND_STOP"
+              "name": "Bar Harbor Campground"
             },
             {
               "id": 3,
               "description": "LMK_HULLS_COVE_VISITOR_CENTER_DESC",
-              "name": "LMK_HULLS_COVE_VISITOR_CENTER_STOP"
+              "name": "Hulls Cove Vistor Center"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 3,
               "description": "LMK_HULLS_COVE_VISITOR_CENTER_DESC",
-              "name": "LMK_HULLS_COVE_VISITOR_CENTER_STOP"
+              "name": "Hulls Cove Vistor Center"
             },
             {
               "id": 4,
-              "description": "LMK_BAR_HARBOR_CAMPGROUND_STOP",
-              "name": "LMK_BAR_HARBOR_CAMPGROUND_STOP"
+              "name": "Bar Harbor Campground"
             },
             {
               "id": 5,
-              "description": "LMK_HADLEY_POINT_STOP",
-              "name": "LMK_HADLEY_POINT_STOP"
+              "name": "Hadley Point"
             },
             {
               "id": 6,
-              "description": "LMK_MT_DESERT_NARROWS_CAMPGROUND_STOP",
-              "name": "LMK_MT_DESERT_NARROWS_CAMPGROUND_STOP"
+              "name": "Mount Desert Narrows Campground"
             },
             {
               "id": 7,
-              "description": "LMK_OCEANARIUM_STOP",
-              "name": "LMK_OCEANARIUM_STOP"
+              "name": "Oceanarium"
             }
           ]
         }
@@ -666,47 +612,41 @@
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 3,
               "description": "LMK_HULLS_COVE_VISITOR_CENTER_DESC",
-              "name": "LMK_HULLS_COVE_VISITOR_CENTER_STOP"
+              "name": "Hulls Cove Vistor Center"
             },
             {
               "id": 15,
-              "description": "LMK_BAR_HARBOR_REGENCY_STOP",
-              "name": "LMK_BAR_HARBOR_REGENCY_STOP"
+              "name": "Bar Harbor Regency"
             },
             {
               "id": 14,
-              "description": "LMK_ATLANTIC_OCEANSIDE_HOTEL_STOP",
-              "name": "LMK_ATLANTIC_OCEANSIDE_HOTEL_STOP"
+              "name": "Atlantic Oceanside Hotel"
             },
             {
               "id": 17,
-              "description": "LMK_ACADIA_INN_STOP",
-              "name": "LMK_ACADIA_INN_STOP"
+              "name": "Acadia Inn"
             },
             {
               "id": 18,
-              "description": "LMK_ATLANTIC_EYRIE_LODGE_STOP",
-              "name": "LMK_ATLANTIC_EYRIE_LODGE_STOP"
+              "name": "Atlantic Eyrie Lodge"
             },
             {
               "id": 71,
-              "description": "LMK_HAMPTON_INN_BAR_HARBOR_STOP",
-              "name": "LMK_HAMPTON_INN_BAR_HARBOR_STOP"
+              "name": "Hampton Inn Bar Harbor"
             },
             {
               "id": 19,
-              "description": "LMK_WONDER_VIEW_INN_STOP",
-              "name": "LMK_WONDER_VIEW_INN_STOP"
+              "name": "Wonder View Inn"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             }
           ]
         },
@@ -723,47 +663,41 @@
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 3,
               "description": "LMK_HULLS_COVE_VISITOR_CENTER_DESC",
-              "name": "LMK_HULLS_COVE_VISITOR_CENTER_STOP"
+              "name": "Hulls Cove Vistor Center"
             },
             {
               "id": 15,
-              "description": "LMK_BAR_HARBOR_REGENCY_STOP",
-              "name": "LMK_BAR_HARBOR_REGENCY_STOP"
+              "name": "Bar Harbor Regency"
             },
             {
               "id": 14,
-              "description": "LMK_ATLANTIC_OCEANSIDE_HOTEL_STOP",
-              "name": "LMK_ATLANTIC_OCEANSIDE_HOTEL_STOP"
+              "name": "Atlantic Oceanside Hotel"
             },
             {
               "id": 17,
-              "description": "LMK_ACADIA_INN_STOP",
-              "name": "LMK_ACADIA_INN_STOP"
+              "name": "Acadia Inn"
             },
             {
               "id": 18,
-              "description": "LMK_ATLANTIC_EYRIE_LODGE_STOP",
-              "name": "LMK_ATLANTIC_EYRIE_LODGE_STOP"
+              "name": "Atlantic Eyrie Lodge"
             },
             {
               "id": 71,
-              "description": "LMK_HAMPTON_INN_BAR_HARBOR_STOP",
-              "name": "LMK_HAMPTON_INN_BAR_HARBOR_STOP"
+              "name": "Hampton Inn Bar Harbor"
             },
             {
               "id": 19,
-              "description": "LMK_WONDER_VIEW_INN_STOP",
-              "name": "LMK_WONDER_VIEW_INN_STOP"
+              "name": "Wonder View Inn"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             }
           ]
         }
@@ -771,9 +705,14 @@
       "landmarks": []
     },
     {
-      "description": "Serves Ocean Drive to Otter Cliffs.",
+      "description": "RTE_SAND_BEACH_DESC",
       "id": 3,
       "name": "Sand Beach",
+      "page": [
+        {
+          "p": "RTE_SAND_BEACH_DESC"
+        }
+      ],
       "scheduledStops": [
         {
           "dates": {
@@ -788,37 +727,35 @@
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 21,
               "description": "LMK_SIEUR_DE_MONTS_DESC",
-              "name": "LMK_SIEUR_DE_MONTS_STOP"
+              "name": "Sieur De Monts"
             },
             {
               "id": 22,
               "description": "LMK_SAND_BEACH_DESC",
-              "name": "LMK_SAND_BEACH_STOP"
+              "name": "Sand Beach"
             },
             {
               "id": 23,
-              "description": "LMK_THUNDER_HOLE_STOP",
-              "name": "LMK_THUNDER_HOLE_STOP"
+              "name": "Thunder Hole"
             },
             {
               "id": 24,
-              "description": "LMK_OTTER_CLIFFS_STOP",
-              "name": "LMK_OTTER_CLIFFS_STOP"
+              "name": "Otter Cliffs"
             },
             {
               "id": 21,
               "description": "LMK_SIEUR_DE_MONTS_DESC",
-              "name": "LMK_SIEUR_DE_MONTS_STOP"
+              "name": "Sieur De Monts"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             }
           ]
         },
@@ -835,44 +772,43 @@
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 21,
               "description": "LMK_SIEUR_DE_MONTS_DESC",
-              "name": "LMK_SIEUR_DE_MONTS_STOP"
+              "name": "Sieur De Monts"
             },
             {
               "id": 22,
               "description": "LMK_SAND_BEACH_DESC",
-              "name": "LMK_SAND_BEACH_STOP"
+              "name": "Sand Beach"
             },
             {
               "id": 23,
-              "description": "LMK_THUNDER_HOLE_STOP",
-              "name": "LMK_THUNDER_HOLE_STOP"
+              "name": "Thunder Hole"
             },
             {
               "id": 24,
-              "description": "LMK_OTTER_CLIFFS_STOP",
-              "name": "LMK_OTTER_CLIFFS_STOP"
+              "name": "Otter Cliffs"
             },
             {
               "id": 21,
               "description": "LMK_SIEUR_DE_MONTS_DESC",
-              "name": "LMK_SIEUR_DE_MONTS_STOP"
+              "name": "Sieur De Monts"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             }
           ]
         }
       ],
       "landmarks": [
         {
-          "description": "The roadside trailhead for Champlain Mountain's north trail.",
+          "description": "N.R.T. description.",
+          "descriptionShort": "N.R.T. short desc.",
           "landmarkType": "trailhead",
           "name": "Champlain North Ridge Trailhead",
           "location": {
@@ -900,42 +836,40 @@
             {
               "id": 3,
               "description": "LMK_HULLS_COVE_VISITOR_CENTER_DESC",
-              "name": "LMK_HULLS_COVE_VISITOR_CENTER_STOP"
+              "name": "Hulls Cove Vistor Center"
             },
             {
               "id": 20,
-              "description": "LMK_CADILLAC_NORTH_RIDGE_STOP",
-              "name": "LMK_CADILLAC_NORTH_RIDGE_STOP"
+              "name": "Cadillac North Ridge"
             },
             {
               "id": 21,
               "description": "LMK_SIEUR_DE_MONTS_DESC",
-              "name": "LMK_SIEUR_DE_MONTS_STOP"
+              "name": "Sieur De Monts"
             },
             {
               "id": 22,
               "description": "LMK_SAND_BEACH_DESC",
-              "name": "LMK_SAND_BEACH_STOP"
+              "name": "Sand Beach"
             },
             {
               "id": 30,
-              "description": "LMK_WILDWOOD_STABLES_STOP",
-              "name": "LMK_WILDWOOD_STABLES_STOP"
+              "name": "Wildwood Stables"
             },
             {
               "id": 29,
               "description": "LMK_JORDAN_POND_DESC",
-              "name": "LMK_JORDAN_POND_STOP"
+              "name": "Jordan Pond"
             },
             {
               "id": 28,
               "description": "LMK_BUBBLE_POND_DESC",
-              "name": "LMK_BUBBLE_POND_STOP"
+              "name": "Bubble Pond"
             },
             {
               "id": 3,
               "description": "LMK_HULLS_COVE_VISITOR_CENTER_DESC",
-              "name": "LMK_HULLS_COVE_VISITOR_CENTER_STOP"
+              "name": "Hulls Cove Vistor Center"
             }
           ]
         },
@@ -952,49 +886,48 @@
             {
               "id": 3,
               "description": "LMK_HULLS_COVE_VISITOR_CENTER_DESC",
-              "name": "LMK_HULLS_COVE_VISITOR_CENTER_STOP"
+              "name": "Hulls Cove Vistor Center"
             },
             {
               "id": 20,
-              "description": "LMK_CADILLAC_NORTH_RIDGE_STOP",
-              "name": "LMK_CADILLAC_NORTH_RIDGE_STOP"
+              "name": "Cadillac North Ridge"
             },
             {
               "id": 21,
               "description": "LMK_SIEUR_DE_MONTS_DESC",
-              "name": "LMK_SIEUR_DE_MONTS_STOP"
+              "name": "Sieur De Monts"
             },
             {
               "id": 22,
               "description": "LMK_SAND_BEACH_DESC",
-              "name": "LMK_SAND_BEACH_STOP"
+              "name": "Sand Beach"
             },
             {
               "id": 30,
-              "description": "LMK_WILDWOOD_STABLES_STOP",
-              "name": "LMK_WILDWOOD_STABLES_STOP"
+              "name": "Wildwood Stables"
             },
             {
               "id": 29,
               "description": "LMK_JORDAN_POND_DESC",
-              "name": "LMK_JORDAN_POND_STOP"
+              "name": "Jordan Pond"
             },
             {
               "id": 28,
               "description": "LMK_BUBBLE_POND_DESC",
-              "name": "LMK_BUBBLE_POND_STOP"
+              "name": "Bubble Pond"
             },
             {
               "id": 3,
               "description": "LMK_HULLS_COVE_VISITOR_CENTER_DESC",
-              "name": "LMK_HULLS_COVE_VISITOR_CENTER_STOP"
+              "name": "Hulls Cove Vistor Center"
             }
           ]
         }
       ],
       "landmarks": [
         {
-          "description": "The roadside trailhead for Champlain Mountain's north trail.",
+          "description": "N.R.T. description.",
+          "descriptionShort": "N.R.T. short desc.",
           "landmarkType": "trailhead",
           "name": "Champlain North Ridge Trailhead",
           "location": {
@@ -1022,62 +955,59 @@
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 3,
               "description": "LMK_HULLS_COVE_VISITOR_CENTER_DESC",
-              "name": "LMK_HULLS_COVE_VISITOR_CENTER_STOP"
+              "name": "Hulls Cove Vistor Center"
             },
             {
               "id": 28,
               "description": "LMK_BUBBLE_POND_DESC",
-              "name": "LMK_BUBBLE_POND_STOP"
+              "name": "Bubble Pond"
             },
             {
               "id": 29,
               "description": "LMK_JORDAN_POND_DESC",
-              "name": "LMK_JORDAN_POND_STOP"
+              "name": "Jordan Pond"
             },
             {
               "id": 31,
-              "description": "LMK_SEAL_HARBOR_STOP",
-              "name": "LMK_SEAL_HARBOR_STOP"
+              "name": "Seal Harbor"
             },
             {
               "id": 52,
-              "description": "LMK_NORTHEAST_HARBOR_STOP",
-              "name": "LMK_NORTHEAST_HARBOR_STOP"
+              "name": "Northeast Harbor Main Street"
             },
             {
               "id": 38,
               "description": "LMK_NORTHEAST_HARBOR_PIER_DESC",
-              "name": "LMK_NORTHEAST_HARBOR_PIER_STOP"
+              "name": "Northeast Harbor Pier"
             },
             {
               "id": 31,
-              "description": "LMK_SEAL_HARBOR_STOP",
-              "name": "LMK_SEAL_HARBOR_STOP"
+              "name": "Seal Harbor"
             },
             {
               "id": 29,
               "description": "LMK_JORDAN_POND_DESC",
-              "name": "LMK_JORDAN_POND_STOP"
+              "name": "Jordan Pond"
             },
             {
               "id": 28,
               "description": "LMK_BUBBLE_POND_DESC",
-              "name": "LMK_BUBBLE_POND_STOP"
+              "name": "Bubble Pond"
             },
             {
               "id": 3,
               "description": "LMK_HULLS_COVE_VISITOR_CENTER_DESC",
-              "name": "LMK_HULLS_COVE_VISITOR_CENTER_STOP"
+              "name": "Hulls Cove Vistor Center"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             }
           ]
         },
@@ -1094,57 +1024,54 @@
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 28,
               "description": "LMK_BUBBLE_POND_DESC",
-              "name": "LMK_BUBBLE_POND_STOP"
+              "name": "Bubble Pond"
             },
             {
               "id": 29,
               "description": "LMK_JORDAN_POND_DESC",
-              "name": "LMK_JORDAN_POND_STOP"
+              "name": "Jordan Pond"
             },
             {
               "id": 31,
-              "description": "LMK_SEAL_HARBOR_STOP",
-              "name": "LMK_SEAL_HARBOR_STOP"
+              "name": "Seal Harbor"
             },
             {
               "id": 52,
-              "description": "LMK_NORTHEAST_HARBOR_STOP",
-              "name": "LMK_NORTHEAST_HARBOR_STOP"
+              "name": "Northeast Harbor Main Street"
             },
             {
               "id": 38,
               "description": "LMK_NORTHEAST_HARBOR_PIER_DESC",
-              "name": "LMK_NORTHEAST_HARBOR_PIER_STOP"
+              "name": "Northeast Harbor Pier"
             },
             {
               "id": 31,
-              "description": "LMK_SEAL_HARBOR_STOP",
-              "name": "LMK_SEAL_HARBOR_STOP"
+              "name": "Seal Harbor"
             },
             {
               "id": 29,
               "description": "LMK_JORDAN_POND_DESC",
-              "name": "LMK_JORDAN_POND_STOP"
+              "name": "Jordan Pond"
             },
             {
               "id": 28,
               "description": "LMK_BUBBLE_POND_DESC",
-              "name": "LMK_BUBBLE_POND_STOP"
+              "name": "Bubble Pond"
             },
             {
               "id": 3,
               "description": "LMK_HULLS_COVE_VISITOR_CENTER_DESC",
-              "name": "LMK_HULLS_COVE_VISITOR_CENTER_STOP"
+              "name": "Hulls Cove Vistor Center"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             }
           ]
         },
@@ -1161,47 +1088,44 @@
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 28,
               "description": "LMK_BUBBLE_POND_DESC",
-              "name": "LMK_BUBBLE_POND_STOP"
+              "name": "Bubble Pond"
             },
             {
               "id": 29,
               "description": "LMK_JORDAN_POND_DESC",
-              "name": "LMK_JORDAN_POND_STOP"
+              "name": "Jordan Pond"
             },
             {
               "id": 31,
-              "description": "LMK_SEAL_HARBOR_STOP",
-              "name": "LMK_SEAL_HARBOR_STOP"
+              "name": "Seal Harbor"
             },
             {
               "id": 52,
-              "description": "LMK_NORTHEAST_HARBOR_STOP",
-              "name": "LMK_NORTHEAST_HARBOR_STOP"
+              "name": "Northeast Harbor Main Street"
             },
             {
               "id": 38,
               "description": "LMK_NORTHEAST_HARBOR_PIER_DESC",
-              "name": "LMK_NORTHEAST_HARBOR_PIER_STOP"
+              "name": "Northeast Harbor Pier"
             },
             {
               "id": 31,
-              "description": "LMK_SEAL_HARBOR_STOP",
-              "name": "LMK_SEAL_HARBOR_STOP"
+              "name": "Seal Harbor"
             },
             {
               "id": 29,
               "description": "LMK_JORDAN_POND_DESC",
-              "name": "LMK_JORDAN_POND_STOP"
+              "name": "Jordan Pond"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             }
           ]
         },
@@ -1218,42 +1142,39 @@
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 29,
               "description": "LMK_JORDAN_POND_DESC",
-              "name": "LMK_JORDAN_POND_STOP"
+              "name": "Jordan Pond"
             },
             {
               "id": 31,
-              "description": "LMK_SEAL_HARBOR_STOP",
-              "name": "LMK_SEAL_HARBOR_STOP"
+              "name": "Seal Harbor"
             },
             {
               "id": 52,
-              "description": "LMK_NORTHEAST_HARBOR_STOP",
-              "name": "LMK_NORTHEAST_HARBOR_STOP"
+              "name": "Northeast Harbor Main Street"
             },
             {
               "id": 38,
               "description": "LMK_NORTHEAST_HARBOR_PIER_DESC",
-              "name": "LMK_NORTHEAST_HARBOR_PIER_STOP"
+              "name": "Northeast Harbor Pier"
             },
             {
               "id": 31,
-              "description": "LMK_SEAL_HARBOR_STOP",
-              "name": "LMK_SEAL_HARBOR_STOP"
+              "name": "Seal Harbor"
             },
             {
               "id": 29,
               "description": "LMK_JORDAN_POND_DESC",
-              "name": "LMK_JORDAN_POND_STOP"
+              "name": "Jordan Pond"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             }
           ]
         },
@@ -1270,22 +1191,20 @@
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 29,
               "description": "LMK_JORDAN_POND_DESC",
-              "name": "LMK_JORDAN_POND_STOP"
+              "name": "Jordan Pond"
             },
             {
               "id": 31,
-              "description": "LMK_SEAL_HARBOR_STOP",
-              "name": "LMK_SEAL_HARBOR_STOP"
+              "name": "Seal Harbor"
             },
             {
               "id": 52,
-              "description": "LMK_NORTHEAST_HARBOR_STOP",
-              "name": "LMK_NORTHEAST_HARBOR_STOP"
+              "name": "Northeast Harbor Main Street"
             }
           ]
         }
@@ -1310,57 +1229,57 @@
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 34,
               "description": "LMK_EAGLE_LAKE_DESC",
-              "name": "LMK_EAGLE_LAKE_STOP"
+              "name": "Eagle Lake"
             },
             {
               "id": 35,
               "description": "LMK_MID_HIGH_SCHOOL_DESC",
-              "name": "LMK_MID_HIGH_SCHOOL_STOP"
+              "name": "MDI High School"
             },
             {
               "id": 77,
               "description": "LMK_PARKMAN_MOUNTAIN_DESC",
-              "name": "LMK_PARKMAN_MOUNTAIN_STOP"
+              "name": "Parkman Mountain"
             },
             {
               "id": 53,
               "description": "LMK_BROWN_MOUNTAIN_GATEHOUSE_DESC",
-              "name": "LMK_BROWN_MOUNTAIN_GATEHOUSE_STOP"
+              "name": "Brown Mountain Gatehouse"
             },
             {
               "id": 38,
               "description": "LMK_NORTHEAST_HARBOR_PIER_DESC",
-              "name": "LMK_NORTHEAST_HARBOR_PIER_STOP"
+              "name": "Northeast Harbor Pier"
             },
             {
               "id": 53,
               "description": "LMK_BROWN_MOUNTAIN_GATEHOUSE_DESC",
-              "name": "LMK_BROWN_MOUNTAIN_GATEHOUSE_STOP"
+              "name": "Brown Mountain Gatehouse"
             },
             {
               "id": 77,
               "description": "LMK_PARKMAN_MOUNTAIN_DESC",
-              "name": "LMK_PARKMAN_MOUNTAIN_STOP"
+              "name": "Parkman Mountain"
             },
             {
               "id": 35,
               "description": "LMK_MID_HIGH_SCHOOL_DESC",
-              "name": "LMK_MID_HIGH_SCHOOL_STOP"
+              "name": "MDI High School"
             },
             {
               "id": 34,
               "description": "LMK_EAGLE_LAKE_DESC",
-              "name": "LMK_EAGLE_LAKE_STOP"
+              "name": "Eagle Lake"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             }
           ]
         },
@@ -1377,32 +1296,32 @@
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 34,
               "description": "LMK_EAGLE_LAKE_DESC",
-              "name": "LMK_EAGLE_LAKE_STOP"
+              "name": "Eagle Lake"
             },
             {
               "id": 35,
               "description": "LMK_MID_HIGH_SCHOOL_DESC",
-              "name": "LMK_MID_HIGH_SCHOOL_STOP"
+              "name": "MDI High School"
             },
             {
               "id": 77,
               "description": "LMK_PARKMAN_MOUNTAIN_DESC",
-              "name": "LMK_PARKMAN_MOUNTAIN_STOP"
+              "name": "Parkman Mountain"
             },
             {
               "id": 53,
               "description": "LMK_BROWN_MOUNTAIN_GATEHOUSE_DESC",
-              "name": "LMK_BROWN_MOUNTAIN_GATEHOUSE_STOP"
+              "name": "Brown Mountain Gatehouse"
             },
             {
               "id": 38,
               "description": "LMK_NORTHEAST_HARBOR_PIER_DESC",
-              "name": "LMK_NORTHEAST_HARBOR_PIER_STOP"
+              "name": "Northeast Harbor Pier"
             }
           ]
         },
@@ -1419,57 +1338,57 @@
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 34,
               "description": "LMK_EAGLE_LAKE_DESC",
-              "name": "LMK_EAGLE_LAKE_STOP"
+              "name": "Eagle Lake"
             },
             {
               "id": 35,
               "description": "LMK_MID_HIGH_SCHOOL_DESC",
-              "name": "LMK_MID_HIGH_SCHOOL_STOP"
+              "name": "MDI High School"
             },
             {
               "id": 77,
               "description": "LMK_PARKMAN_MOUNTAIN_DESC",
-              "name": "LMK_PARKMAN_MOUNTAIN_STOP"
+              "name": "Parkman Mountain"
             },
             {
               "id": 53,
               "description": "LMK_BROWN_MOUNTAIN_GATEHOUSE_DESC",
-              "name": "LMK_BROWN_MOUNTAIN_GATEHOUSE_STOP"
+              "name": "Brown Mountain Gatehouse"
             },
             {
               "id": 38,
               "description": "LMK_NORTHEAST_HARBOR_PIER_DESC",
-              "name": "LMK_NORTHEAST_HARBOR_PIER_STOP"
+              "name": "Northeast Harbor Pier"
             },
             {
               "id": 53,
               "description": "LMK_BROWN_MOUNTAIN_GATEHOUSE_DESC",
-              "name": "LMK_BROWN_MOUNTAIN_GATEHOUSE_STOP"
+              "name": "Brown Mountain Gatehouse"
             },
             {
               "id": 77,
               "description": "LMK_PARKMAN_MOUNTAIN_DESC",
-              "name": "LMK_PARKMAN_MOUNTAIN_STOP"
+              "name": "Parkman Mountain"
             },
             {
               "id": 35,
               "description": "LMK_MID_HIGH_SCHOOL_DESC",
-              "name": "LMK_MID_HIGH_SCHOOL_STOP"
+              "name": "MDI High School"
             },
             {
               "id": 34,
               "description": "LMK_EAGLE_LAKE_DESC",
-              "name": "LMK_EAGLE_LAKE_STOP"
+              "name": "Eagle Lake"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             }
           ]
         }
@@ -1495,137 +1414,118 @@
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 35,
               "description": "LMK_MID_HIGH_SCHOOL_DESC",
-              "name": "LMK_MID_HIGH_SCHOOL_STOP"
+              "name": "MDI High School"
             },
             {
               "id": 62,
-              "description": "LMK_MT_DESERT_CAMPGROUND_STOP",
-              "name": "LMK_MT_DESERT_CAMPGROUND_STOP"
+              "name": "Mount Desert Campground"
             },
             {
               "id": 39,
               "description": "LMK_SOMESVILLE_DESC",
-              "name": "LMK_SOMESVILLE_STOP"
+              "name": "Somesville"
             },
             {
               "id": 40,
               "description": "LMK_ECHO_LAKE_DESC",
-              "name": "LMK_ECHO_LAKE_STOP"
+              "name": "Echo Lake"
             },
             {
               "id": 41,
-              "description": "LMK_SMUGGLERS_DEN_CAMPGROUND_STOP",
-              "name": "LMK_SMUGGLERS_DEN_CAMPGROUND_STOP"
+              "name": "Smugglers' Den Campground"
             },
             {
               "id": 43,
-              "description": "LMK_CLARK_POINT_STOP",
-              "name": "LMK_CLARK_POINT_STOP"
+              "name": "Clark Point"
             },
             {
               "id": 44,
-              "description": "LMK_SOUTHWEST_HARBOR_STOP",
-              "name": "LMK_SOUTHWEST_HARBOR_STOP"
+              "name": "Southwest Harbor"
             },
             {
               "id": 88,
-              "description": "LMK_MANSET_DOCK_STOP",
-              "name": "LMK_MANSET_DOCK_STOP"
+              "name": "Manset Dock"
             },
             {
               "id": 46,
-              "description": "LMK_SEAWALL_CAMPGROUND_STOP",
-              "name": "LMK_SEAWALL_CAMPGROUND_STOP"
+              "name": "Seawall Campground"
             },
             {
               "id": 47,
-              "description": "LMK_BASS_HARBOR_CAMPGROUND_STOP",
-              "name": "LMK_BASS_HARBOR_CAMPGROUND_STOP"
+              "name": "Bass Harbor Campground"
             },
             {
               "id": 55,
-              "description": "LMK_BASS_HARBOR_FERRY_TERMINAL_STOP",
-              "name": "LMK_BASS_HARBOR_FERRY_TERMINAL_STOP"
+              "name": "Bass Harbor Ferry Terminal"
             },
             {
               "id": 48,
-              "description": "LMK_TREMONT_SCHOOL_STOP",
-              "name": "LMK_TREMONT_SCHOOL_STOP"
+              "name": "Tremont School"
             },
             {
               "id": 50,
-              "description": "LMK_BERNARD_STOP",
-              "name": "LMK_BERNARD_STOP"
+              "name": "Bernard"
             },
             {
               "id": 48,
-              "description": "LMK_TREMONT_SCHOOL_STOP",
-              "name": "LMK_TREMONT_SCHOOL_STOP"
+              "name": "Tremont School"
             },
             {
               "id": 55,
-              "description": "LMK_BASS_HARBOR_FERRY_TERMINAL_STOP",
-              "name": "LMK_BASS_HARBOR_FERRY_TERMINAL_STOP"
+              "name": "Bass Harbor Ferry Terminal"
             },
             {
               "id": 47,
-              "description": "LMK_BASS_HARBOR_CAMPGROUND_STOP",
-              "name": "LMK_BASS_HARBOR_CAMPGROUND_STOP"
+              "name": "Bass Harbor Campground"
             },
             {
               "id": 46,
-              "description": "LMK_SEAWALL_CAMPGROUND_STOP",
-              "name": "LMK_SEAWALL_CAMPGROUND_STOP"
+              "name": "Seawall Campground"
             },
             {
               "id": 88,
-              "description": "LMK_MANSET_DOCK_STOP",
-              "name": "LMK_MANSET_DOCK_STOP"
+              "name": "Manset Dock"
             },
             {
               "id": 44,
-              "description": "LMK_SOUTHWEST_HARBOR_STOP",
-              "name": "LMK_SOUTHWEST_HARBOR_STOP"
+              "name": "Southwest Harbor"
             },
             {
               "id": 43,
-              "description": "LMK_CLARK_POINT_STOP",
-              "name": "LMK_CLARK_POINT_STOP"
+              "name": "Clark Point"
             },
             {
               "id": 41,
-              "description": "LMK_SMUGGLERS_DEN_CAMPGROUND_STOP",
-              "name": "LMK_SMUGGLERS_DEN_CAMPGROUND_STOP"
+              "name": "Smugglers' Den Campground"
             },
             {
               "id": 40,
               "description": "LMK_ECHO_LAKE_DESC",
-              "name": "LMK_ECHO_LAKE_STOP"
+              "name": "Echo Lake"
             },
             {
               "id": 39,
               "description": "LMK_SOMESVILLE_DESC",
-              "name": "LMK_SOMESVILLE_STOP"
+              "name": "Somesville"
             },
             {
               "id": 62,
-              "description": "LMK_MT_DESERT_CAMPGROUND_STOP",
-              "name": "LMK_MT_DESERT_CAMPGROUND_STOP"
+              "name": "Mount Desert Campground"
             },
             {
               "id": 35,
               "description": "LMK_MID_HIGH_SCHOOL_DESC",
-              "name": "LMK_MID_HIGH_SCHOOL_STOP"
+              "name": "MDI High School"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             }
           ]
         },
@@ -1642,137 +1542,118 @@
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 35,
               "description": "LMK_MID_HIGH_SCHOOL_DESC",
-              "name": "LMK_MID_HIGH_SCHOOL_STOP"
+              "name": "MDI High School"
             },
             {
               "id": 62,
-              "description": "LMK_MT_DESERT_CAMPGROUND_STOP",
-              "name": "LMK_MT_DESERT_CAMPGROUND_STOP"
+              "name": "Mount Desert Campground"
             },
             {
               "id": 39,
               "description": "LMK_SOMESVILLE_DESC",
-              "name": "LMK_SOMESVILLE_STOP"
+              "name": "Somesville"
             },
             {
               "id": 40,
               "description": "LMK_ECHO_LAKE_DESC",
-              "name": "LMK_ECHO_LAKE_STOP"
+              "name": "Echo Lake"
             },
             {
               "id": 41,
-              "description": "LMK_SMUGGLERS_DEN_CAMPGROUND_STOP",
-              "name": "LMK_SMUGGLERS_DEN_CAMPGROUND_STOP"
+              "name": "Smugglers' Den Campground"
             },
             {
               "id": 43,
-              "description": "LMK_CLARK_POINT_STOP",
-              "name": "LMK_CLARK_POINT_STOP"
+              "name": "Clark Point"
             },
             {
               "id": 44,
-              "description": "LMK_SOUTHWEST_HARBOR_STOP",
-              "name": "LMK_SOUTHWEST_HARBOR_STOP"
+              "name": "Southwest Harbor"
             },
             {
               "id": 88,
-              "description": "LMK_MANSET_DOCK_STOP",
-              "name": "LMK_MANSET_DOCK_STOP"
+              "name": "Manset Dock"
             },
             {
               "id": 46,
-              "description": "LMK_SEAWALL_CAMPGROUND_STOP",
-              "name": "LMK_SEAWALL_CAMPGROUND_STOP"
+              "name": "Seawall Campground"
             },
             {
               "id": 47,
-              "description": "LMK_BASS_HARBOR_CAMPGROUND_STOP",
-              "name": "LMK_BASS_HARBOR_CAMPGROUND_STOP"
+              "name": "Bass Harbor Campground"
             },
             {
               "id": 55,
-              "description": "LMK_BASS_HARBOR_FERRY_TERMINAL_STOP",
-              "name": "LMK_BASS_HARBOR_FERRY_TERMINAL_STOP"
+              "name": "Bass Harbor Ferry Terminal"
             },
             {
               "id": 48,
-              "description": "LMK_TREMONT_SCHOOL_STOP",
-              "name": "LMK_TREMONT_SCHOOL_STOP"
+              "name": "Tremont School"
             },
             {
               "id": 50,
-              "description": "LMK_BERNARD_STOP",
-              "name": "LMK_BERNARD_STOP"
+              "name": "Bernard"
             },
             {
               "id": 48,
-              "description": "LMK_TREMONT_SCHOOL_STOP",
-              "name": "LMK_TREMONT_SCHOOL_STOP"
+              "name": "Tremont School"
             },
             {
               "id": 55,
-              "description": "LMK_BASS_HARBOR_FERRY_TERMINAL_STOP",
-              "name": "LMK_BASS_HARBOR_FERRY_TERMINAL_STOP"
+              "name": "Bass Harbor Ferry Terminal"
             },
             {
               "id": 47,
-              "description": "LMK_BASS_HARBOR_CAMPGROUND_STOP",
-              "name": "LMK_BASS_HARBOR_CAMPGROUND_STOP"
+              "name": "Bass Harbor Campground"
             },
             {
               "id": 46,
-              "description": "LMK_SEAWALL_CAMPGROUND_STOP",
-              "name": "LMK_SEAWALL_CAMPGROUND_STOP"
+              "name": "Seawall Campground"
             },
             {
               "id": 88,
-              "description": "LMK_MANSET_DOCK_STOP",
-              "name": "LMK_MANSET_DOCK_STOP"
+              "name": "Manset Dock"
             },
             {
               "id": 44,
-              "description": "LMK_SOUTHWEST_HARBOR_STOP",
-              "name": "LMK_SOUTHWEST_HARBOR_STOP"
+              "name": "Southwest Harbor"
             },
             {
               "id": 43,
-              "description": "LMK_CLARK_POINT_STOP",
-              "name": "LMK_CLARK_POINT_STOP"
+              "name": "Clark Point"
             },
             {
               "id": 41,
-              "description": "LMK_SMUGGLERS_DEN_CAMPGROUND_STOP",
-              "name": "LMK_SMUGGLERS_DEN_CAMPGROUND_STOP"
+              "name": "Smugglers' Den Campground"
             },
             {
               "id": 40,
               "description": "LMK_ECHO_LAKE_DESC",
-              "name": "LMK_ECHO_LAKE_STOP"
+              "name": "Echo Lake"
             },
             {
               "id": 39,
               "description": "LMK_SOMESVILLE_DESC",
-              "name": "LMK_SOMESVILLE_STOP"
+              "name": "Somesville"
             },
             {
               "id": 62,
-              "description": "LMK_MT_DESERT_CAMPGROUND_STOP",
-              "name": "LMK_MT_DESERT_CAMPGROUND_STOP"
+              "name": "Mount Desert Campground"
             },
             {
               "id": 35,
               "description": "LMK_MID_HIGH_SCHOOL_DESC",
-              "name": "LMK_MID_HIGH_SCHOOL_STOP"
+              "name": "MDI High School"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             }
           ]
         }
@@ -1796,18 +1677,16 @@
           "stops": [
             {
               "id": 79,
-              "description": "LMK_SCHOODIC_WOODS_CAMPROUND_STOP",
-              "name": "LMK_SCHOODIC_WOODS_CAMPROUND_STOP"
+              "name": "Schoodic Woods Campground"
             },
             {
               "id": 57,
-              "description": "LMK_WINTER_HARBOR_STOP",
-              "name": "LMK_WINTER_HARBOR_STOP"
+              "name": "Winter Harbor"
             },
             {
               "id": 56,
               "description": "LMK_WH_FERRY_TERMINAL_DESC",
-              "name": "LMK_WH_FERRY_TERMINAL_STOP"
+              "name": "Winter Harbor Ferry Terminal"
             }
           ]
         },
@@ -1824,42 +1703,37 @@
             {
               "id": 56,
               "description": "LMK_WH_FERRY_TERMINAL_DESC",
-              "name": "LMK_WH_FERRY_TERMINAL_STOP"
+              "name": "Winter Harbor Ferry Terminal"
             },
             {
               "id": 79,
-              "description": "LMK_SCHOODIC_WOODS_CAMPROUND_STOP",
-              "name": "LMK_SCHOODIC_WOODS_CAMPROUND_STOP"
+              "name": "Schoodic Woods Campground"
             },
             {
               "id": 59,
               "description": "LMK_SCHOODIC_POINT_DESC",
-              "name": "LMK_SCHOODIC_POINT_STOP"
+              "name": "Schoodic Point"
             },
             {
               "id": 60,
-              "description": "LMK_BIRCH_HARBOR_STOP",
-              "name": "LMK_BIRCH_HARBOR_STOP"
+              "name": "Birch Harbor"
             },
             {
               "id": 61,
-              "description": "LMK_PROSPECT_HARBOR_STOP",
-              "name": "LMK_PROSPECT_HARBOR_STOP"
+              "name": "Prospect Harbor"
             },
             {
               "id": 79,
-              "description": "LMK_SCHOODIC_WOODS_CAMPROUND_STOP",
-              "name": "LMK_SCHOODIC_WOODS_CAMPROUND_STOP"
+              "name": "Schoodic Woods Campground"
             },
             {
               "id": 57,
-              "description": "LMK_WINTER_HARBOR_STOP",
-              "name": "LMK_WINTER_HARBOR_STOP"
+              "name": "Winter Harbor"
             },
             {
               "id": 56,
               "description": "LMK_WH_FERRY_TERMINAL_DESC",
-              "name": "LMK_WH_FERRY_TERMINAL_STOP"
+              "name": "Winter Harbor Ferry Terminal"
             }
           ]
         },
@@ -1876,12 +1750,11 @@
             {
               "id": 56,
               "description": "LMK_WH_FERRY_TERMINAL_DESC",
-              "name": "LMK_WH_FERRY_TERMINAL_STOP"
+              "name": "Winter Harbor Ferry Terminal"
             },
             {
               "id": 79,
-              "description": "LMK_SCHOODIC_WOODS_CAMPROUND_STOP",
-              "name": "LMK_SCHOODIC_WOODS_CAMPROUND_STOP"
+              "name": "Schoodic Woods Campground"
             }
           ]
         }
@@ -1906,77 +1779,67 @@
             {
               "id": 74,
               "description": "LMK_ACADIA_GATEWAY_CENTER_DESC",
-              "name": "LMK_ACADIA_GATEWAY_CENTER_STOP"
+              "name": "Acadia Gateway Center"
             },
             {
               "id": 11,
-              "description": "LMK_NARROWS_TOO_CAMPGROUND_STOP",
-              "name": "LMK_NARROWS_TOO_CAMPGROUND_STOP"
+              "name": "Narrows Too Campground"
             },
             {
               "id": 10,
-              "description": "LMK_BAR_HARBOR_AIRPORT_DESC",
-              "name": "LMK_BAR_HARBOR_AIRPORT_STOP"
+              "name": "Bar Harbor Airport"
             },
             {
               "id": 9,
-              "description": "LMK_BAR_HARBOR_KOA_CAMPGROUND_STOP",
-              "name": "LMK_BAR_HARBOR_KOA_CAMPGROUND_STOP"
+              "name": "Bar Harbor KOA Campground"
             },
             {
               "id": 8,
-              "description": "LMK_WOODLANDS_KOA_CAMPGROUND_STOP",
-              "name": "LMK_WOODLANDS_KOA_CAMPGROUND_STOP"
+              "name": "Woodlands KOA Campground"
             },
             {
               "id": 69,
-              "description": "LMK_TOWN_HILL_STOP",
-              "name": "LMK_TOWN_HILL_STOP"
+              "name": "Town Hill"
             },
             {
               "id": 35,
               "description": "LMK_MID_HIGH_SCHOOL_DESC",
-              "name": "LMK_MID_HIGH_SCHOOL_STOP"
+              "name": "MDI High School"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 35,
               "description": "LMK_MID_HIGH_SCHOOL_DESC",
-              "name": "LMK_MID_HIGH_SCHOOL_STOP"
+              "name": "MDI High School"
             },
             {
               "id": 69,
-              "description": "LMK_TOWN_HILL_STOP",
-              "name": "LMK_TOWN_HILL_STOP"
+              "name": "Town Hill"
             },
             {
               "id": 8,
-              "description": "LMK_WOODLANDS_KOA_CAMPGROUND_STOP",
-              "name": "LMK_WOODLANDS_KOA_CAMPGROUND_STOP"
+              "name": "Woodlands KOA Campground"
             },
             {
               "id": 9,
-              "description": "LMK_BAR_HARBOR_KOA_CAMPGROUND_STOP",
-              "name": "LMK_BAR_HARBOR_KOA_CAMPGROUND_STOP"
+              "name": "Bar Harbor KOA Campground"
             },
             {
               "id": 11,
-              "description": "LMK_NARROWS_TOO_CAMPGROUND_STOP",
-              "name": "LMK_NARROWS_TOO_CAMPGROUND_STOP"
+              "name": "Narrows Too Campground"
             },
             {
               "id": 10,
-              "description": "LMK_BAR_HARBOR_AIRPORT_DESC",
-              "name": "LMK_BAR_HARBOR_AIRPORT_STOP"
+              "name": "Bar Harbor Airport"
             },
             {
               "id": 74,
               "description": "LMK_ACADIA_GATEWAY_CENTER_DESC",
-              "name": "LMK_ACADIA_GATEWAY_CENTER_STOP"
+              "name": "Acadia Gateway Center"
             }
           ]
         },
@@ -1993,77 +1856,67 @@
             {
               "id": 74,
               "description": "LMK_ACADIA_GATEWAY_CENTER_DESC",
-              "name": "LMK_ACADIA_GATEWAY_CENTER_STOP"
+              "name": "Acadia Gateway Center"
             },
             {
               "id": 11,
-              "description": "LMK_NARROWS_TOO_CAMPGROUND_STOP",
-              "name": "LMK_NARROWS_TOO_CAMPGROUND_STOP"
+              "name": "Narrows Too Campground"
             },
             {
               "id": 10,
-              "description": "LMK_BAR_HARBOR_AIRPORT_DESC",
-              "name": "LMK_BAR_HARBOR_AIRPORT_STOP"
+              "name": "Bar Harbor Airport"
             },
             {
               "id": 9,
-              "description": "LMK_BAR_HARBOR_KOA_CAMPGROUND_STOP",
-              "name": "LMK_BAR_HARBOR_KOA_CAMPGROUND_STOP"
+              "name": "Bar Harbor KOA Campground"
             },
             {
               "id": 8,
-              "description": "LMK_WOODLANDS_KOA_CAMPGROUND_STOP",
-              "name": "LMK_WOODLANDS_KOA_CAMPGROUND_STOP"
+              "name": "Woodlands KOA Campground"
             },
             {
               "id": 69,
-              "description": "LMK_TOWN_HILL_STOP",
-              "name": "LMK_TOWN_HILL_STOP"
+              "name": "Town Hill"
             },
             {
               "id": 35,
               "description": "LMK_MID_HIGH_SCHOOL_DESC",
-              "name": "LMK_MID_HIGH_SCHOOL_STOP"
+              "name": "MDI High School"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 35,
               "description": "LMK_MID_HIGH_SCHOOL_DESC",
-              "name": "LMK_MID_HIGH_SCHOOL_STOP"
+              "name": "MDI High School"
             },
             {
               "id": 69,
-              "description": "LMK_TOWN_HILL_STOP",
-              "name": "LMK_TOWN_HILL_STOP"
+              "name": "Town Hill"
             },
             {
               "id": 8,
-              "description": "LMK_WOODLANDS_KOA_CAMPGROUND_STOP",
-              "name": "LMK_WOODLANDS_KOA_CAMPGROUND_STOP"
+              "name": "Woodlands KOA Campground"
             },
             {
               "id": 9,
-              "description": "LMK_BAR_HARBOR_KOA_CAMPGROUND_STOP",
-              "name": "LMK_BAR_HARBOR_KOA_CAMPGROUND_STOP"
+              "name": "Bar Harbor KOA Campground"
             },
             {
               "id": 11,
-              "description": "LMK_NARROWS_TOO_CAMPGROUND_STOP",
-              "name": "LMK_NARROWS_TOO_CAMPGROUND_STOP"
+              "name": "Narrows Too Campground"
             },
             {
               "id": 10,
-              "description": "LMK_BAR_HARBOR_AIRPORT_DESC",
-              "name": "LMK_BAR_HARBOR_AIRPORT_STOP"
+              "name": "Bar Harbor Airport"
             },
             {
               "id": 74,
               "description": "LMK_ACADIA_GATEWAY_CENTER_DESC",
-              "name": "LMK_ACADIA_GATEWAY_CENTER_STOP"
+              "name": "Acadia Gateway Center"
             }
           ]
         }
@@ -2088,27 +1941,26 @@
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 21,
               "description": "LMK_SIEUR_DE_MONTS_DESC",
-              "name": "LMK_SIEUR_DE_MONTS_STOP"
+              "name": "Sieur De Monts"
             },
             {
               "id": 27,
-              "description": "LMK_BLACKWOODS_CAMPGROUND_STOP",
-              "name": "LMK_BLACKWOODS_CAMPGROUND_STOP"
+              "name": "Blackwoods Campground"
             },
             {
               "id": 21,
               "description": "LMK_SIEUR_DE_MONTS_DESC",
-              "name": "LMK_SIEUR_DE_MONTS_STOP"
+              "name": "Sieur De Monts"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             }
           ]
         },
@@ -2125,32 +1977,30 @@
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 21,
               "description": "LMK_SIEUR_DE_MONTS_DESC",
-              "name": "LMK_SIEUR_DE_MONTS_STOP"
+              "name": "Sieur De Monts"
             },
             {
               "id": 27,
-              "description": "LMK_BLACKWOODS_CAMPGROUND_STOP",
-              "name": "LMK_BLACKWOODS_CAMPGROUND_STOP"
+              "name": "Blackwoods Campground"
             },
             {
               "id": 24,
-              "description": "LMK_OTTER_CLIFFS_STOP",
-              "name": "LMK_OTTER_CLIFFS_STOP"
+              "name": "Otter Cliffs"
             },
             {
               "id": 21,
               "description": "LMK_SIEUR_DE_MONTS_DESC",
-              "name": "LMK_SIEUR_DE_MONTS_STOP"
+              "name": "Sieur De Monts"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             }
           ]
         },
@@ -2167,17 +2017,16 @@
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 27,
-              "description": "LMK_BLACKWOODS_CAMPGROUND_STOP",
-              "name": "LMK_BLACKWOODS_CAMPGROUND_STOP"
+              "name": "Blackwoods Campground"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             }
           ]
         },
@@ -2194,17 +2043,16 @@
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             },
             {
               "id": 27,
-              "description": "LMK_BLACKWOODS_CAMPGROUND_STOP",
-              "name": "LMK_BLACKWOODS_CAMPGROUND_STOP"
+              "name": "Blackwoods Campground"
             },
             {
               "id": 1,
               "description": "LMK_VILLAGE_GREEN_DESC",
-              "name": "LMK_VILLAGE_GREEN_STOP"
+              "name": "Village Green"
             }
           ]
         }

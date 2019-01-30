@@ -60,11 +60,24 @@ export default (state: State = {}, action: Action): State => {
 };
 
 
+interface Landmark {
+    description?: string;
+    descriptionShort?: string;
+    landmarkType: string;
+    name: string;
+    location: { elevation?: number; latitude: number; longitude: number; };
+}
+
+type RoutePageType = { [key in "h1" | "li" | "p"]: string };
+
+type RoutePageArrayType = { [key in "li" | "ul"]: RoutePageType | RoutePageArrayType };
+
 interface Route { // Some of these interface properties are part of app.json.
     description: string;
     id: number;
-    landmarks: any[];
+    landmarks: Landmark[];
     name: string;
+    page: (RoutePageType | RoutePageArrayType)[];
     scheduledStops: ScheduledStop[];
 }
 
@@ -80,4 +93,4 @@ interface ScheduledStop extends StopSchedule {
     stops: { description: string; id: number; name: string; }[];
 }
 
-export { Route, State/*, Routes*/ };
+export { Landmark, Route, RoutePageArrayType, RoutePageType, State/*, Routes*/ };

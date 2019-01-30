@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Richard L. McNeary II
+ * Copyright (c) 2019 Richard L. McNeary II
  *
  * MIT License
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -21,16 +21,100 @@
  */
 
 
+import { Landmark, Route, RoutePageArrayType, RoutePageType } from "@reducer/app";
 import * as React from "react";
+import { FormattedMessage } from "react-intl";
 
 
 export default (props: Props): JSX.Element => {
+    const { route } = props;
+    const info = route.page ? renderPage(route) : renderRoute(route);
+
     return (
-        <div className="route-info">{props.routeId} info is coming!</div>
+        <div className="route-info">
+            <h1>{route.name}</h1>
+            {info}
+        </div>
     );
 };
 
+function createPageElement(e: RoutePageType | RoutePageArrayType, i: number, indexPrefix = ""): JSX.Element {
+    const key = Object.keys(e)[0];
+
+    const keyPropBase = `${indexPrefix}${i}-`;
+    const keyProp = `${keyPropBase}${key}`;
+    let result: JSX.Element;
+    switch (key) {
+        case "li": {
+            const v = e[key];
+            result = typeof v === "string" ? (<FormattedMessage id={v} key={keyProp} tagName={key} />) : createPageElement(v, i, keyPropBase);
+            break;
+        }
+
+        case "ul": {
+            const arr = e[key] as (RoutePageType | RoutePageArrayType)[];
+            result = (<ul key={keyProp}>{arr.map((x, idx) => createPageElement(x, idx, keyPropBase))}</ul>);
+            break;
+        }
+
+        default: {
+            result = (<FormattedMessage id={e[key]} key={keyProp} tagName={key} />);
+            break;
+        }
+    }
+
+    return result;
+}
+
+function landmarkDescription(landmark: Landmark): JSX.Element {
+    return landmark.descriptionShort ? (<FormattedMessage id={landmark.descriptionShort} />) : null;
+}
+
+function renderLandmarks(route: Route): React.ReactFragment {
+    if (!route.landmarks || !route.landmarks.length) {
+        return null;
+    }
+
+    const getDescription = (landmark: Landmark): JSX.Element => {
+        const l = landmarkDescription(landmark);
+        if (!l) {
+            return null;
+        }
+
+        return (<span> ‑ {l}</span>);
+    };
+
+    return [
+        (<FormattedMessage id="LBL_LANDMARKS" tagName="h2" />),
+        (<ul>{route.landmarks.map((x, i) => (<li key={`lk-${i}`}>{x.name}{getDescription(x)}</li>))}</ul>)
+    ];
+}
+
+function renderPage(route: Route): React.ReactFragment {
+    return [
+        route.page.map<JSX.Element>((x, i) => createPageElement(x, i)),
+        renderScheduledStops(route),
+        renderLandmarks(route)
+    ];
+}
+
+function renderRoute(route: Route): React.ReactFragment {
+    return (
+        <div>{route.description}</div>
+    );
+}
+
+function renderScheduledStops(route: Route): React.ReactFragment {
+    return [
+        (<FormattedMessage id="LBL_SCHEDULED_STOPS" tagName="h2" />),
+        (<ul>{route.scheduledStops[0].stops.map((x, i) => (<li key={`st-${i}`}>{x.name}</li>))}</ul>)
+    ];
+}
+
 
 interface Props {
-    routeId: number;
+    route: Route;
 }
+
+
+export { Props };
