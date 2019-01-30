@@ -48,12 +48,29 @@
     @extend %headline-1;
 }
 
+%list-item {
+    &::before {
+        content: "\2022";
+        display: inline-block;
+        margin: 0 0 0 $text-custom-bullet-spacing * -1;
+        width: $text-custom-bullet-spacing;
+    }
+    @extend %para;
+}
+
 %para {
     & %para {
         font-size: 1em; /* Prevents recursive paras from increasing the font size. */
     }
     @extend %body;
     margin: $text-para-margin 0 0 0;
+}
+
+%ulist {
+    @extend %para;
+    list-style: none; // Lists will not automatically create bullet images.
+    margin-top: $text-li-margin;
+    padding-inline-start: $text-custom-bullet-spacing * 2; // Position the left side of the bullet (the indent).
 }
 
 

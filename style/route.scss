@@ -88,18 +88,14 @@
         @extend %para;
     }
     & ul {
-        @extend %para;
+        @extend %ulist;
         li {
-            &::before {
-                content: "\2022";
-                padding: 0 $text-custom-bullet-padding 0 0; // The space between the right side of the bullet and item text.
-            }
-            @extend %para;
+            @extend %list-item;
             margin-top: $text-li-margin;
         }
-        list-style: none; // Lists will not automatically create bullet images.
-        margin-top: $text-li-margin;
-        padding-inline-start: $text-custom-bullet-padding; // Position the left side of the bullet (the indent).
+        // list-style: none; // Lists will not automatically create bullet images.
+        // margin-top: $text-li-margin;
+        // padding-inline-start: $text-custom-bullet-padding; // Position the left side of the bullet (the indent).
     }
     background-color: white;
     height: 100%;
