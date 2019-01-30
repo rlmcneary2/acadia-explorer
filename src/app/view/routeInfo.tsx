@@ -70,7 +70,7 @@ function landmarkDescription(landmark: Landmark): JSX.Element {
     return landmark.descriptionShort ? (<FormattedMessage id={landmark.descriptionShort} />) : null;
 }
 
-function renderLandmarks(route: Route): React.ReactFragment {
+function renderLandmarks(route: Route): JSX.Element {
     if (!route.landmarks || !route.landmarks.length) {
         return null;
     }
@@ -84,31 +84,37 @@ function renderLandmarks(route: Route): React.ReactFragment {
         return (<span> ‑ {l}</span>);
     };
 
-    return [
-        (<FormattedMessage id="LBL_LANDMARKS" tagName="h2" />),
-        (<ul>{route.landmarks.map((x, i) => (<li key={`lk-${i}`}>{x.name}{getDescription(x)}</li>))}</ul>)
-    ];
+    return (
+        <React.Fragment>
+            <FormattedMessage id="LBL_ALONG_ROUTE" tagName="h2" />
+            <ul>{route.landmarks.map((x, i) => (<li key={`lk-${i}`}>{x.name}{getDescription(x)}</li>))}</ul>
+        </React.Fragment>
+    );
 }
 
-function renderPage(route: Route): React.ReactFragment {
-    return [
-        route.page.map<JSX.Element>((x, i) => createPageElement(x, i)),
-        renderScheduledStops(route),
-        renderLandmarks(route)
-    ];
+function renderPage(route: Route): JSX.Element {
+    return (
+        <React.Fragment>
+            {route.page.map<JSX.Element>((x, i) => createPageElement(x, i))}
+            {renderScheduledStops(route)}
+            {renderLandmarks(route)}
+        </React.Fragment>
+    );
 }
 
-function renderRoute(route: Route): React.ReactFragment {
+function renderRoute(route: Route): JSX.Element {
     return (
         <div>{route.description}</div>
     );
 }
 
-function renderScheduledStops(route: Route): React.ReactFragment {
-    return [
-        (<FormattedMessage id="LBL_SCHEDULED_STOPS" tagName="h2" />),
-        (<ul>{route.scheduledStops[0].stops.map((x, i) => (<li key={`st-${i}`}>{x.name}</li>))}</ul>)
-    ];
+function renderScheduledStops(route: Route): JSX.Element {
+    return (
+        <React.Fragment>
+            <FormattedMessage id="LBL_SCHEDULED_STOPS" tagName="h2" />
+            <ul>{route.scheduledStops[0].stops.map((x, i) => (<li key={`st-${i}`}>{x.name}</li>))}</ul>
+        </React.Fragment>
+    );
 }
 
 
