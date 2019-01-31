@@ -153,8 +153,8 @@ const config = {
         new webpack.BannerPlugin({ banner: fs.readFileSync("./LICENSE", "utf8") }),
         new HtmlWebpackPlugin({ inject: "head", template: "./src/index.template.html", title: "Acadia Island Explorer" }),
         new MiniCssExtractPlugin({ filename: "[name].css" }), // create css files from the css.import
-        new CopyWebpackPlugin([{ from: "data" }, { from: "manifest.json" }, { from: "style/images/*.png" }]), // copy json data files
-        new WriteFilePlugin({ test: /(\.json$|\.png$)/, useHashIndex: true }), // so the dev server can access files that aren't part of the bundle (like the json files copied above)
+        new CopyWebpackPlugin([{ from: "data" }, { from: "manifest.json" }, { from: "style/images/*.png" }, { from: "style/images/favicon.ico", to: "." }]), // copy json data files
+        new WriteFilePlugin({ test: /(\.json$|\.png$|\.ico$)/, useHashIndex: true }), // so the dev server can access files that aren't part of the bundle (like the json files copied above)
         new GenerateSW(serviceWorkerOptions) // create the service worker
     ],
     resolve: {
