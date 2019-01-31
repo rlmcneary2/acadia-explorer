@@ -38,7 +38,6 @@ const babelOptions = require("./babel.config");
 
 const _OUTPUT_DIR = "dist";
 const _SOURCE_DIR = "src";
-const _STYLE_DIR = "style";
 
 
 const serviceWorkerOptions = {
@@ -168,7 +167,7 @@ const config = {
     },
     serve: {
         content: path.resolve(__dirname, _OUTPUT_DIR),
-        add: (app, middleware, options) => {
+        add: (app/*, middleware, options*/) => {
             app.use(convert(history()));
         }
     },
