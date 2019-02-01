@@ -28,7 +28,7 @@ import { FormattedMessage } from "react-intl";
 
 export default (props: Props): JSX.Element => {
     const { route } = props;
-    const info = route.page ? renderPage(route) : renderRoute(route);
+    const info = route.page ? renderPage(props) : renderRoute(route);
 
     return (
         <div className="route-info">
@@ -40,6 +40,10 @@ export default (props: Props): JSX.Element => {
 };
 
 function createPageElement(e: RoutePageType | RoutePageArrayType, i: number, indexPrefix = ""): JSX.Element {
+    const propElementMap = {
+        tip: "b"
+    };
+
     const key = Object.keys(e)[0];
 
     const keyPropBase = `${indexPrefix}${i}-`;
@@ -59,12 +63,36 @@ function createPageElement(e: RoutePageType | RoutePageArrayType, i: number, ind
         }
 
         default: {
-            result = (<FormattedMessage id={e[key]} key={keyProp} tagName={key} />);
+            result = (<FormattedMessage id={e[key]} key={keyProp} tagName={propElementMap[key] || key} />);
             break;
         }
     }
 
     return result;
+}
+
+function createScheduledStopItems(props: Props): JSX.Element {
+    const { landmarks, route } = props;
+    const { scheduledStops } = route;
+
+    const stops = scheduledStops[0].stops.map((x, i) => {
+        let symbols: JSX.Element[];
+
+        const landmark = landmarks.find(y => y.id === x.id);
+        if (landmark && landmark.features && landmark.features.length) {
+            symbols = landmark.features.map(y => (<span className={`sym-${y}`} key={`sym-${y}`} />));
+        }
+
+        const symbolContainer = symbols ? (<React.Fragment>{symbols}</React.Fragment>) : null;
+
+        const liProps = {
+            className: symbolContainer ? "sym" : null
+        };
+
+        return (<li {...liProps} key={`st-${i}`}>{x.name}{symbolContainer}</li>);
+    });
+
+    return (<React.Fragment>{stops}</React.Fragment>);
 }
 
 function landmarkDescription(landmark: Landmark): JSX.Element {
@@ -93,11 +121,13 @@ function renderLandmarks(route: Route): JSX.Element {
     );
 }
 
-function renderPage(route: Route): JSX.Element {
+function renderPage(props: Props): JSX.Element {
+    const { route } = props;
+
     return (
         <React.Fragment>
             {route.page.map<JSX.Element>((x, i) => createPageElement(x, i))}
-            {renderScheduledStops(route)}
+            {renderScheduledStops(props)}
             {renderLandmarks(route)}
         </React.Fragment>
     );
@@ -109,17 +139,18 @@ function renderRoute(route: Route): JSX.Element {
     );
 }
 
-function renderScheduledStops(route: Route): JSX.Element {
+function renderScheduledStops(props: Props): JSX.Element {
     return (
         <React.Fragment>
             <FormattedMessage id="LBL_SCHEDULED_STOPS" tagName="h2" />
-            <ul>{route.scheduledStops[0].stops.map((x, i) => (<li key={`st-${i}`}>{x.name}</li>))}</ul>
+            <ul>{createScheduledStopItems(props)}</ul>
         </React.Fragment>
     );
 }
 
 
 interface Props {
+    landmarks: Landmark[];
     route: Route;
 }
 

@@ -25,18 +25,20 @@
     symbol
 */
 
-$symbol-small: 20px;
+$symbol-border: 0;
+$symbol-small: 20px - ($symbol-border * 2);
 
 
 %symbol {
     background: {
-        color: lightgray;
+        color: $color-secondary-1-1;
         image: url("images/symbols.svg");
         position: left top;
-        repeat: no-repeat;
         size: cover;
     }
-    display: inline-block;
+    border: solid $color-control-text-dark $symbol-border;
+    border-radius: 3px;
+    margin-left: 1px;
 }
 
 %symbol-small {
@@ -45,11 +47,27 @@ $symbol-small: 20px;
     width: $symbol-small;
 }
 
-.sym-restroom {
+.sym-climb {
     @extend %symbol-small;
+    background-position: $symbol-small * -4;
 }
 
 .sym-hike {
     @extend %symbol-small;
+    background-position: $symbol-small * -3;
+}
+
+.sym-park {
+    @extend %symbol-small;
+}
+
+.sym-restroom {
+    @extend %symbol-small;
     background-position: $symbol-small * -1;
 }
+
+.sym-walk {
+    @extend %symbol-small;
+    background-position: $symbol-small * -2;
+}
+

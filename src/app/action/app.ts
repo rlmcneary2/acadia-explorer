@@ -25,7 +25,7 @@ import { State } from "@reducer/interfaces";
 import { ThunkAction } from "redux-thunk";
 import { http } from "../network/http";
 import { WorkerResponse } from "../network/httpInterfaces";
-import { Route /*, StateStop, StateStopData*/ } from "../reducer/app";
+import { Landmark, Route } from "../reducer/app";
 import { actionApi } from "./api";
 import { DataAction /*, DataActionId*/ } from "./interfaces";
 
@@ -37,7 +37,7 @@ const actionApp = Object.freeze({
 
     types: Object.freeze({
         // updateLastStop: "appUpdateLastStop",
-        updateRoutesData: "appUpdateRoutesData"
+        updateAppData: "appUpdateAppData"
         // updateStops: "appUpdateStops"
     }),
 
@@ -47,8 +47,7 @@ const actionApp = Object.freeze({
 
             const response = await getAppData();
             const { response: data = {} }  = response;
-            const { routes } = data;
-            dispatch(actionApp.updateRoutesData(routes));
+            dispatch(actionApp.updateAppData(data));
         };
     },
 
@@ -65,10 +64,10 @@ const actionApp = Object.freeze({
     //     };
     // },
 
-    updateRoutesData(data: Route[]): DataAction<Route[]> {
+    updateAppData(data: { landmarks: Landmark[]; routes: Route[] }): DataAction<{ landmarks: Landmark[]; routes: Route[] }> {
         return {
             data,
-            type: actionApp.types.updateRoutesData
+            type: actionApp.types.updateAppData
         };
     }
 

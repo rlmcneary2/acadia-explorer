@@ -3,6 +3,7 @@
     {
       "landmarkType": "lodging",
       "name": "Acadia Inn",
+      "id": 17,
       "location": {
         "latitutde": 44.39526749,
         "longitude": -68.22457123
@@ -12,6 +13,7 @@
       "description": "LMK_ACADIA_GATEWAY_CENTER_DESC",
       "landmarkType": "ground-transport",
       "name": "Acadia Gateway Center",
+      "id": 74,
       "location": {
         "latitutde": 44.470624,
         "longitude": -68.371438
@@ -20,6 +22,7 @@
     {
       "landmarkType": "lodging",
       "name": "Atlantic Eyrie Lodge",
+      "id": 18,
       "location": {
         "latitutde": 44.39187622,
         "longitude": -68.22277832
@@ -28,6 +31,7 @@
     {
       "landmarkType": "lodging",
       "name": "Atlantic Oceanside Hotel",
+      "id": 14,
       "location": {
         "latitutde": 44.3971138,
         "longitude": -68.22524261
@@ -36,6 +40,7 @@
     {
       "landmarkType": "airport",
       "name": "Bar Harbor Airport",
+      "id": 10,
       "location": {
         "latitutde": 44.44600296,
         "longitude": -68.3615036
@@ -44,6 +49,7 @@
     {
       "landmarkType": "campground",
       "name": "Bar Harbor Campground",
+      "id": 4,
       "location": {
         "latitutde": 44.43102264,
         "longitude": -68.27126312
@@ -52,6 +58,7 @@
     {
       "landmarkType": "campground",
       "name": "Bar Harbor KOA Campground",
+      "id": 9,
       "location": {
         "latitutde": 44.42137909,
         "longitude": -68.36430359
@@ -60,6 +67,7 @@
     {
       "landmarkType": "lodging",
       "name": "Bar Harbor Regency",
+      "id": 15,
       "location": {
         "latitutde": 44.39929581,
         "longitude": -68.22899628
@@ -68,6 +76,7 @@
     {
       "landmarkType": "campground",
       "name": "Bass Harbor Campground",
+      "id": 47,
       "location": {
         "latitutde": 44.23036194,
         "longitude": -68.33906555
@@ -76,6 +85,7 @@
     {
       "landmarkType": "ferry-transport",
       "name": "Bass Harbor Ferry Terminal",
+      "id": 55,
       "location": {
         "latitutde": 44.23500061,
         "longitude": 34738159
@@ -84,6 +94,7 @@
     {
       "landmarkType": "point-of-interest",
       "name": "Bernard",
+      "id": 50,
       "location": {
         "latitutde": 44.23987198,
         "longitude": -68.35358429
@@ -92,6 +103,7 @@
     {
       "landmarkType": "campground",
       "name": "Blackwoods Campground",
+      "id": 27,
       "location": {
         "latitutde": 44.30889511,
         "longitude": -68.20349121
@@ -100,6 +112,7 @@
     {
       "landmarkType": "point-of-interest",
       "name": "Birch Harbor",
+      "id": 60,
       "location": {
         "latitutde": 44.38780212,
         "longitude": -68.03931427
@@ -109,6 +122,7 @@
       "description": "LMK_BROWN_MOUNTAIN_GATEHOUSE_DESC",
       "landmarkType": "point-of-interest",
       "name": "Brown Mountain Gatehouse",
+      "id": 53,
       "location": {
         "latitutde": 44.31218338,
         "longitude": -68.28541565
@@ -118,6 +132,7 @@
       "description": "LMK_BUBBLE_POND_DESC",
       "landmarkType": "route-stop",
       "name": "Bubble Pond",
+      "id": 28,
       "location": {
         "latitutde": 44.35030746,
         "longitude": -68.24166107
@@ -126,6 +141,7 @@
     {
       "landmarkType": "trailhead",
       "name": "Cadillac North Ridge",
+      "id": 20,
       "location": {
         "latitutde": 44.3786,
         "longitude": -68.2292
@@ -134,6 +150,7 @@
     {
       "landmarkType": "trailhead",
       "name": "Cadillac North Ridge",
+      "id": 83,
       "location": {
         "latitutde": 44.3786,
         "longitude": -68.2292
@@ -142,6 +159,7 @@
     {
       "landmarkType": "route-stop",
       "name": "Clark Point",
+      "id": 43,
       "location": {
         "latitutde": 44.26898575,
         "longitude": -68.31143188
@@ -151,6 +169,7 @@
       "description": "LMK_EAGLE_LAKE_DESC",
       "landmarkType": "route-stop",
       "name": "Eagle Lake",
+      "id": 34,
       "location": {
         "latitutde": 44.37762833,
         "longitude": -68.24991608
@@ -160,6 +179,7 @@
       "description": "LMK_ECHO_LAKE_DESC",
       "landmarkType": "point-of-interest",
       "name": "Echo Lake",
+      "id": 40,
       "location": {
         "latitutde": 44.31499481,
         "longitude": -68.33670044
@@ -169,6 +189,7 @@
       "description": "LMK_WH_FERRY_TERMINAL_DESC",
       "landmarkType": "ferry-transport",
       "name": "Winter Harbor Ferry Terminal",
+      "id": 56,
       "location": {
         "latitutde": 44.39276123,
         "longitude": -68.07952881
@@ -177,6 +198,7 @@
     {
       "landmarkType": "route-stop",
       "name": "Hadley Point",
+      "id": 5,
       "location": {
         "latitutde": 44.43872833,
         "longitude": -68.31433105
@@ -185,6 +207,7 @@
     {
       "landmarkType": "lodging",
       "name": "Hampton Inn Bar Harbor",
+      "id": 71,
       "location": {
         "latitutde": 44.390103,
         "longitude": -68.22244
@@ -194,6 +217,7 @@
       "description": "LMK_HULLS_COVE_VISITOR_CENTER_DESC",
       "landmarkType": "visitor-center",
       "name": "Hulls Cove Vistor Center",
+      "id": 3,
       "location": {
         "latitutde": 44.40903854,
         "longitude": -68.24743652
@@ -203,6 +227,7 @@
       "description": "LMK_JORDAN_POND_DESC",
       "landmarkType": "point-of-interest",
       "name": "Jordan Pond",
+      "id": 29,
       "location": {
         "latitutde": 44.32016754,
         "longitude": -68.25358582
@@ -211,6 +236,7 @@
     {
       "landmarkType": "route-stop",
       "name": "Manset Dock",
+      "id": 88,
       "location": {
         "latitutde": 44.268904,
         "longitude": -68.309941
@@ -220,6 +246,7 @@
       "description": "LMK_MID_HIGH_SCHOOL_DESC",
       "landmarkType": "route-stop",
       "name": "MDI High School",
+      "id": 35,
       "location": {
         "latitutde": 44.37173843,
         "longitude": -68.30102539
@@ -228,6 +255,7 @@
     {
       "landmarkType": "campground",
       "name": "Mount Desert Campground",
+      "id": 62,
       "location": {
         "latitutde": 44.36645889,
         "longitude": -68.31780243
@@ -236,6 +264,7 @@
     {
       "landmarkType": "campground",
       "name": "Mount Desert Narrows Campground",
+      "id": 6,
       "location": {
         "latitutde": 44.4199295,
         "longitude": -68.33718109
@@ -244,6 +273,7 @@
     {
       "landmarkType": "campground",
       "name": "Narrows Too Campground",
+      "id": 11,
       "location": {
         "latitutde": 44.43856812,
         "longitude": -68.36693573
@@ -252,6 +282,7 @@
     {
       "landmarkType": "route-stop",
       "name": "Northeast Harbor Main Street",
+      "id": 52,
       "location": {
         "latitutde": 44.29478073,
         "longitude": -68.28958893
@@ -261,6 +292,7 @@
       "description": "LMK_NORTHEAST_HARBOR_PIER_DESC",
       "landmarkType": "ferry-transport",
       "name": "Northeast Harbor Pier",
+      "id": 38,
       "location": {
         "latitutde": 44.29471588,
         "longitude": -68.284935
@@ -269,6 +301,7 @@
     {
       "landmarkType": "attraction",
       "name": "Oceanarium",
+      "id": 7,
       "location": {
         "latitutde": 44.419361,
         "longitude": -68.349579
@@ -277,6 +310,7 @@
     {
       "landmarkType": "point-of-interest",
       "name": "Otter Cliffs",
+      "id": 24,
       "location": {
         "latitutde": 44.31101227,
         "longitude": -68.18968201
@@ -286,6 +320,7 @@
       "description": "LMK_PARKMAN_MOUNTAIN_DESC",
       "landmarkType": "route-stop",
       "name": "Parkman Mountain",
+      "id": 77,
       "location": {
         "latitutde": 44.329011,
         "longitude": -68.293192
@@ -294,6 +329,7 @@
     {
       "landmarkType": "route-stop",
       "name": "Prospect Harbor",
+      "id": 61,
       "location": {
         "latitutde": 44.40686798,
         "longitude": -68.02690125
@@ -303,6 +339,7 @@
       "description": "LMK_SAND_BEACH_DESC",
       "landmarkType": "point-of-interest",
       "name": "Sand Beach",
+      "id": 22,
       "location": {
         "latitutde": 44.32995987,
         "longitude": -68.184021
@@ -312,6 +349,7 @@
       "description": "LMK_SCHOODIC_POINT_DESC",
       "landmarkType": "route-stop",
       "name": "Schoodic Point",
+      "id": 59,
       "location": {
         "latitutde": 44.33314896,
         "longitude": -68.06096649
@@ -320,6 +358,7 @@
     {
       "landmarkType": "campground",
       "name": "Schoodic Woods Campground",
+      "id": 79,
       "location": {
         "latitutde": 44.380588,
         "longitude": -68.067864
@@ -328,6 +367,7 @@
     {
       "landmarkType": "route-stop",
       "name": "Seal Harbor",
+      "id": 31,
       "location": {
         "latitutde": 44.29630661,
         "longitude": -68.2411499
@@ -336,6 +376,7 @@
     {
       "landmarkType": "campground",
       "name": "Seawall Campground",
+      "id": 46,
       "location": {
         "latitutde": 44.23894882,
         "longitude": -68.30301666
@@ -343,8 +384,14 @@
     },
     {
       "description": "LMK_SIEUR_DE_MONTS_DESC",
+      "features": [
+        "restroom",
+        "hike",
+        "climb"
+      ],
       "landmarkType": "visitor-center",
       "name": "Sieur De Monts",
+      "id": 21,
       "location": {
         "latitutde": 44.36243439,
         "longitude": -68.20748138
@@ -353,6 +400,7 @@
     {
       "landmarkType": "campground",
       "name": "Smugglers' Den Campground",
+      "id": 41,
       "location": {
         "latitutde": 44.30040359,
         "longitude": -68.33153534
@@ -362,6 +410,7 @@
       "description": "LMK_SOMESVILLE_DESC",
       "landmarkType": "route-stop",
       "name": "Somesville",
+      "id": 39,
       "location": {
         "latitutde": 44.3613205,
         "longitude": -68.33518219
@@ -370,6 +419,7 @@
     {
       "landmarkType": "route-stop",
       "name": "Southwest Harbor",
+      "id": 44,
       "location": {
         "latitutde": 44.2801857,
         "longitude": -68.32499695
@@ -378,6 +428,7 @@
     {
       "landmarkType": "point-of-interest",
       "name": "Thunder Hole",
+      "id": 23,
       "location": {
         "latitutde": 44.32134247,
         "longitude": -68.18928528
@@ -386,6 +437,7 @@
     {
       "landmarkType": "route-stop",
       "name": "Tremont School",
+      "id": 48,
       "location": {
         "latitutde": 44.25374985,
         "longitude": -68.35064697
@@ -394,6 +446,7 @@
     {
       "landmarkType": "route-stop",
       "name": "Town Hill",
+      "id": 69,
       "location": {
         "latitutde": 44.39901733,
         "longitude": -68.33446503
@@ -401,8 +454,12 @@
     },
     {
       "description": "LMK_VILLAGE_GREEN_DESC",
+      "features": [
+        "park"
+      ],
       "landmarkType": "point-of-interest",
       "name": "Village Green",
+      "id": 1,
       "location": {
         "latitutde": 44.38788986,
         "longitude": -68.20548248
@@ -411,6 +468,7 @@
     {
       "landmarkType": "route-stop",
       "name": "Wildwood Stables",
+      "id": 30,
       "location": {
         "latitutde": 44.31375122,
         "longitude": -68.24717712
@@ -419,6 +477,7 @@
     {
       "landmarkType": "route-stop",
       "name": "Winter Harbor",
+      "id": 57,
       "location": {
         "latitutde": 44.39128876,
         "longitude": -68.08921051
@@ -427,6 +486,7 @@
     {
       "landmarkType": "lodging",
       "name": "Wonder View Inn",
+      "id": 19,
       "location": {
         "latitutde": 44.39022446,
         "longitude": -68.21959686
@@ -435,6 +495,7 @@
     {
       "landmarkType": "campground",
       "name": "Woodlands KOA Campground",
+      "id": 8,
       "location": {
         "latitutde": 44.4050827,
         "longitude": -68.34212494
@@ -453,6 +514,7 @@
     {
       "landmarkType": "point-of-interest",
       "name": "Sand Beach",
+      "id": 22,
       "location": {
         "latitutde": 44.32995987,
         "longitude": -68.184021
@@ -461,6 +523,7 @@
     {
       "landmarkType": "point-of-interest",
       "name": "Thunder Hole",
+      "id": 23,
       "location": {
         "latitutde": 44.32134247,
         "longitude": -68.18928528
@@ -713,7 +776,7 @@
           "p": "RTE_SAND_BEACH_DESC"
         },
         {
-          "p": "RTE_SAND_BEACH_DESC_2"
+          "tip": "RTE_SAND_BEACH_TIP"
         }
       ],
       "scheduledStops": [

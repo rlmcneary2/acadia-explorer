@@ -73,6 +73,15 @@
         & > *:nth-child(1) {
             margin-top: 0;
         }
+        & b {
+            @extend %para;
+            display: block;
+            font: {
+                style: italic;
+                weight: normal;
+            }
+            margin-left: $text-tip-margin;
+        }
         & h1 {
             @extend %headline-1;
         }
@@ -86,6 +95,12 @@
             @extend %ulist;
             li {
                 @extend %list-item;
+                &.sym {
+                    display: flex;
+                    & > span:first-of-type {
+                        margin-left: $control-padding;
+                    }
+                }
                 margin-top: $text-li-margin;
             }
         }

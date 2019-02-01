@@ -25,7 +25,7 @@ import { actionApi } from "@action/api";
 import { actionUi } from "@action/ui";
 import { TimerPie } from "@controls/timerPie";
 import { RouteGeo, RouteStops, RouteVehicles } from "@reducer/api";
-import { Route } from "@reducer/app";
+import { Landmark, Route } from "@reducer/app";
 import { State as ReduxState } from "@reducer/interfaces";
 import { MapData } from "@reducer/ui";
 import dateTime from "@util/dateTime";
@@ -57,6 +57,7 @@ const ZOOM_TO_FIT_PADDING = 25;
 
 interface InternalProps extends Props {
     componentWillUnmount: (props: InternalProps) => void;
+    landmarkData: Landmark[];
     mapData: MapData;
     nextTick?: number;
     onMapChanged: (data: MapData) => void;
@@ -130,6 +131,7 @@ function mapStateToProps(state: ReduxState, ownProps: Props): InternalProps {
     }
 
     if (state.app && state.app && -1 < routeId) {
+        props.landmarkData = state.app.landmarks;
         props.routeData = state.app.routes;
     }
 
@@ -290,8 +292,9 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
             let routeInfoProps: RouteInfoProps = null;
             if (!isShowMap && this.props.route && this.props.routeData) {
                 const route = this.props.routeData.find(x => x.id === this.props.route.RouteId);
+                const { landmarkData: landmarks } = this.props;
                 if (route) {
-                    routeInfoProps = { route };
+                    routeInfoProps = { landmarks, route };
                 }
             }
 

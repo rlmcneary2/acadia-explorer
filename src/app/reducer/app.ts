@@ -40,10 +40,11 @@ export default (state: State = {}, action: Action): State => {
         //     break;
         // }
 
-        case actionApp.types.updateRoutesData: {
-            const a = action as DataAction<Route[]>;
-            const { data: routes } = a;
-            nextState = {...state, routes};
+        case actionApp.types.updateAppData: {
+            const a = action as DataAction<{ landmarks: Landmark[]; routes: Route[] }>;
+            const { data } = a;
+            const { landmarks, routes } = data;
+            nextState = {...state, landmarks, routes};
             break;
         }
 
@@ -60,15 +61,19 @@ export default (state: State = {}, action: Action): State => {
 };
 
 
+type LandmarkFeatureType = { [key in "climb" | "hike" | "restroom"]: string };
+
 interface Landmark {
     description?: string;
     descriptionShort?: string;
+    features?: LandmarkFeatureType[];
+    id?: number;
     landmarkType: string;
     name: string;
     location: { elevation?: number; latitude: number; longitude: number; };
 }
 
-type RoutePageType = { [key in "h1" | "li" | "p"]: string };
+type RoutePageType = { [key in "h1" | "li" | "p" | "tip"]: string };
 
 type RoutePageArrayType = { [key in "li" | "ul"]: RoutePageType | RoutePageArrayType };
 
@@ -82,6 +87,7 @@ interface Route { // Some of these interface properties are part of app.json.
 }
 
 interface State {
+    landmarks?: Landmark[];
     routes?: Route[];
 }
 
@@ -93,4 +99,4 @@ interface ScheduledStop extends StopSchedule {
     stops: { description: string; id: number; name: string; }[];
 }
 
-export { Landmark, Route, RoutePageArrayType, RoutePageType, State/*, Routes*/ };
+export { Landmark, Route, RoutePageArrayType, RoutePageType, ScheduledStop, State/*, Routes*/ };
