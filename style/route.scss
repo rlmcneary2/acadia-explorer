@@ -74,7 +74,6 @@
             margin-top: 0;
         }
         & b {
-            @extend %para;
             @extend %tip;
             background: $color-complement-1;
             border: solid black 0;

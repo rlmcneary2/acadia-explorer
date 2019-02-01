@@ -29,20 +29,6 @@ $text-status: $text-default * 1.6;
 $text-tip: $text-default * 1.6;
 
 
-%body {
-    font: {
-        size: $text-body;
-    }
-}
-
-%tip {
-    font: {
-        size: $text-tip;
-        style: italic;
-        weight: normal;
-    }
-}
-
 %title {
     font: {
         weight: bold;
