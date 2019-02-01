@@ -26,11 +26,20 @@ $text-body: $text-default * 1.8;
 $text-control: $text-default * 1.8;
 $text-headline: $text-default * 2.0;
 $text-status: $text-default * 1.6;
+$text-tip: $text-default * 1.6;
 
 
 %body {
     font: {
         size: $text-body;
+    }
+}
+
+%tip {
+    font: {
+        size: $text-tip;
+        style: italic;
+        weight: normal;
     }
 }
 

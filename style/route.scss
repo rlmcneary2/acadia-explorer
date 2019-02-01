@@ -75,12 +75,12 @@
         }
         & b {
             @extend %para;
+            @extend %tip;
+            background: $color-complement-1;
+            border: solid black 0;
+            border-radius: $control-rounded-border-radius-h unquote(" / ") $control-rounded-border-radius-v;
             display: block;
-            font: {
-                style: italic;
-                weight: normal;
-            }
-            margin-left: $text-tip-margin;
+            padding: $text-tip-padding;
         }
         & h1 {
             @extend %headline-1;
@@ -97,9 +97,6 @@
                 @extend %list-item;
                 &.sym {
                     display: flex;
-                    & > span:first-of-type {
-                        margin-left: $control-padding;
-                    }
                 }
                 margin-top: $text-li-margin;
             }

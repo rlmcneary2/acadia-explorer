@@ -31,14 +31,14 @@ $symbol-small: 20px - ($symbol-border * 2);
 
 %symbol {
     background: {
-        color: $color-secondary-1-1;
+        color: $color-secondary-4-2;
         image: url("images/symbols.svg");
         position: left top;
         size: cover;
     }
     border: solid $color-control-text-dark $symbol-border;
-    border-radius: 3px;
-    margin-left: 1px;
+    border-radius: $symbol-rounded-border-radius-h unquote(" / ") $symbol-rounded-border-radius-v;
+    margin-left: $symbol-margin-h;
 }
 
 %symbol-small {
