@@ -65,7 +65,7 @@
         font-size: 1em; /* Prevents recursive paras from increasing the font size. */
     }
     font-size: $text-body;
-    line-height: 1.3em;
+    line-height: $text-body-line-height;
     margin: $text-para-margin 0 0 0;
 }
 
@@ -75,7 +75,7 @@
         style: italic;
         weight: normal;
     }
-    line-height: 1.3em;
+    line-height: $text-body-line-height;
     margin: $text-para-margin 0 0 0;
 }
 
