@@ -23,13 +23,11 @@
 
 import { Store } from "redux";
 import { State } from "../reducer/interfaces";
-import route from "./route.listener";
 import storageListener from "./storage";
 import tickListener from "./tick";
 
 
 const modules: { [name: string]: (store: Store<State>) => void; } = {
-    route,
     storageListener,
     tickListener
 };
