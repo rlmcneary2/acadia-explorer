@@ -95,28 +95,15 @@ function createScheduledStopItems(props: Props): JSX.Element {
     return (<React.Fragment>{stops}</React.Fragment>);
 }
 
-function landmarkDescription(landmark: Landmark): JSX.Element {
-    return landmark.descriptionShort ? (<FormattedMessage id={landmark.descriptionShort} />) : null;
-}
-
 function renderLandmarks(route: Route): JSX.Element {
     if (!route.landmarks || !route.landmarks.length) {
         return null;
     }
 
-    const getDescription = (landmark: Landmark): JSX.Element => {
-        const l = landmarkDescription(landmark);
-        if (!l) {
-            return null;
-        }
-
-        return (<span> ‑ {l}</span>);
-    };
-
     return (
         <React.Fragment>
             <FormattedMessage id="LBL_ALONG_ROUTE" tagName="h2" />
-            <ul>{route.landmarks.map((x, i) => (<li key={`lk-${i}`}>{x.name}{getDescription(x)}</li>))}</ul>
+            <ul>{route.landmarks.map((x, i) => (<li key={`lk-${i}`}>{x.name}</li>))}</ul>
         </React.Fragment>
     );
 }

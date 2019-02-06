@@ -24,5 +24,7 @@
     "ROUTE-NOT_SELECTED": "Select a route",
     "ROUTE-RESUMES_NEXT_YEAR": "The Island Explorer resumes service in {year}.",
     "RTE_SAND_BEACH_DESC": "Serves many of the park's most popular attractions including: Sieur De Monts, The Precipice, Sand Beach, Thunder Hole, and Otter Cliffs. The Island Explorer follows a loop that starts in Bar Harbor and goes south along Ocean Drive to Otter Cliffs then returns to Bar Harbor along Route 3.",
-    "RTE_SAND_BEACH_TIP": "This route provides access to the trails on Champlain and Gorham Mountains and the Beehive. It loops arround all these mountains making it possible to hike a trail from end-to-end and then ride the Island Explorer back to your starting point."
+    "RTE_SAND_BEACH_TIP": "This route provides access to the trails on Champlain and Gorham Mountains and the Beehive. It loops arround all these mountains making it possible to hike a trail from end-to-end and then ride the Island Explorer back to your starting point.",
+    "TRH_CHAMPLAIN_NORTH_RIDGE_DESC": "Champlain North Ridge Trail access from the Loop Road.",
+    "TRH_CHAMPLAIN_NORTH_RIDGE_SDESC": "Champlain North Ridge Trail from the Loop Road."
 }
