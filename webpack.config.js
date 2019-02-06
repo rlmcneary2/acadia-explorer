@@ -22,24 +22,21 @@
  */
 
 
+const babelOptions = require("./babel.config");
+const convert = require("koa-connect");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const fs = require("fs");
+const { GenerateSW } = require("workbox-webpack-plugin");
+const history = require("connect-history-api-fallback");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 const webpack = require("webpack");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const convert = require("koa-connect");
-const history = require("connect-history-api-fallback");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 const WriteFilePlugin = require("write-file-webpack-plugin");
-const { GenerateSW } = require("workbox-webpack-plugin");
-const babelOptions = require("./babel.config");
-
 
 
 const _OUTPUT_DIR = "dist";
 const _SOURCE_DIR = "src";
-
-
 const serviceWorkerOptions = {
     importWorkboxFrom: "local",
     navigateFallback: "/index.html", // this is an SPA so all app URLs can be resolved to this item in the cache
