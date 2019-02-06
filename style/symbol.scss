@@ -31,7 +31,7 @@ $symbol-small: 20px - ($symbol-border * 2);
 
 %symbol {
     background: {
-        color: $color-secondary-4-2;
+        // color: $color-secondary-4-2;
         image: url("images/symbols.svg");
         position: left top;
         size: cover;
