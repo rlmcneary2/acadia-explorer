@@ -23,7 +23,6 @@
 
 import { actionApi } from "@action/api";
 import { actionUi } from "@action/ui";
-import { TimerPie } from "@controls/timerPie";
 import { RouteGeo, RouteStops, RouteVehicles } from "@reducer/api";
 import { Landmark, Route } from "@reducer/app";
 import { State as ReduxState } from "@reducer/interfaces";
@@ -281,10 +280,6 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 }
             }
 
-            let countdown = null;
-            if (isShowMap && this.state.nextTick) {
-                countdown = (<TimerPie countDown={true} expiresMs={this.state.nextTick} spanMs={15 * 1000} refreshMs={1000} />);
-            }
 
             const vehicleStatus = isShowMap ? this.vehicleStatus(activeRouteId) : null;
 
@@ -312,7 +307,6 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                         sources={sources}
                     />
                     {vehicleStatus}
-                    {countdown}
                     {routeInfoProps !== null ? <RouteInfo {...routeInfoProps} /> : null}
                 </div>
             );
