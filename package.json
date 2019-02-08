@@ -6,6 +6,7 @@
   "scripts": {
     "build": "webpack",
     "debug": "set NODE_ENV=development&& webpack",
+    "prod": "set NODE_ENV=production&& webpack",
     "serve": "webpack-serve ./webpack.config.js"
   },
   "repository": {
