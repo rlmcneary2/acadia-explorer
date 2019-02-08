@@ -129,6 +129,7 @@ const config = {
     target: "web"
 };
 
+console.log(`webpack.config.js - process.env.NODE_ENV: '${process.env.NODE_ENV}'.`);
 console.log(`webpack.config.js - mode: '${config.mode}'.`);
 
 module.exports = config;
