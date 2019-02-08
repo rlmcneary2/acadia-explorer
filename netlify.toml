@@ -7,13 +7,13 @@
 [build.environment]
   NODE_VERSION = "10.6"
 
-[context.develop.environment]
+[context.develop]
   command = "ECHO Develop Environment"
-  NODE_ENV = "development"
+  environment = { NODE_ENV = "development" }
 
-[context.production.environment]
+[context.production]
   command = "ECHO Production Environment"
-  NODE_ENV = "production"
+  environment = { NODE_ENV = "production" }
 
 [[redirects]]
   from = "/*"
