@@ -11,6 +11,10 @@
   command = "ECHO Develop Environment"
   NODE_ENV = "development"
 
+[context.production.environment]
+  command = "ECHO Production Environment"
+  NODE_ENV = "production"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
