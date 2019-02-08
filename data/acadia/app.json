@@ -1,6 +1,9 @@
 {
   "landmarks": [
     {
+      "features": [
+        "inn"
+      ],
       "landmarkType": "lodging",
       "name": "Acadia Inn",
       "id": 17,
@@ -10,6 +13,9 @@
       }
     },
     {
+      "features": [
+        "park"
+      ],
       "description": "LMK_ACADIA_GATEWAY_CENTER_DESC",
       "landmarkType": "ground-transport",
       "name": "Acadia Gateway Center",
@@ -20,6 +26,9 @@
       }
     },
     {
+      "features": [
+        "inn"
+      ],
       "landmarkType": "lodging",
       "name": "Atlantic Eyrie Lodge",
       "id": 18,
@@ -29,6 +38,9 @@
       }
     },
     {
+      "features": [
+        "inn"
+      ],
       "landmarkType": "lodging",
       "name": "Atlantic Oceanside Hotel",
       "id": 14,
@@ -38,6 +50,9 @@
       }
     },
     {
+      "features": [
+        "airport"
+      ],
       "landmarkType": "airport",
       "name": "Bar Harbor Airport",
       "id": 10,
@@ -47,6 +62,9 @@
       }
     },
     {
+      "features": [
+        "camp"
+      ],
       "landmarkType": "campground",
       "name": "Bar Harbor Campground",
       "id": 4,
@@ -56,6 +74,9 @@
       }
     },
     {
+      "features": [
+        "camp"
+      ],
       "landmarkType": "campground",
       "name": "Bar Harbor KOA Campground",
       "id": 9,
@@ -65,6 +86,9 @@
       }
     },
     {
+      "features": [
+        "inn"
+      ],
       "landmarkType": "lodging",
       "name": "Bar Harbor Regency",
       "id": 15,
@@ -74,6 +98,9 @@
       }
     },
     {
+      "features": [
+        "camp"
+      ],
       "landmarkType": "campground",
       "name": "Bass Harbor Campground",
       "id": 47,
@@ -83,6 +110,9 @@
       }
     },
     {
+      "features": [
+        "ferry"
+      ],
       "landmarkType": "ferry-transport",
       "name": "Bass Harbor Ferry Terminal",
       "id": 55,
@@ -92,6 +122,9 @@
       }
     },
     {
+      "features": [
+        "dine"
+      ],
       "landmarkType": "point-of-interest",
       "name": "Bernard",
       "id": 50,
@@ -101,6 +134,9 @@
       }
     },
     {
+      "features": [
+        "camp"
+      ],
       "landmarkType": "campground",
       "name": "Blackwoods Campground",
       "id": 27,
@@ -110,6 +146,9 @@
       }
     },
     {
+      "features": [
+        "dine"
+      ],
       "landmarkType": "point-of-interest",
       "name": "Birch Harbor",
       "id": 60,
@@ -120,6 +159,12 @@
     },
     {
       "description": "LMK_BROWN_MOUNTAIN_GATEHOUSE_DESC",
+      "features": [
+        "restroom",
+        "walk",
+        "hike",
+        "bike"
+      ],
       "landmarkType": "point-of-interest",
       "name": "Brown Mountain Gatehouse",
       "id": 53,
@@ -130,6 +175,13 @@
     },
     {
       "description": "LMK_BUBBLE_POND_DESC",
+      "features": [
+        "restroom",
+        "walk",
+        "hike",
+        "climb",
+        "bike"
+      ],
       "landmarkType": "route-stop",
       "name": "Bubble Pond",
       "id": 28,
@@ -139,6 +191,9 @@
       }
     },
     {
+      "features": [
+        "hike"
+      ],
       "landmarkType": "trailhead",
       "name": "Cadillac North Ridge",
       "id": 20,
@@ -148,6 +203,9 @@
       }
     },
     {
+      "features": [
+        "hike"
+      ],
       "landmarkType": "trailhead",
       "name": "Cadillac North Ridge",
       "id": 83,
@@ -157,6 +215,9 @@
       }
     },
     {
+      "features": [
+        "dine"
+      ],
       "landmarkType": "route-stop",
       "name": "Clark Point",
       "id": 43,
@@ -167,6 +228,11 @@
     },
     {
       "description": "LMK_EAGLE_LAKE_DESC",
+      "features": [
+        "restroom",
+        "walk",
+        "bike"
+      ],
       "landmarkType": "route-stop",
       "name": "Eagle Lake",
       "id": 34,
@@ -177,6 +243,15 @@
     },
     {
       "description": "LMK_ECHO_LAKE_DESC",
+      "features": [
+        "restroom",
+        "water",
+        "beach",
+        "swim",
+        "hike",
+        "climb",
+        "tower"
+      ],
       "landmarkType": "point-of-interest",
       "name": "Echo Lake",
       "id": 40,
@@ -187,6 +262,9 @@
     },
     {
       "description": "LMK_WH_FERRY_TERMINAL_DESC",
+      "features": [
+        "ferry"
+      ],
       "landmarkType": "ferry-transport",
       "name": "Winter Harbor Ferry Terminal",
       "id": 56,
@@ -196,6 +274,9 @@
       }
     },
     {
+      "features": [
+        "camp"
+      ],
       "landmarkType": "route-stop",
       "name": "Hadley Point",
       "id": 5,
@@ -205,6 +286,9 @@
       }
     },
     {
+      "features": [
+        "inn"
+      ],
       "landmarkType": "lodging",
       "name": "Hampton Inn Bar Harbor",
       "id": 71,
@@ -215,6 +299,13 @@
     },
     {
       "description": "LMK_HULLS_COVE_VISITOR_CENTER_DESC",
+      "features": [
+        "restroom",
+        "water",
+        "park",
+        "walk",
+        "bike"
+      ],
       "landmarkType": "visitor-center",
       "name": "Hulls Cove Vistor Center",
       "id": 3,
@@ -225,6 +316,19 @@
     },
     {
       "description": "LMK_JORDAN_POND_DESC",
+      "features": [
+        "accessible",
+        "restroom",
+        "water",
+        "dine",
+        "gift",
+        "wonder",
+        "park",
+        "walk",
+        "hike",
+        "climb",
+        "bike"
+      ],
       "landmarkType": "point-of-interest",
       "name": "Jordan Pond",
       "id": 29,
@@ -234,6 +338,9 @@
       }
     },
     {
+      "features": [
+        "ferry"
+      ],
       "landmarkType": "route-stop",
       "name": "Manset Dock",
       "id": 88,
@@ -253,6 +360,9 @@
       }
     },
     {
+      "features": [
+        "camp"
+      ],
       "landmarkType": "campground",
       "name": "Mount Desert Campground",
       "id": 62,
@@ -262,6 +372,9 @@
       }
     },
     {
+      "features": [
+        "camp"
+      ],
       "landmarkType": "campground",
       "name": "Mount Desert Narrows Campground",
       "id": 6,
@@ -271,6 +384,9 @@
       }
     },
     {
+      "features": [
+        "camp"
+      ],
       "landmarkType": "campground",
       "name": "Narrows Too Campground",
       "id": 11,
@@ -280,6 +396,9 @@
       }
     },
     {
+      "features": [
+        "dine"
+      ],
       "landmarkType": "route-stop",
       "name": "Northeast Harbor Main Street",
       "id": 52,
@@ -290,6 +409,9 @@
     },
     {
       "description": "LMK_NORTHEAST_HARBOR_PIER_DESC",
+      "features": [
+        "ferry"
+      ],
       "landmarkType": "ferry-transport",
       "name": "Northeast Harbor Pier",
       "id": 38,
@@ -299,6 +421,9 @@
       }
     },
     {
+      "features": [
+        "attraction"
+      ],
       "landmarkType": "attraction",
       "name": "Oceanarium",
       "id": 7,
@@ -308,6 +433,12 @@
       }
     },
     {
+      "features": [
+        "wonder",
+        "walk",
+        "hike",
+        "climb"
+      ],
       "landmarkType": "point-of-interest",
       "name": "Otter Cliffs",
       "id": 24,
@@ -318,6 +449,13 @@
     },
     {
       "description": "LMK_PARKMAN_MOUNTAIN_DESC",
+      "features": [
+        "restroom",
+        "walk",
+        "hike",
+        "climb",
+        "bike"
+      ],
       "landmarkType": "route-stop",
       "name": "Parkman Mountain",
       "id": 77,
@@ -337,6 +475,17 @@
     },
     {
       "description": "LMK_SAND_BEACH_DESC",
+      "features": [
+        "restroom",
+        "water",
+        "wonder",
+        "beach",
+        "swim",
+        "park",
+        "walk",
+        "hike",
+        "climb"
+      ],
       "landmarkType": "point-of-interest",
       "name": "Sand Beach",
       "id": 22,
@@ -347,6 +496,10 @@
     },
     {
       "description": "LMK_SCHOODIC_POINT_DESC",
+      "features": [
+        "restroom",
+        "wonder"
+      ],
       "landmarkType": "route-stop",
       "name": "Schoodic Point",
       "id": 59,
@@ -356,6 +509,9 @@
       }
     },
     {
+      "features": [
+        "camp"
+      ],
       "landmarkType": "campground",
       "name": "Schoodic Woods Campground",
       "id": 79,
@@ -365,6 +521,11 @@
       }
     },
     {
+      "features": [
+        "dine",
+        "beach",
+        "swim"
+      ],
       "landmarkType": "route-stop",
       "name": "Seal Harbor",
       "id": 31,
@@ -374,6 +535,9 @@
       }
     },
     {
+      "features": [
+        "camp"
+      ],
       "landmarkType": "campground",
       "name": "Seawall Campground",
       "id": 46,
@@ -385,9 +549,14 @@
     {
       "description": "LMK_SIEUR_DE_MONTS_DESC",
       "features": [
+        "accessible",
         "restroom",
-        "hike",
-        "climb"
+        "water",
+        "station",
+        "attraction",
+        "park",
+        "walk",
+        "hike"
       ],
       "landmarkType": "visitor-center",
       "name": "Sieur De Monts",
@@ -398,6 +567,9 @@
       }
     },
     {
+      "features": [
+        "camp"
+      ],
       "landmarkType": "campground",
       "name": "Smugglers' Den Campground",
       "id": 41,
@@ -417,6 +589,9 @@
       }
     },
     {
+      "features": [
+        "dine"
+      ],
       "landmarkType": "route-stop",
       "name": "Southwest Harbor",
       "id": 44,
@@ -426,6 +601,13 @@
       }
     },
     {
+      "features": [
+        "accessible",
+        "restroom",
+        "snack",
+        "wonder",
+        "walk"
+      ],
       "landmarkType": "point-of-interest",
       "name": "Thunder Hole",
       "id": 23,
@@ -444,6 +626,9 @@
       }
     },
     {
+      "features": [
+        "dine"
+      ],
       "landmarkType": "route-stop",
       "name": "Town Hill",
       "id": 69,
@@ -455,7 +640,14 @@
     {
       "description": "LMK_VILLAGE_GREEN_DESC",
       "features": [
-        "park"
+        "restroom",
+        "dine",
+        "snack",
+        "gift",
+        "inn",
+        "attraction",
+        "park",
+        "walk"
       ],
       "landmarkType": "point-of-interest",
       "name": "Village Green",
@@ -466,6 +658,12 @@
       }
     },
     {
+      "features": [
+        "restroom",
+        "walk",
+        "hike",
+        "bike"
+      ],
       "landmarkType": "route-stop",
       "name": "Wildwood Stables",
       "id": 30,
@@ -475,6 +673,9 @@
       }
     },
     {
+      "features": [
+        "dine"
+      ],
       "landmarkType": "route-stop",
       "name": "Winter Harbor",
       "id": 57,
@@ -484,6 +685,9 @@
       }
     },
     {
+      "features": [
+        "inn"
+      ],
       "landmarkType": "lodging",
       "name": "Wonder View Inn",
       "id": 19,
@@ -493,6 +697,9 @@
       }
     },
     {
+      "features": [
+        "camp"
+      ],
       "landmarkType": "campground",
       "name": "Woodlands KOA Campground",
       "id": 8,
@@ -504,37 +711,30 @@
     {
       "description": "TRH_CHAMPLAIN_NORTH_RIDGE_DESC",
       "descriptionShort": "TRH_CHAMPLAIN_NORTH_RIDGE_SDESC",
+      "features": [
+        "hike"
+      ],
       "landmarkType": "trailhead",
       "name": "Champlain North Ridge Trailhead",
       "location": {
         "latitutde": 44.363095,
         "longitude": -68.193408
       }
-    },
-    {
-      "landmarkType": "point-of-interest",
-      "name": "Sand Beach",
-      "id": 22,
-      "location": {
-        "latitutde": 44.32995987,
-        "longitude": -68.184021
-      }
-    },
-    {
-      "landmarkType": "point-of-interest",
-      "name": "Thunder Hole",
-      "id": 23,
-      "location": {
-        "latitutde": 44.32134247,
-        "longitude": -68.18928528
-      }
     }
   ],
   "routes": [
     {
-      "description": "Serves campgrounds and attractions along Route 3.",
+      "description": "RTE_OCEANARIUM_DESC",
       "id": 1,
       "name": "Oceanarium",
+      "page": [
+        {
+          "p": "RTE_OCEANARIUM_DESC"
+        },
+        {
+          "tip": "RTE_OCEANARIUM_TIP"
+        }
+      ],
       "scheduledStops": [
         {
           "dates": {
@@ -658,9 +858,14 @@
       "landmarks": []
     },
     {
-      "description": "Serves hotels and attractions along Eden Street in Bar Harbor.",
+      "description": "RTE_EDEN_STREET_DESC",
       "id": 2,
       "name": "Eden Street",
+      "page": [
+        {
+          "p": "RTE_EDEN_STREET_DESC"
+        }
+      ],
       "scheduledStops": [
         {
           "dates": {
@@ -875,6 +1080,9 @@
         {
           "description": "TRH_CHAMPLAIN_NORTH_RIDGE_DESC",
           "descriptionShort": "TRH_CHAMPLAIN_NORTH_RIDGE_SDESC",
+          "features": [
+            "hike"
+          ],
           "landmarkType": "trailhead",
           "name": "Champlain North Ridge Trailhead",
           "location": {
@@ -885,9 +1093,20 @@
       ]
     },
     {
-      "description": "Serves all of Ocean Drive, Seal Harbor, and Jordan Pond.",
+      "description": "RTE_LOOP_ROAD_DESC",
       "id": 4,
       "name": "Loop Road",
+      "page": [
+        {
+          "p": "RTE_LOOP_ROAD_DESC"
+        },
+        {
+          "tip": "RTE_LOOP_ROAD_TIP"
+        },
+        {
+          "tip": "RTE_LOOP_ROAD_TIP2"
+        }
+      ],
       "scheduledStops": [
         {
           "dates": {
@@ -994,6 +1213,9 @@
         {
           "description": "TRH_CHAMPLAIN_NORTH_RIDGE_DESC",
           "descriptionShort": "TRH_CHAMPLAIN_NORTH_RIDGE_SDESC",
+          "features": [
+            "hike"
+          ],
           "landmarkType": "trailhead",
           "name": "Champlain North Ridge Trailhead",
           "location": {
@@ -1004,9 +1226,14 @@
       ]
     },
     {
-      "description": "Jordan Pond road to Northeast Harbor.",
+      "description": "RTE_JORDAN_POND_DESC",
       "id": 5,
       "name": "Jordan Pond",
+      "page": [
+        {
+          "p": "RTE_JORDAN_POND_DESC"
+        }
+      ],
       "scheduledStops": [
         {
           "dates": {
@@ -1278,9 +1505,14 @@
       "landmarks": []
     },
     {
-      "description": "Includes Eagle Lake, Hadlock ponds and Northeast Harbor",
+      "description": "RTE_BROWN_MOUNTAIN_DESC",
       "id": 6,
       "name": "Brown Mountain",
+      "page": [
+        {
+          "p": "RTE_BROWN_MOUNTAIN_DESC"
+        }
+      ],
       "scheduledStops": [
         {
           "dates": {
@@ -1462,10 +1694,15 @@
       "landmarks": []
     },
     {
-      "description": "West side of Mount Desert Island along Somes Sound including Southwest Harbor and Bass Harbor.",
+      "description": "RTE_SOUTHWEST_HARBOR_DESC",
       "id": 7,
       "name": "Southwest Harbor",
       "notice": "Scheduled stops vary by time of year and day. Please check a local schedule to confirm the stops that are currently in service.",
+      "page": [
+        {
+          "p": "RTE_SOUTHWEST_HARBOR_DESC"
+        }
+      ],
       "scheduledStops": [
         {
           "dates": {
@@ -1727,9 +1964,14 @@
       "landmarks": []
     },
     {
-      "description": "Circulates around the Schoodic penninsula. Travel between Schoodic and Mount Desert Island is possible by ferry or car.",
+      "description": "RTE_SCHOODIC_DESC",
       "id": 8,
       "name": "Schoodic",
+      "page": [
+        {
+          "p": "RTE_SCHOODIC_DESC"
+        }
+      ],
       "scheduledStops": [
         {
           "dates": {
@@ -1828,9 +2070,14 @@
       "landmarks": []
     },
     {
-      "description": "Serves campgrounds and attractions in the northern part of Mount Desert Island.",
+      "description": "RTE_TRENTON_DESC",
       "id": 9,
       "name": "Trenton",
+      "page": [
+        {
+          "p": "RTE_TRENTON_DESC"
+        }
+      ],
       "scheduledStops": [
         {
           "dates": {
@@ -1990,9 +2237,14 @@
       "landmarks": []
     },
     {
-      "description": "Traverses the interior of Mount Desert Island between Bar Harbor and Blackwoods Campground.",
+      "description": "RTE_BLACKWOODS_DESC",
       "id": 10,
       "name": "Blackwoods",
+      "page": [
+        {
+          "p": "RTE_BLACKWOODS_DESC"
+        }
+      ],
       "scheduledStops": [
         {
           "dates": {
