@@ -8,11 +8,9 @@
   NODE_VERSION = "10.6"
 
 [context.develop]
-  command = "echo 'Develop Environment'"
   environment = { NODE_ENV = "development" }
 
 [context.production]
-  command = "echo 'Production Environment'"
   environment = { NODE_ENV = "production" }
 
 [[redirects]]
