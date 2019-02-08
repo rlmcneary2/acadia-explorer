@@ -24,62 +24,14 @@
 
 const babelOptions = require("./babel.config");
 const convert = require("koa-connect");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const fs = require("fs");
-const { GenerateSW } = require("workbox-webpack-plugin");
 const history = require("connect-history-api-fallback");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
-const webpack = require("webpack");
-const WriteFilePlugin = require("write-file-webpack-plugin");
+const plugins = require("./build/webpack.plugins");
 
 
 const _OUTPUT_DIR = "dist";
 const _SOURCE_DIR = "src";
-const serviceWorkerOptions = {
-    importWorkboxFrom: "local",
-    navigateFallback: "/index.html", // this is an SPA so all app URLs can be resolved to this item in the cache
-    runtimeCaching: [{
-        handler: "cacheFirst",
-        options: {
-            cacheName: "tracker",
-            expiration: {
-                maxAgeSeconds: 7 * 24 * 60 * 60 // seconds in a week
-            }
-        },
-        urlPattern: /^https:\/\/islandexplorertracker\.availtec\.com\/InfoPoint\/rest\/(Routes|Stops)\//
-    }, {
-        handler: "cacheFirst",
-        options: {
-            cacheName: "tracker",
-            expiration: {
-                maxAgeSeconds: 7 * 24 * 60 * 60 // seconds in a week
-            }
-        },
-        urlPattern: /^https:\/\/islandexplorertracker\.availtec\.com\/InfoPoint\/Resources\/Traces\//
-    }, {
-        handler: "cacheFirst",
-        options: {
-            cacheName: "mapbox",
-            expiration: {
-                maxAgeSeconds: 7 * 24 * 60 * 60 // seconds in a week
-            }
-        },
-        urlPattern: /^https:\/\/api\.mapbox\.com\//
-    }, {
-        handler: "cacheFirst",
-        options: {
-            cacheName: "mapbox",
-            expiration: {
-                maxAgeSeconds: 7 * 24 * 60 * 60, // seconds in a week
-                maxEntries: 80
-            }
-        },
-        urlPattern: /^https:\/\/[\w]\.tiles\.mapbox\.com\//
-    }],
-    swDest: "sw.js" // name of the output file with the service worker
-};
 
 
 /**
@@ -145,14 +97,7 @@ const config = {
         path: path.resolve(__dirname, _OUTPUT_DIR),
         publicPath: "/"
     },
-    plugins: [
-        new webpack.BannerPlugin({ banner: fs.readFileSync("./LICENSE", "utf8") }),
-        new HtmlWebpackPlugin({ inject: "head", template: "./src/index.template.html", title: "Acadia Island Explorer" }),
-        new MiniCssExtractPlugin({ filename: "[name].css" }), // create css files from the css.import
-        new CopyWebpackPlugin([{ from: "data" }, { from: "manifest.json" }, { from: "style/images/*.png" }, { from: "style/images/favicon.ico", to: "." }]), // copy json data files
-        new WriteFilePlugin({ test: /(\.json$|\.png$|\.ico$)/, useHashIndex: true }), // so the dev server can access files that aren't part of the bundle (like the json files copied above)
-        new GenerateSW(serviceWorkerOptions) // create the service worker
-    ],
+    plugins: plugins(true),
     resolve: {
         alias: {
             "@action": path.resolve(__dirname, "src/app/action/"),
