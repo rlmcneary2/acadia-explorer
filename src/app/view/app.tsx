@@ -24,6 +24,7 @@
 import { DropdownList, Props as DropdownProps } from "@controls/dropdownList";
 import { ControlLinkContent, ControlTextContent } from "@controls/interfaces";
 import LinkButton, { Props as LinkButtonProps } from "@controls/linkButton";
+import memoize from "memoize-one";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Redirect, Route } from "react-router-dom";
@@ -41,33 +42,15 @@ interface ComponentState {
     showRoutesMenu: boolean;
 }
 
-class App extends React.Component<Props> {
+class App extends React.Component<Props, ComponentState> {
 
     constructor(props: Props) {
         super(props);
         this.state = { showRoutesMenu: false };
     }
 
+
     public state: ComponentState;
-
-    private get routeId(): number | null {
-        if (!(this.props as any).location || !(this.props as any).location.pathname) {
-            return null;
-        }
-
-        const matches = /^\/route\/(\d+)\/?(?:([\w\-]+))?$/.exec((this.props as any).location.pathname);
-        if (!matches || matches.length < 2) {
-            return null;
-        }
-
-        const [, id] = matches;
-        const routeId = parseInt(id, 10);
-        if (!isNumber(routeId)) {
-            return null;
-        }
-
-        return routeId;
-    }
 
     public render() {
         const routeId = this.routeId;
@@ -113,12 +96,49 @@ class App extends React.Component<Props> {
         );
     }
 
+
+    private get routeId(): number | null {
+        if (!(this.props as any).location || !(this.props as any).location.pathname) {
+            return null;
+        }
+
+        const matches = /^\/route\/(\d+)\/?(?:([\w\-]+))?$/.exec((this.props as any).location.pathname);
+        if (!matches || matches.length < 2) {
+            return null;
+        }
+
+        const [, id] = matches;
+        const routeId = parseInt(id, 10);
+        if (!isNumber(routeId)) {
+            return null;
+        }
+
+        return routeId;
+    }
+
+    /**
+     * Maintains the state of the route view, whether or not the map or
+     * information being shown, even when the route ID changes.
+     */
+    private routePath = memoize((location: any): "info" | "map" => {
+        let path: "info" | "map" = "map";
+        if (location) {
+            const { pathname }: { pathname: string } = location;
+            if (pathname) {
+                const matches = /\/route\/[^\/]*\/([^\/]*)/.exec(pathname);
+                path = matches && 1 < matches.length ? matches[1] as any : "map";
+            }
+        }
+
+        return path;
+    });
+
     private createRoutesMenu(): JSX.Element {
         const { routes = [] } = this.props;
         const items: ControlLinkContent[] = routes.map(item => {
             return {
                 text: item.LongName,
-                to: `/route/${item.RouteId}/map`
+                to: `/route/${item.RouteId}/${this.routePath((this.props as any).location)}`
             };
         });
 
