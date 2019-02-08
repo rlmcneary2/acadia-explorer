@@ -26,8 +26,10 @@ const babelOptions = require("./babel.config");
 const convert = require("koa-connect");
 const history = require("connect-history-api-fallback");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const path = require("path");
 const plugins = require("./build/webpack.plugins");
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 
 const _OUTPUT_DIR = "dist";
@@ -90,6 +92,17 @@ const config = {
             }
         ]
     },
+    optimization: {
+        minimizer: [
+            new UglifyJsPlugin({
+                parallel: true,
+                uglifyOptions: {
+                    output: { comments: false }
+                }
+            }),
+            new OptimizeCssAssetsPlugin()
+        ]
+    },
     output: {
         chunkFilename: "[name].chunk.js",
         filename: "[name].js",
@@ -97,7 +110,7 @@ const config = {
         path: path.resolve(__dirname, _OUTPUT_DIR),
         publicPath: "/"
     },
-    plugins: plugins(true),
+    plugins: plugins(process.env.NODE_ENV !== "production"),
     resolve: {
         alias: {
             "@action": path.resolve(__dirname, "src/app/action/"),
