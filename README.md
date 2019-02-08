@@ -1,5 +1,7 @@
 # Explore Acadia!
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/2d3507cb-fb11-49c1-9103-5dd1d9407228/deploy-status)](https://app.netlify.com/sites/acadia-explorer/deploys)
+
 A single-page progressive web app targeted at mobile devices that displays the current locations of Island Explorer buses on their routes. Includes information about landmarks along the routes as well as bus stops.
 
 You can try out the develop branch deployed to [Netlify](https://app.netlify.com/sites/acadia-explorer/overview), *note that if you are using a desktop browser you will want to open its developer tools `[F12]` and enable responsive design mode then choose a mobile phone for display*.
