@@ -45,7 +45,6 @@ const config = {
     entry: {
         app: `./${_SOURCE_DIR}/index.ts`
     },
-    mode: process.env.WEBPACK_SERVE ? "development" : process.env.NODE_ENV || "development",
     module: {
         rules: [
             {
@@ -110,7 +109,6 @@ const config = {
         path: path.resolve(__dirname, _OUTPUT_DIR),
         publicPath: "/"
     },
-    plugins: plugins(process.env.NODE_ENV !== "production"),
     resolve: {
         alias: {
             "@action": path.resolve(__dirname, "src/app/action/"),
@@ -129,7 +127,20 @@ const config = {
     target: "web"
 };
 
-console.log(`webpack.config.js - process.env.NODE_ENV: '${process.env.NODE_ENV}'.`);
-console.log(`webpack.config.js - mode: '${config.mode}'.`);
 
-module.exports = config;
+module.exports = env => {
+    console.log(`webpack.config.js - process.env.WEBPACK_SERVE: '${process.env.WEBPACK_SERVE}'.`);
+    console.log(`webpack.config.js - env.NODE_ENV: '${env ? env.NODE_ENV : "undefined"}'.`);
+
+    let mode = "development";
+    if (!process.env.WEBPACK_SERVE && env && env.NODE_ENV === "production") {
+        mode = "production";
+    }
+
+    config.mode = mode;
+    console.log(`webpack.config.js - mode: '${config.mode}'.`);
+
+    config.plugins = plugins(mode !== "production");
+
+    return config;
+};

@@ -36,7 +36,7 @@ const WriteFilePlugin = require("write-file-webpack-plugin");
  * @returns {any[]}
  */
 module.exports = (isDebug) => {
-    return [
+    const plugins = [
         new webpack.BannerPlugin({
             banner: fs.readFileSync("./LICENSE", "utf8")
         }),
@@ -63,6 +63,15 @@ module.exports = (isDebug) => {
         }),
         new GenerateSW(serviceWorkerOptions) // create the service worker
     ];
+
+    if (!isDebug) {
+        console.log("webpack.plugins.js - adding DefinePlugin.");
+        plugins.push(new webpack.DefinePlugin({
+            "process.env.NODE_ENV": "'production'" // Yes this string MUST be quoted for production to have full effect on minifying code.
+        }));
+    }
+
+    return plugins;
 };
 
 
