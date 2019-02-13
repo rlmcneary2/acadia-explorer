@@ -8,13 +8,14 @@ You can try out the develop branch deployed to [Netlify](https://app.netlify.com
 https://develop--acadia-explorer.netlify.com/
 
 ## Features
-This application is a work-in-progress. Here are the fetaures that currently work:
+This application is a work-in-progress. Here are the features that currently work:
 * Select an Island Explorer route.
 * A map displays the path of the route along with the locations of bus stops.
 * Locations of buses along the route are displayed and updated every 15 seconds.
 * Information about a route and the stops along it can be displayed (route data is incomplete at this time).
 
 More features will be added in the future including:
+* Tooltips for buses with upcoming stop and schedule status.
 * Landmarks along a route, such as trailheads, will be optionally displayed on the map.
 * Tooltips for map stops and landmarks that display details.
 * Native mobile notifications when a bus is approaching a stop.
