@@ -60,8 +60,7 @@ module.exports = (isDebug) => {
         new WriteFilePlugin({ // so the dev server can access files that aren't part of the bundle (like the json files copied above)
             test: /(\.json$|\.png$|\.ico$)/,
             useHashIndex: true
-        }),
-        new GenerateSW(serviceWorkerOptions) // create the service worker
+        })
     ];
 
     if (!isDebug) {
@@ -69,6 +68,7 @@ module.exports = (isDebug) => {
         plugins.push(new webpack.DefinePlugin({
             "process.env.NODE_ENV": "'production'" // Yes this string MUST be quoted for production to have full effect on minifying code.
         }));
+        plugins.push(new GenerateSW(serviceWorkerOptions)); // create the service worker
     }
 
     return plugins;
