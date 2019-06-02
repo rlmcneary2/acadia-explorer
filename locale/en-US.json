@@ -23,6 +23,7 @@
     "ROUTE-NO_VEHICLES": "No buses are available on this route.",
     "ROUTE-NOT_SELECTED": "Select a route",
     "ROUTE-RESUMES_NEXT_YEAR": "The Island Explorer resumes service in {year}.",
+    "ROUTE-RESUMES_ON": "The Island Explorer resumes on",
     "RTE_BLACKWOODS_DESC": "Traverses the interior of Mount Desert Island between Bar Harbor and Blackwoods Campground.",
     "RTE_BROWN_MOUNTAIN_DESC": "Includes Eagle Lake, Hadlock ponds and Northeast Harbor.",
     "RTE_EDEN_STREET_DESC": "Serves hotels and attractions along Eden Street in Bar Harbor.",
