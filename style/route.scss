@@ -49,6 +49,7 @@
         span {
             @extend %button-text;
             align-self: center;
+            flex: 0 0 content;
             font: {
                 size: $text-status;
             }
@@ -56,10 +57,10 @@
             text-align: center;
             white-space: initial;
         }
-        align-items: center;
         background-color: rgba($color-app-background, 0.85);
         display: flex;
         height: $control-height-2;
+        justify-content: center;
         left: $control-padding-large;
         right: $control-padding-large;
         top: $control-padding-large;
