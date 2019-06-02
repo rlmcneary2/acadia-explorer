@@ -68,6 +68,8 @@ export default {
                 if (a.date && b.date) {
                     if (b.date.isBefore(a.date)) {
                         return -1;
+                    } else if (a.date.isBefore(b.date)) {
+                        return 1;
                     }
 
                     return 0;
