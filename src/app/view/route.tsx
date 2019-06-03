@@ -510,10 +510,10 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 this.state.activeRoute &&
                 this.props.routeStops &&
                 this.props.routeData &&
-                this.props.routeData[`${this.state.activeRoute.id}`]
+                this.props.routeData.find(x => x.id === this.state.activeRoute.id)
             ) {
                 // Find the next scheduled stop.
-                const routeData = this.props.routeData[`${this.state.activeRoute.id}`];
+                const routeData = this.props.routeData.find(x => x.id === this.state.activeRoute.id);
                 const acadiaNow = moment(dateTime.getLocationTime());
                 let currentStopData: { ids: number[]; };
                 for (const stopData of routeData.scheduledStops || []) {
@@ -529,7 +529,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                         continue;
                     }
 
-                    currentStopData = stopData;
+                    currentStopData = { ids: stopData.stops.map(x => x.id) };
                     break;
                 }
 
@@ -650,8 +650,8 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
 
         // Is the schedule for this route finished? routeData is the
         // supplemental data provided in a JSON file.
-        const { routeData = {} } = this.props;
-        const route = routeData[routeId];
+        const { routeData = [] } = this.props;
+        const route = routeData.find(x => x.id === routeId);
 
         let status: JSX.Element = null;
         if (route) {
@@ -666,7 +666,7 @@ class IslandExplorerRoute extends React.Component<InternalProps, State> {
                 status =
                     resumes.isNextYear ?
                         (<FormattedMessage id="ROUTE-RESUMES_NEXT_YEAR" values={{ year }} />) :
-                        (<React.Fragment><FormattedMessage id="ROUTE-RESUMES_ON" /><FormattedDate value={resumes.date.toDate()} /></React.Fragment>);
+                        (<React.Fragment><FormattedMessage id="ROUTE-RESUMES_ON" />&nbsp;<FormattedDate value={resumes.date.toDate()} /><span>.</span></React.Fragment>);
             }
         } else {
             status = (<FormattedMessage id="ROUTE-NO_VEHICLES" />);

@@ -33,9 +33,10 @@ const WriteFilePlugin = require("write-file-webpack-plugin");
 /**
  * Get the plugins for webpack.
  * @param {boolean} isDebug
+ * @param {boolean} isDevServe
  * @returns {any[]}
  */
-module.exports = (isDebug) => {
+module.exports = (isDebug, isDevServe) => {
     const plugins = [
         new webpack.BannerPlugin({
             banner: fs.readFileSync("./LICENSE", "utf8")
@@ -60,12 +61,16 @@ module.exports = (isDebug) => {
         new WriteFilePlugin({ // so the dev server can access files that aren't part of the bundle (like the json files copied above)
             test: /(\.json$|\.png$|\.ico$)/,
             useHashIndex: true
-        }),
-        new GenerateSW(serviceWorkerOptions) // create the service worker
+        })
     ];
 
+    if (!isDevServe) {
+        console.log("webpack.plugins.js - adding GenerateSW plugin.");
+        plugins.push(new GenerateSW(serviceWorkerOptions)); // create the service worker
+    }
+
     if (!isDebug) {
-        console.log("webpack.plugins.js - adding DefinePlugin.");
+        console.log("webpack.plugins.js - adding production only plugins.");
         plugins.push(new webpack.DefinePlugin({
             "process.env.NODE_ENV": "'production'" // Yes this string MUST be quoted for production to have full effect on minifying code.
         }));
