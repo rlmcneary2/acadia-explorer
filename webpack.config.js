@@ -140,7 +140,7 @@ module.exports = env => {
     config.mode = mode;
     console.log(`webpack.config.js - mode: '${config.mode}'.`);
 
-    config.plugins = plugins(mode !== "production");
+    config.plugins = plugins(mode !== "production", !!process.env.WEBPACK_SERVE);
 
     return config;
 };
