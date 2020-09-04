@@ -45,7 +45,7 @@
     "http-server": "^0.9.0",
     "koa-connect": "^2.0.1",
     "mini-css-extract-plugin": "^0.4.0",
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.13.1",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "prop-types": "^15.6.1",
     "sass-loader": "^7.0.2",
