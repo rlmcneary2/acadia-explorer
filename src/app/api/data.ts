@@ -22,7 +22,7 @@
 
 
 export default {
-    domain: "//api"
+    domain: "/api"
     // domain: "https://islandexplorertracker.availtec.com"
     // domain: "http://localhost"
 };
