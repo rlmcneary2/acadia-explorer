@@ -83,25 +83,28 @@ module.exports = (isDebug, isDevServe) => {
 const serviceWorkerOptions = {
     importWorkboxFrom: "local",
     navigateFallback: "/index.html", // this is an SPA so all app URLs can be resolved to this item in the cache
-    runtimeCaching: [{
-        handler: "cacheFirst",
-        options: {
-            cacheName: "tracker",
-            expiration: {
-                maxAgeSeconds: 7 * 24 * 60 * 60 // seconds in a week
-            }
-        },
-        urlPattern: /^https:\/\/islandexplorertracker\.availtec\.com\/InfoPoint\/rest\/(Routes|Stops)\//
-    }, {
-        handler: "cacheFirst",
-        options: {
-            cacheName: "tracker",
-            expiration: {
-                maxAgeSeconds: 7 * 24 * 60 * 60 // seconds in a week
-            }
-        },
-        urlPattern: /^https:\/\/islandexplorertracker\.availtec\.com\/InfoPoint\/Resources\/Traces\//
-    }, {
+    runtimeCaching: [
+    // {
+    //     handler: "cacheFirst",
+    //     options: {
+    //         cacheName: "tracker",
+    //         expiration: {
+    //             maxAgeSeconds: 7 * 24 * 60 * 60 // seconds in a week
+    //         }
+    //     },
+    //     urlPattern: /^https:\/\/islandexplorertracker\.availtec\.com\/InfoPoint\/rest\/(Routes|Stops)\//
+    // },
+    // {
+    //     handler: "cacheFirst",
+    //     options: {
+    //         cacheName: "tracker",
+    //         expiration: {
+    //             maxAgeSeconds: 7 * 24 * 60 * 60 // seconds in a week
+    //         }
+    //     },
+    //     urlPattern: /^https:\/\/islandexplorertracker\.availtec\.com\/InfoPoint\/Resources\/Traces\//
+    // },
+    {
         handler: "cacheFirst",
         options: {
             cacheName: "mapbox",
@@ -110,7 +113,8 @@ const serviceWorkerOptions = {
             }
         },
         urlPattern: /^https:\/\/api\.mapbox\.com\//
-    }, {
+    },
+    {
         handler: "cacheFirst",
         options: {
             cacheName: "mapbox",
