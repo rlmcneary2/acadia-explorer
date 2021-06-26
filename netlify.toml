@@ -11,6 +11,11 @@
   command = "npm run prod"
 
 [[redirects]]
+  from = "/api/*"
+  to = "http://islandexplorertracker.availtec.com/:splat"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
