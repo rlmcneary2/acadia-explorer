@@ -11,8 +11,8 @@
   command = "sed -i \"s|MAPBOX_REDIRECT_ACCESS_TOKEN|${MAPBOX_ACCESS_TOKEN}|g\" netlify.toml && npm run prod"
 
 [[redirects]]
-  from = "/mapbox-api"
-  to = "https://api.mapbox.com/styles/v1/mapbox/outdoors-v11?access_token=MAPBOX_REDIRECT_ACCESS_TOKEN"
+  from = "/mapbox-api/*"
+  to = "https://api.mapbox.com/:splat?access_token=MAPBOX_REDIRECT_ACCESS_TOKEN"
   status = 200
 
 
