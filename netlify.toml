@@ -1,7 +1,7 @@
 [Settings]
 
 [build]
-  command = "npm run build"
+  command = "sed -i \"s|MAPBOX_REDIRECT_ACCESS_TOKEN|${MAPBOX_ACCESS_TOKEN}|g\" netlify.toml && npm run build"
   publish = "dist"
 
 [build.environment]
@@ -9,6 +9,12 @@
 
 [context.production]
   command = "npm run prod"
+
+[[redirects]]
+  from = "/api-mapbox"
+  to = "https://api.mapbox.com/styles/v1/mapbox/outdoors-v11?access_token=MAPBOX_REDIRECT_ACCESS_TOKEN"
+  status = 200
+
 
 [[redirects]]
   from = "/api/*"
