@@ -12,7 +12,8 @@
 
 [[redirects]]
   from = "/api-mapbox"
-  to = "https://api.mapbox.com/styles/v1/mapbox/outdoors-v11?access_token=MAPBOX_REDIRECT_ACCESS_TOKEN"
+  to = "https://api.mapbox.com/styles/v1/mapbox/outdoors-v11"
+  query = {access_token = MAPBOX_REDIRECT_ACCESS_TOKEN}
   status = 200
 
 
